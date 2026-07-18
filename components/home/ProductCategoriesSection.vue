@@ -1,9 +1,9 @@
 <script setup lang="ts">
-const { data } = await useAsyncData('products', useProducts)
+const { products } = useProducts()
 
 // ponytail: derive unique categories from product data instead of separate mock file
 const categories = computed(() => {
-  const cats = data.value?.data.map(p => p.category) ?? []
+  const cats = products.value.map(p => p.category) ?? []
   return [...new Set(cats)]
 })
 </script>

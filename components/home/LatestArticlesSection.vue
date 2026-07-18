@@ -1,12 +1,7 @@
 <script setup lang="ts">
-const { data } = await useAsyncData('articles', useArticles)
+const { getLatest } = useArticles()
 
-const latest = computed(() => {
-  const articles = data.value?.data ?? []
-  return [...articles]
-    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
-    .slice(0, 3)
-})
+const latest = computed(() => getLatest().slice(0, 3))
 </script>
 
 <template>

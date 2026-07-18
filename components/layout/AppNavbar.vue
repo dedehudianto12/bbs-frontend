@@ -1,26 +1,19 @@
 <script setup lang="ts">
+import { JASA_SLUGS } from '~/types/category'
+
+const { getByGroup } = useKategori()
+const { settings } = useSettings()
+
 const isOpen = ref(false)
 
-const beltConveyorItems = [
-  { label: 'PVC Belt', link: '/produk/belt-conveyor/pvc' },
-  { label: 'PU', link: '/produk/belt-conveyor/pu' },
-  { label: 'Flat Belt', link: '/produk/belt-conveyor/flat' },
-  { label: 'Rubber Belt', link: '/produk/belt-conveyor/rubber' }
-]
+function toNavItems(items: { slug: string; label: string }[], base: string) {
+  return items.map((k) => ({ label: k.label, link: `${base}/${k.slug}` }))
+}
 
-const produkLainnyaItems = [
-  { label: 'Timing Belt', link: '/produk/lainnya/timing' },
-  { label: 'Fastener', link: '/produk/lainnya/fastener' },
-  { label: 'Cleat', link: '/produk/lainnya/cleat' },
-  { label: 'Gravity Roll', link: '/produk/lainnya/gravity-roll' }
-]
+const beltConveyorItems = computed(() => toNavItems(getByGroup('belt-conveyor'), '/produk/belt-conveyor'))
+const produkLainnyaItems = computed(() => toNavItems(getByGroup('lainnya'), '/produk/lainnya'))
 
-const jasaItems = [
-  { label: 'Incline Cleated Belt', link: '/jasa/incline-cleated' },
-  { label: 'Profile Guide Belt', link: '/jasa/profile-guide' },
-  { label: 'Jasa Reparasi', link: '/jasa/reparasi' },
-  { label: 'Jasa Onsite Joint', link: '/jasa/onsite-joint' }
-]
+const jasaItems = toNavItems([...JASA_SLUGS], '/jasa')
 </script>
 
 <template>
@@ -44,9 +37,9 @@ const jasaItems = [
 
       <!-- Desktop CTA -->
       <div class="hidden md:block shrink-0">
-        <NuxtLink to="/kontak" class="bg-ink text-white px-4 py-2 rounded font-medium hover:bg-gold hover:text-ink transition-colors">
+        <a :href="`https://wa.me/${settings.waSales1}`" target="_blank" rel="noopener noreferrer" class="inline-block bg-ink text-white px-4 py-2 rounded font-medium hover:bg-gold hover:text-ink transition-colors">
           Hubungi Kami
-        </NuxtLink>
+        </a>
       </div>
 
       <!-- Hamburger -->
@@ -65,9 +58,9 @@ const jasaItems = [
       <NuxtLink to="/tentang-kami" class="text-neutral hover:text-ink transition-colors" @click="isOpen = false">Tentang Kami</NuxtLink>
       <NuxtLink to="/artikel" class="text-neutral hover:text-ink transition-colors" @click="isOpen = false">Artikel</NuxtLink>
       <NuxtLink to="/kontak" class="text-neutral hover:text-ink transition-colors" @click="isOpen = false">Kontak</NuxtLink>
-      <NuxtLink to="/kontak" class="bg-ink text-white px-4 py-2 rounded font-medium text-center hover:bg-gold hover:text-ink transition-colors" @click="isOpen = false">
+      <a :href="`https://wa.me/${settings.waSales1}`" target="_blank" rel="noopener noreferrer" class="bg-ink text-white px-4 py-2 rounded font-medium text-center hover:bg-gold hover:text-ink transition-colors" @click="isOpen = false">
         Hubungi Kami
-      </NuxtLink>
+      </a>
     </div>
   </nav>
 </template>

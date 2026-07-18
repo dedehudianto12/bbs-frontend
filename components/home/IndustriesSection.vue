@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data } = await useAsyncData('industries', useIndustries)
+const { industries } = useIndustries()
 </script>
 
 <template>
@@ -11,13 +11,23 @@ const { data } = await useAsyncData('industries', useIndustries)
 
       <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
         <div
-          v-for="industry in data?.data"
+          v-for="industry in industries"
           :key="industry.id"
           class="border border-border rounded-lg p-6"
         >
           <p class="text-ink font-bold">{{ industry.name }}</p>
           <p class="mt-2 text-neutral text-sm">{{ industry.description }}</p>
         </div>
+      </div>
+
+      <div class="mt-10 text-center">
+        <p class="text-neutral text-sm mb-3">Tidak melihat industri Anda?</p>
+        <NuxtLink
+          to="/kontak"
+          class="inline-block bg-ink text-white px-5 py-2.5 rounded text-sm font-medium hover:bg-gold hover:text-ink transition-colors"
+        >
+          Hubungi Kami
+        </NuxtLink>
       </div>
     </div>
   </section>

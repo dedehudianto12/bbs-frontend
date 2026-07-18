@@ -26,6 +26,8 @@ Dokumen ini adalah panduan kerja untuk AI coding agent (dan siapa pun yang berko
 | Auth admin | JWT (dikirim via HttpOnly cookie dari backend) |
 | Image storage | Cloudflare R2 / S3-compatible |
 | Rich text editor (admin artikel) | Tiptap |
+| Schema validation | Zod — dipakai di seluruh project untuk semua tipe di `types/` (form input, validasi response API nanti). Semua file di `types/` didefinisikan sebagai Zod schema + `z.infer`, bukan interface manual terpisah. |
+| UI components (admin panel saja) | shadcn-vue — **dibatasi ke `components/admin/` saja**, jangan dipakai di halaman publik. Belum diinstal, akan disetup saat mulai build admin panel. |
 
 Frontend project ini **hanya mengurus presentasi dan admin UI**. Semua logic bisnis, validasi data, dan auth dilakukan di backend Go. Jangan simpan logic bisnis penting di frontend.
 
@@ -153,6 +155,7 @@ Palet warna diturunkan dari logo resmi CV Bintang Berjaya Satu (gold + hitam). D
 - Nama composable: camelCase dengan prefix `use` (`useProducts.ts`)
 - Props dan emit didefinisikan dengan `defineProps<T>()` dan `defineEmits<T>()` bertipe, bukan runtime declaration
 - Jangan pakai `any` — definisikan tipe di `types/` dan reuse
+- Untuk data yang berasal dari luar (form input, response API nanti), definisikan schema Zod di `types/` sebagai sumber kebenaran, lalu infer TypeScript type darinya (`z.infer<typeof schema>`) — jangan tulis interface manual terpisah dari schema Zod untuk hal yang sama
 - Teks UI (label, button, heading statis) dalam Bahasa Indonesia. Nama variabel/fungsi dalam Bahasa Inggris
 - Gunakan `useFetch`/`useAsyncData` Nuxt untuk data fetching di halaman (SSR-friendly), bukan `onMounted` + manual fetch
 
@@ -170,11 +173,14 @@ Palet warna diturunkan dari logo resmi CV Bintang Berjaya Satu (gold + hitam). D
 
 ## 7. Halaman Admin
 
+Panduan detail admin panel (scope modul, auth flow, pola CRUD, shadcn-vue setup) dipindah ke **`ADMIN_AGENTS.md`** karena cukup kompleks untuk didokumentasikan terpisah. **Baca file itu sebelum mengerjakan apa pun di `pages/admin/*` atau `components/admin/*`.**
+
+Ringkasan singkat scope (detail lengkap ada di ADMIN_AGENTS.md bagian 1): admin panel mengelola Produk, Jasa, Galeri, Artikel, Kategori Produk (CRUD terbatas — slug terkunci), dan Pengaturan Umum (kontak, jam operasional, PDF company profile).
+
+Aturan umum yang tetap berlaku dari sini (bukan duplikat, ini level project bukan level modul):
 - Layout `admin.vue` terpisah total dari layout publik — tidak ada navbar/footer publik di dalam admin
 - Setiap halaman di bawah `pages/admin/` (kecuali `login.vue`) wajib pakai middleware `admin-auth`
-- Form produk dan artikel pakai komponen `admin/forms/` yang reusable untuk mode "tambah" dan "edit" (bedakan lewat prop `mode`)
-- Artikel pakai Tiptap untuk rich text; simpan output sebagai HTML atau JSON terstruktur (samakan dengan format yang backend expect — cek API contract dulu)
-- Upload gambar produk/artikel langsung ke endpoint backend yang handle upload ke R2, jangan upload langsung dari frontend ke storage provider
+- Upload gambar/file (produk, artikel, galeri, company profile PDF) nantinya lewat endpoint backend yang handle ke R2 — jangan upload langsung dari frontend ke storage provider. Sementara backend belum ada, ikuti pola simulasi upload yang dijelaskan di ADMIN_AGENTS.md
 
 ---
 

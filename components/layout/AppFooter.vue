@@ -17,7 +17,6 @@ const year = new Date().getFullYear()
         <!-- Right: links -->
         <div class="flex flex-col gap-2 text-sm">
           <NuxtLink to="/produk/belt-conveyor" class="text-neutral/60 hover:text-gold transition-colors">Produk</NuxtLink>
-          <NuxtLink to="/industri" class="text-neutral/60 hover:text-gold transition-colors">Industri</NuxtLink>
           <NuxtLink to="/artikel" class="text-neutral/60 hover:text-gold transition-colors">Artikel</NuxtLink>
           <NuxtLink to="/kontak" class="text-neutral/60 hover:text-gold transition-colors">Kontak</NuxtLink>
         </div>
