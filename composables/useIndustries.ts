@@ -1,13 +1,28 @@
-import { industrySchema, type Industry } from '~/types/industry'
-import { mockIndustries } from '~/data/mock/industries'
+import type { Industry } from '~/types/industry'
 
 export function useIndustries() {
-  // ponytail: return mock data directly; swap to $fetch when backend is ready
-  const result = industrySchema.array().safeParse(mockIndustries)
-  if (!result.success) {
-    console.error('Invalid mock industry data:', result.error.format())
-  }
-  const industries: Industry[] = result.success ? result.data : mockIndustries
+  const { api } = useApi()
+  // ponytail: useState for SSR-safe shared state
+  const industries = useState<Industry[]>('bbs-industries', () => [])
+  const loading = ref(false)
+  const error = ref<string | null>(null)
 
-  return { industries }
+  async function fetch() {
+    loading.value = true
+    error.value = null
+    try {
+      const data = await api<Industry[]>('/api/industri')
+      industries.value = data
+    } catch (e: any) {
+      error.value = e.statusMessage ?? 'Gagal memuat industri'
+    } finally {
+      loading.value = false
+    }
+  }
+
+  if (import.meta.client && industries.value.length === 0) {
+    fetch()
+  }
+
+  return { industries, loading, error, fetch }
 }

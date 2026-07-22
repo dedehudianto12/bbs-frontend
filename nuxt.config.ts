@@ -9,4 +9,10 @@ export default defineNuxtConfig({
       { path: '~/components', pathPrefix: false },
     ],
   },
+  runtimeConfig: {
+    public: {
+      // Override via NUXT_PUBLIC_API_BASE di .env
+      apiBase: 'http://localhost:8080',
+    },
+  },
 })

@@ -9,12 +9,12 @@ export function slugify(text: string): string {
     .trim()
 }
 
+// ponytail: backend uses slug as PK (no id), sortOrder not order
 export const kategoriSchema = z.object({
-  id: z.string().min(1),
   slug: z.string().min(1),
   label: z.string().min(1),
   group: z.enum(['belt-conveyor', 'lainnya']),
-  order: z.number().int().min(0),
+  sortOrder: z.number().int().min(0),
 })
 
 export type Kategori = z.infer<typeof kategoriSchema>

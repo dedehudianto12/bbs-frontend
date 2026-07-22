@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import { Package, Wrench, Image, FileText, Tags } from '@lucide/vue'
+import { Package, Wrench, Image, FileText, Tags } from "@lucide/vue";
 
-definePageMeta({ middleware: ['admin-auth'] })
+definePageMeta({ middleware: ["admin-auth"] });
 
-const { products } = useProducts()
-const { services } = useServices()
-const { items: galleryItems } = useGallery()
-const { articles, getLatest } = useArticles()
-const { items: kategoriItems } = useKategori()
+const { products } = useProducts();
+const { services } = useServices();
+const { items: galleryItems } = useGallery();
+const { articles, getLatest } = useArticles();
+const { items: kategoriItems } = useKategori();
 
 const summaryCards = computed(() => [
-  { label: 'Total Produk', count: products.value.length, icon: Package },
-  { label: 'Total Jasa', count: services.value.length, icon: Wrench },
-  { label: 'Total Galeri', count: galleryItems.value.length, icon: Image },
-  { label: 'Total Artikel', count: articles.value.length, icon: FileText },
-  { label: 'Total Kategori', count: kategoriItems.length, icon: Tags },
-])
+  { label: "Total Produk", count: products.value.length, icon: Package },
+  { label: "Total Jasa", count: services.value.length, icon: Wrench },
+  { label: "Total Galeri", count: galleryItems.value.length, icon: Image },
+  { label: "Total Artikel", count: articles.value.length, icon: FileText },
+  { label: "Total Kategori", count: kategoriItems.value.length, icon: Tags },
+]);
 
-const recentArticles = computed(() => getLatest().slice(0, 5))
+const recentArticles = computed(() => getLatest().slice(0, 5));
 </script>
 
 <template>
@@ -35,7 +35,9 @@ const recentArticles = computed(() => getLatest().slice(0, 5))
           <component :is="card.icon" class="h-5 w-5" />
         </div>
         <div>
-          <p class="text-2xl font-semibold text-neutral-900">{{ card.count }}</p>
+          <p class="text-2xl font-semibold text-neutral-900">
+            {{ card.count }}
+          </p>
           <p class="text-sm text-neutral-500">{{ card.label }}</p>
         </div>
       </div>
@@ -43,7 +45,9 @@ const recentArticles = computed(() => getLatest().slice(0, 5))
 
     <!-- Recent Articles -->
     <div class="rounded-lg border border-neutral-200 bg-white">
-      <div class="flex items-center justify-between px-4 py-3 border-b border-neutral-100">
+      <div
+        class="flex items-center justify-between px-4 py-3 border-b border-neutral-100"
+      >
         <h2 class="font-medium text-neutral-900">Artikel Terbaru</h2>
         <NuxtLink
           to="/admin/artikel"
@@ -53,7 +57,10 @@ const recentArticles = computed(() => getLatest().slice(0, 5))
         </NuxtLink>
       </div>
 
-      <div v-if="recentArticles.length === 0" class="px-4 py-8 text-center text-sm text-neutral-400">
+      <div
+        v-if="recentArticles.length === 0"
+        class="px-4 py-8 text-center text-sm text-neutral-400"
+      >
         Belum ada artikel.
       </div>
 
@@ -64,9 +71,18 @@ const recentArticles = computed(() => getLatest().slice(0, 5))
           class="flex items-center justify-between px-4 py-3 hover:bg-neutral-50/50 transition-colors"
         >
           <div class="min-w-0 flex-1">
-            <p class="text-sm font-medium text-neutral-900 truncate">{{ article.title }}</p>
+            <p class="text-sm font-medium text-neutral-900 truncate">
+              {{ article.title }}
+            </p>
             <p class="text-xs text-neutral-400 mt-0.5">
-              {{ article.tag }} · {{ new Date(article.publishedAt).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' }) }}
+              {{ article.tag }} ·
+              {{
+                new Date(article.publishedAt).toLocaleDateString("id-ID", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })
+              }}
             </p>
           </div>
           <NuxtLink

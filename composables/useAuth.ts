@@ -1,32 +1,49 @@
-// TODO: Ganti dengan fetch ke backend Go saat API sudah tersedia.
-// Saat ini menggunakan kredensial dummy untuk development.
-
-const DUMMY_EMAIL = 'admin@bbsconveyor.com'
-const DUMMY_PASSWORD = 'admin123'
+type Admin = { id: string; email: string; name: string }
 
 export function useAuth() {
-  const authToken = useCookie<string | null>('bbs_admin_auth', {
-    maxAge: 60 * 60 * 24, // 1 hari
-    sameSite: 'lax',
-  })
+  const { api } = useApi()
 
-  const isAuthenticated = computed(() => authToken.value === 'authenticated')
+  // ponytail: cek autentikasi dengan GET /api/admin/me (cookie JWT otomatis dikirim via credentials:'include')
+  const user = useState<Admin | null>('bbs-admin-user', () => null)
+  const loading = ref(false)
+
+  const isAuthenticated = computed(() => user.value !== null)
+
+  async function checkAuth(): Promise<boolean> {
+    loading.value = true
+    try {
+      const admin = await api<Admin>('/api/admin/me')
+      user.value = admin
+      return true
+    } catch {
+      user.value = null
+      return false
+    } finally {
+      loading.value = false
+    }
+  }
 
   async function login(email: string, password: string): Promise<boolean> {
-    // Simulasi network delay — nanti diganti fetch ke backend
-    await new Promise((r) => setTimeout(r, 300))
-
-    if (email === DUMMY_EMAIL && password === DUMMY_PASSWORD) {
-      authToken.value = 'authenticated'
+    loading.value = true
+    try {
+      const res = await api<{ token: string; admin: Admin }>('/api/admin/login', {
+        method: 'POST',
+        body: { email, password },
+      })
+      user.value = res.admin
       return true
+    } catch {
+      user.value = null
+      return false
+    } finally {
+      loading.value = false
     }
-
-    return false
   }
 
-  function logout() {
-    authToken.value = null
+  async function logout() {
+    await api<null>('/api/admin/logout', { method: 'POST' }).catch(() => {})
+    user.value = null
   }
 
-  return { login, logout, isAuthenticated }
+  return { user, loading, isAuthenticated, login, logout, checkAuth }
 }

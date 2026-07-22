@@ -6,7 +6,7 @@ export const articleSchema = z.object({
   title: z.string().min(1),
   excerpt: z.string().min(1),
   content: z.string(),
-  image: z.string(),
+  image: z.string().nullable(),
   tag: z.string().min(1),
   publishedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Expected YYYY-MM-DD'),
   author: z.string().min(1),

@@ -5,7 +5,7 @@ export const industrySchema = z.object({
   slug: z.string().min(1),
   name: z.string().min(1),
   description: z.string().min(1),
-  image: z.string(),
+  image: z.string().nullable(),
   productSlugs: z.array(z.string()),
 })
 

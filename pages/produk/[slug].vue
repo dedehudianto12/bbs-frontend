@@ -5,7 +5,9 @@ const slug = route.params.slug as string
 const { getBySlug } = useProducts()
 const { getByGroup: getKategoriByGroup } = useKategori()
 const { settings } = useSettings()
-const product = getBySlug(slug)
+
+// ponytail: useAsyncData for SSR-friendly async fetch
+const { data: product, error } = await useAsyncData(`product-${slug}`, () => getBySlug(slug))
 
 function getKategoriInfo(group: string, kategori: string) {
   const list = getKategoriByGroup(group as 'belt-conveyor' | 'lainnya')
@@ -15,26 +17,26 @@ function getKategoriInfo(group: string, kategori: string) {
 }
 
 const kategoriInfo = computed(() => {
-  if (!product) return null
-  return getKategoriInfo(product.group, product.kategori)
+  if (!product.value) return null
+  return getKategoriInfo(product.value.group, product.value.kategori)
 })
 
 // ponytail: placeholder gallery — single image expanded to 4 slots for layout
 const galleryImages = computed(() => {
-  if (!product) return []
-  return Array.from({ length: 4 }, (_, i) => product.image || null).filter(Boolean) as string[]
+  if (!product.value) return []
+  return Array.from({ length: 4 }, (_, i) => product.value!.image || null).filter(Boolean) as string[]
 })
 
 const selectedImage = ref(0)
 
 const waMessage = computed(() => {
-  if (!product) return ''
-  return `Halo, saya ingin menanyakan ketersediaan ${product.name}`
+  if (!product.value) return ''
+  return `Halo, saya ingin menanyakan ketersediaan ${product.value.name}`
 })
 
 useSeoMeta({
-  title: product ? `${product.name} — BBS Conveyor` : 'Produk Tidak Ditemukan — BBS Conveyor',
-  description: product?.description ?? ''
+  title: product.value ? `${product.value.name} — BBS Conveyor` : 'Produk Tidak Ditemukan — BBS Conveyor',
+  description: product.value?.description ?? ''
 })
 </script>
 
@@ -46,7 +48,7 @@ useSeoMeta({
       :to="kategoriInfo.link"
       class="text-sm text-gold-dark hover:text-gold transition-colors mb-8 inline-block"
     >
-      ← Kembali ke {{ kategoriInfo.label }}
+      &larr; Kembali ke {{ kategoriInfo.label }}
     </NuxtLink>
 
     <!-- Two-column layout -->
@@ -115,7 +117,7 @@ useSeoMeta({
     <h1 class="text-2xl font-bold text-ink mb-4">Produk Tidak Ditemukan</h1>
     <p class="text-neutral mb-8">Produk yang Anda cari tidak tersedia.</p>
     <NuxtLink to="/produk/belt-conveyor" class="text-gold-dark hover:text-gold font-medium transition-colors">
-      ← Kembali ke Produk
+      &larr; Kembali ke Produk
     </NuxtLink>
   </div>
 </template>

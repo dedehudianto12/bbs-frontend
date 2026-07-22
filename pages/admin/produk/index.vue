@@ -224,7 +224,7 @@ function sortDir(colId: string): 'asc' | 'desc' | false {
         class="h-9 rounded-md border border-neutral-200 bg-white px-3 text-sm text-neutral-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-400"
       >
         <option value="">Semua Kategori</option>
-        <option v-for="kat in kategoriFilterOptions" :key="kat.id" :value="kat.slug">
+        <option v-for="kat in kategoriFilterOptions" :key="kat.slug" :value="kat.slug">
           {{ kat.label }}
         </option>
       </select>

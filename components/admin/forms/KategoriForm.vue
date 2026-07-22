@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { kategoriSchema, type Kategori, slugify } from '~/types/category'
+import { kategoriSchema, type Kategori } from '~/types/category'
 
 const props = defineProps<{
   mode: 'create' | 'edit'
@@ -7,21 +7,16 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  submit: [data: Omit<Kategori, 'id' | 'slug'>]
+  submit: [data: { label: string; sortOrder: number }]
 }>()
 
 const label = ref(props.initialData?.label ?? '')
+const sortOrder = ref(props.initialData?.sortOrder ?? 1)
 const group = ref<'belt-conveyor' | 'lainnya'>(props.initialData?.group ?? 'belt-conveyor')
-const order = ref(props.initialData?.order ?? 1)
 
-// Slug: auto-generated di create mode, locked di edit mode
+// Slug: readonly (backend seed), locked di edit mode
 const isEdit = props.mode === 'edit'
-const originalSlug = ref(props.initialData?.slug ?? '')
-
-const liveSlug = computed(() => {
-  if (isEdit) return originalSlug.value
-  return slugify(label.value)
-})
+const slug = computed(() => props.initialData?.slug ?? '')
 
 const errors = ref<Record<string, string>>({})
 
@@ -29,11 +24,10 @@ function validate(): boolean {
   errors.value = {}
 
   const result = kategoriSchema.safeParse({
-    id: isEdit ? props.initialData?.id : 'new',
-    slug: liveSlug.value || 'temp',
+    slug: slug.value || 'temp',
     label: label.value,
     group: group.value,
-    order: order.value,
+    sortOrder: sortOrder.value,
   })
 
   if (result.success) return true
@@ -54,8 +48,7 @@ function onSubmit() {
 
   emit('submit', {
     label: label.value,
-    group: group.value,
-    order: order.value,
+    sortOrder: sortOrder.value,
   })
 }
 </script>
@@ -72,14 +65,11 @@ function onSubmit() {
       <Label for="kat-slug">Slug</Label>
       <Input
         id="kat-slug"
-        :model-value="liveSlug"
+        :model-value="slug"
         disabled
         class="bg-neutral-50 text-neutral-400 cursor-not-allowed"
       />
-      <p class="text-xs text-neutral-400">
-        {{ isEdit ? 'Slug tidak bisa diubah setelah kategori dibuat.' : 'Slug dibuat otomatis dari label di atas.' }}
-      </p>
-      <p v-if="errors.slug" class="text-sm text-red-600">{{ errors.slug }}</p>
+      <p class="text-xs text-neutral-400">Slug tidak bisa diubah (dibuat via migration backend).</p>
     </div>
 
     <div class="grid grid-cols-2 gap-4">
@@ -88,25 +78,23 @@ function onSubmit() {
         <select
           id="kat-group"
           v-model="group"
-          class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          disabled
+          class="flex h-9 w-full rounded-md border border-input bg-neutral-50 text-neutral-400 cursor-not-allowed px-3 py-1 text-sm shadow-sm"
         >
           <option value="belt-conveyor">Belt Conveyor</option>
           <option value="lainnya">Produk Lainnya</option>
         </select>
-        <p v-if="errors.group" class="text-sm text-red-600">{{ errors.group }}</p>
       </div>
 
       <div class="space-y-2">
         <Label for="kat-order">Urutan</Label>
-        <Input id="kat-order" v-model.number="order" type="number" min="0" />
-        <p v-if="errors.order" class="text-sm text-red-600">{{ errors.order }}</p>
+        <Input id="kat-order" v-model.number="sortOrder" type="number" min="0" />
+        <p v-if="errors.sortOrder" class="text-sm text-red-600">{{ errors.sortOrder }}</p>
       </div>
     </div>
 
     <div class="flex justify-end gap-3 pt-2">
-      <Button type="submit">
-        {{ mode === 'create' ? 'Simpan' : 'Perbarui' }}
-      </Button>
+      <Button type="submit">Perbarui</Button>
     </div>
   </form>
 </template>

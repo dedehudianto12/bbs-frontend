@@ -1,28 +1,48 @@
-// TODO: Ganti dengan fetch ke backend Go + R2 upload saat API sudah tersedia.
-// Saat ini menggunakan mock data in-memory untuk development.
 import type { GalleryItem } from '~/types/gallery'
-import { mockGallery } from '~/data/mock/gallery'
-
-let nextId = 99
 
 export function useGallery() {
-  const items = ref<GalleryItem[]>([...mockGallery.map((g) => ({ ...g }))])
+  const { api } = useApi()
+  const items = useState<GalleryItem[]>('bbs-gallery', () => [])
+  const loading = ref(false)
+  const error = ref<string | null>(null)
 
-  function add(item: Omit<GalleryItem, 'id'>) {
-    const newItem: GalleryItem = { ...item, id: `gal-${String(++nextId).padStart(2, '0')}` }
-    items.value.push(newItem)
-  }
-
-  function update(id: string, data: Omit<GalleryItem, 'id'>) {
-    const idx = items.value.findIndex((i) => i.id === id)
-    if (idx !== -1) {
-      items.value[idx] = { ...data, id }
+  async function fetch() {
+    loading.value = true
+    error.value = null
+    try {
+      const data = await api<GalleryItem[]>('/api/galeri')
+      items.value = data
+    } catch (e: any) {
+      error.value = e.statusMessage ?? 'Gagal memuat galeri'
+    } finally {
+      loading.value = false
     }
   }
 
-  function remove(id: string) {
+  async function add(item: Omit<GalleryItem, 'id' | 'createdAt' | 'updatedAt'>) {
+    error.value = null
+    const created = await api<GalleryItem>('/api/admin/galeri', { method: 'POST', body: item })
+    items.value.push(created)
+    return created
+  }
+
+  async function update(id: string, data: Omit<GalleryItem, 'id' | 'createdAt' | 'updatedAt'>) {
+    error.value = null
+    const updated = await api<GalleryItem>(`/api/admin/galeri/${id}`, { method: 'PUT', body: data })
+    const idx = items.value.findIndex((i) => i.id === id)
+    if (idx !== -1) items.value[idx] = updated
+    return updated
+  }
+
+  async function remove(id: string) {
+    error.value = null
+    await api<null>(`/api/admin/galeri/${id}`, { method: 'DELETE' })
     items.value = items.value.filter((i) => i.id !== id)
   }
 
-  return { items, add, update, remove }
+  if (import.meta.client && items.value.length === 0) {
+    fetch()
+  }
+
+  return { items, loading, error, fetch, add, update, remove }
 }

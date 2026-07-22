@@ -1,12 +1,17 @@
 <script setup lang="ts">
-definePageMeta({ layout: false, middleware: ['admin-auth'] })
+definePageMeta({ layout: false })
 
 const email = ref('')
 const password = ref('')
 const error = ref('')
 const loading = ref(false)
 
-const { login } = useAuth()
+const { login, isAuthenticated } = useAuth()
+
+// Already logged in? Redirect to dashboard
+if (import.meta.client && isAuthenticated.value) {
+  await navigateTo('/admin')
+}
 
 async function onSubmit() {
   error.value = ''
@@ -44,10 +49,6 @@ async function onSubmit() {
       <Button type="submit" class="w-full" :disabled="loading">
         {{ loading ? 'Memeriksa...' : 'Masuk' }}
       </Button>
-
-      <p class="text-xs text-center text-neutral-400">
-        Login sementara — mock auth, belum terhubung backend.
-      </p>
     </form>
   </div>
 </template>

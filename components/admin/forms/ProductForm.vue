@@ -105,7 +105,7 @@ function onSubmit() {
           class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         >
           <option value="" disabled>Pilih kategori...</option>
-          <option v-for="kat in kategoriOptions" :key="kat.id" :value="kat.slug">
+          <option v-for="kat in kategoriOptions" :key="kat.slug" :value="kat.slug">
             {{ kat.label }}
           </option>
         </select>
@@ -162,7 +162,7 @@ function onSubmit() {
         <button
           type="button"
           class="p-1.5 rounded text-neutral-400 hover:bg-red-50 hover:text-red-600 transition-colors shrink-0"
-          @click="delete specs[key]; $forceUpdate()"
+          @click="delete specs[key]"
         >
           ✕
         </button>

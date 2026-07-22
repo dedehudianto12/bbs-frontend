@@ -1,18 +1,13 @@
 <script setup lang="ts">
-import { Trash2, Pencil } from '@lucide/vue'
+import { Pencil } from '@lucide/vue'
 import type { Kategori } from '~/types/category'
 
 definePageMeta({ middleware: ['admin-auth'] })
 
-const { items, add, update, remove } = useKategori()
+const { items, update } = useKategori()
 
 const formOpen = ref(false)
-const formMode = ref<'create' | 'edit'>('create')
 const editingItem = ref<Kategori | undefined>(undefined)
-
-const deleteOpen = ref(false)
-const deletingItem = ref<Kategori | undefined>(undefined)
-
 const toast = ref('')
 
 const groupLabels: Record<string, string> = {
@@ -20,41 +15,18 @@ const groupLabels: Record<string, string> = {
   lainnya: 'Produk Lainnya',
 }
 
-function openCreate() {
-  formMode.value = 'create'
-  editingItem.value = undefined
-  formOpen.value = true
-}
-
+// ponytail: kategori hanya bisa edit label + sortOrder (backend seed via migration)
 function openEdit(item: Kategori) {
-  formMode.value = 'edit'
   editingItem.value = item
   formOpen.value = true
 }
 
-function openDelete(item: Kategori) {
-  deletingItem.value = item
-  deleteOpen.value = true
-}
-
-function onFormSubmit(data: Omit<Kategori, 'id' | 'slug'>) {
-  if (formMode.value === 'create') {
-    add(data)
-    toast.value = 'Kategori berhasil ditambahkan.'
-  } else if (editingItem.value) {
-    update(editingItem.value.id, data)
-    toast.value = 'Kategori berhasil diperbarui.'
+function onFormSubmit(data: { label: string; sortOrder: number }) {
+  if (editingItem.value) {
+    update(editingItem.value.slug, data)
+    toast.value = `Kategori "${data.label}" berhasil diperbarui.`
   }
   formOpen.value = false
-  setTimeout(() => (toast.value = ''), 3000)
-}
-
-function onDeleteConfirm() {
-  if (deletingItem.value) {
-    remove(deletingItem.value.id)
-    toast.value = 'Kategori berhasil dihapus.'
-  }
-  deleteOpen.value = false
   setTimeout(() => (toast.value = ''), 3000)
 }
 </script>
@@ -70,7 +42,6 @@ function onDeleteConfirm() {
 
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-xl font-semibold text-neutral-900">Kategori Produk</h1>
-      <Button @click="openCreate">Tambah Kategori</Button>
     </div>
 
     <div class="overflow-x-auto rounded-lg border border-neutral-200">
@@ -85,7 +56,7 @@ function onDeleteConfirm() {
           </tr>
         </thead>
         <tbody class="divide-y divide-neutral-100">
-          <tr v-for="item in items" :key="item.id" class="hover:bg-neutral-50/50">
+          <tr v-for="item in items" :key="item.slug" class="hover:bg-neutral-50/50">
             <td class="px-4 py-3 font-medium text-neutral-900">{{ item.label }}</td>
             <td class="px-4 py-3 hidden sm:table-cell text-neutral-400 font-mono text-xs">
               {{ item.slug }}
@@ -100,7 +71,7 @@ function onDeleteConfirm() {
                 {{ groupLabels[item.group] }}
               </span>
             </td>
-            <td class="px-4 py-3 hidden sm:table-cell text-neutral-500">{{ item.order }}</td>
+            <td class="px-4 py-3 hidden sm:table-cell text-neutral-500">{{ item.sortOrder }}</td>
             <td class="px-4 py-3">
               <div class="flex justify-end gap-1">
                 <button
@@ -109,13 +80,6 @@ function onDeleteConfirm() {
                   @click="openEdit(item)"
                 >
                   <Pencil class="h-4 w-4" />
-                </button>
-                <button
-                  class="p-1.5 rounded text-neutral-400 hover:bg-red-50 hover:text-red-600 transition-colors"
-                  title="Hapus"
-                  @click="openDelete(item)"
-                >
-                  <Trash2 class="h-4 w-4" />
                 </button>
               </div>
             </td>
@@ -130,26 +94,14 @@ function onDeleteConfirm() {
 
     <Dialog
       :open="formOpen"
-      :title="formMode === 'create' ? 'Tambah Kategori' : 'Edit Kategori'"
+      title="Edit Kategori"
       @update:open="formOpen = $event"
     >
       <KategoriForm
-        :mode="formMode"
+        mode="edit"
         :initial-data="editingItem"
         @submit="onFormSubmit"
       />
-    </Dialog>
-
-    <Dialog
-      :open="deleteOpen"
-      title="Hapus Kategori"
-      description="Kategori yang dihapus tidak dapat dikembalikan."
-      @update:open="deleteOpen = $event"
-    >
-      <div class="flex justify-end gap-3">
-        <Button variant="outline" @click="deleteOpen = false">Batal</Button>
-        <Button variant="destructive" @click="onDeleteConfirm">Hapus</Button>
-      </div>
     </Dialog>
   </div>
 </template>

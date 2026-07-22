@@ -1,243 +1,481 @@
-# AGENTS.md — BBS Conveyor Frontend
+# AGENTS.md — BBS Conveyor Website
 
-Dokumen ini adalah panduan kerja untuk AI coding agent (dan siapa pun yang berkontribusi) di project rework website **CV Bintang Berjaya Satu (BBS Conveyor)**. Baca seluruh dokumen ini sebelum membuat perubahan apa pun.
+This document is the single source of truth for every AI coding agent working on this project.
 
----
-
-## 1. Ringkasan Project
-
-- **Nama bisnis**: CV Bintang Berjaya Satu (dikenal publik sebagai "BBS Conveyor")
-- **Tagline**: "Connecting Power and Motion to Drive Industrial Excellence"
-- **Domain bisnis**: Supplier belt conveyor, roller, komponen industri untuk manufaktur, tambang, dan pengolahan
-- **Tujuan rework**: website lama (WordPress + Slider Revolution) diganti menjadi lebih profesional, ringan, dan punya admin panel untuk update artikel & produk
-- **Target pengguna**: (1) calon klien B2B yang mencari supplier conveyor, (2) admin internal BBS yang update konten
+Read this file completely before making any changes.
 
 ---
 
-## 2. Tech Stack
+# 1. Project Overview
 
-| Layer | Teknologi |
-|---|---|
-| Frontend framework | Nuxt 3 (Vue 3, Composition API, `<script setup>`) |
-| Styling | Tailwind CSS |
-| Hosting frontend | Vercel |
-| Backend API | Go (chi router, pgx/v5) — repo terpisah |
-| Database | PostgreSQL (Railway) |
-| Auth admin | JWT (dikirim via HttpOnly cookie dari backend) |
-| Image storage | Cloudflare R2 / S3-compatible |
-| Rich text editor (admin artikel) | Tiptap |
-| Schema validation | Zod — dipakai di seluruh project untuk semua tipe di `types/` (form input, validasi response API nanti). Semua file di `types/` didefinisikan sebagai Zod schema + `z.infer`, bukan interface manual terpisah. |
-| UI components (admin panel saja) | shadcn-vue — **dibatasi ke `components/admin/` saja**, jangan dipakai di halaman publik. Belum diinstal, akan disetup saat mulai build admin panel. |
+## Business
 
-Frontend project ini **hanya mengurus presentasi dan admin UI**. Semua logic bisnis, validasi data, dan auth dilakukan di backend Go. Jangan simpan logic bisnis penting di frontend.
+**Company**
+CV Bintang Berjaya Satu (BBS Conveyor)
+
+**Tagline**
+
+Connecting Power and Motion to Drive Industrial Excellence
+
+**Industry**
+
+Industrial Conveyor Supplier
+
+- Belt Conveyor
+- Conveyor Components
+- Industrial Rollers
+- Conveyor Engineering
+- Installation Services
 
 ---
 
-## 3. Struktur Folder
+## Project Goal
+
+Rebuild the old WordPress website into a modern, fast, SEO-friendly B2B company profile.
+
+This website is primarily content-driven.
+
+Content is managed using **Nuxt Studio**.
+
+The website should feel premium, modern, trustworthy, and lightweight.
+
+---
+
+## Target Users
+
+### Visitor
+
+Industrial companies looking for:
+
+- conveyor products
+- engineering services
+- industrial solutions
+
+### Content Editor
+
+Internal BBS staff.
+
+Editors should be able to update content without touching code.
+
+---
+
+# 2. Architecture
+
+This project follows a **Content-First Architecture**.
+
+Nuxt Studio is the source of truth.
+
+There is **no backend API** for managing content.
 
 ```
-bbs-conveyor-frontend/
-├── app.vue
-├── nuxt.config.ts
-├── tailwind.config.ts
-├── package.json
-├── .env.example
-├── assets/
-│   ├── css/main.css          # Tailwind base + font imports
-│   └── images/                # logo, ikon statis (bukan gambar produk)
-├── components/
-│   ├── layout/
-│   │   ├── AppNavbar.vue
-│   │   ├── AppFooter.vue
-│   │   └── AppHero.vue
-│   ├── product/
-│   │   ├── ProductCard.vue
-│   │   ├── ProductGrid.vue
-│   │   └── ProductFilter.vue
-│   ├── article/
-│   │   ├── ArticleCard.vue
-│   │   └── ArticleGrid.vue
-│   ├── industry/
-│   │   └── IndustryCard.vue
-│   ├── ui/                    # komponen generik: Button, Badge, SectionLabel, Input
-│   └── admin/
-│       ├── AdminSidebar.vue
-│       ├── AdminTable.vue
-│       └── forms/
-│           ├── ProductForm.vue
-│           └── ArticleForm.vue
-├── composables/
-│   ├── useApi.ts              # wrapper fetch ke backend Go
-│   ├── useAuth.ts             # login/logout/session admin
-│   ├── useProducts.ts
-│   ├── useArticles.ts
-│   └── useIndustries.ts
-├── layouts/
-│   ├── default.vue            # navbar + footer publik
-│   └── admin.vue              # sidebar admin, tanpa navbar publik
-├── middleware/
-│   └── admin-auth.ts          # redirect ke /admin/login jika belum login
-├── pages/
-│   ├── index.vue
-│   ├── produk/
-│   │   ├── belt-conveyor/
-│   │   │   └── [kategori].vue     # pvc-belt, pu, flat-belt, rubber-belt
-│   │   ├── lainnya/
-│   │   │   └── [kategori].vue     # timing-belt, fastener, cleat, gravity-roll
-│   │   └── [slug].vue             # halaman detail satu produk (semua kategori share ini)
-│   ├── jasa/
-│   │   ├── index.vue              # listing semua jasa
-│   │   └── [slug].vue             # incline-cleated-belt, profile-guide-belt, reparasi, onsite-joint
-│   ├── galeri.vue             # foto instalasi/proyek — trust signal B2B
-│   ├── artikel/
-│   │   ├── index.vue          # gabungan konten "Blog" + "Sharing & Tips" situs lama — jangan dipisah lagi
-│   │   └── [slug].vue
-│   ├── tentang-kami.vue
-│   ├── kontak.vue
-│   └── admin/
-│       ├── login.vue
-│       ├── index.vue          # dashboard ringkas
-│       ├── produk/
-│       │   ├── index.vue
-│       │   ├── tambah.vue
-│       │   └── [id]/edit.vue
-│       └── artikel/
-│           ├── index.vue
-│           ├── tambah.vue
-│           └── [id]/edit.vue
-├── types/
-│   ├── product.ts
-│   ├── article.ts
-│   ├── industry.ts
-│   └── service.ts             # untuk konten "Jasa" — struktur berbeda dari product.ts
-└── public/
-    └── favicon.ico
+Nuxt Studio
+      │
+      ▼
+Nuxt Content
+      │
+      ▼
+Nuxt Website
+      │
+      ▼
+Vercel
 ```
 
-**Aturan penempatan file:**
-- Komponen yang dipakai lebih dari satu halaman → `components/`
-- Komponen yang cuma dipakai satu halaman spesifik → boleh inline di file page tersebut, jangan buat komponen terpisah untuk satu pemakaian
-- Semua pemanggilan API lewat `composables/`, jangan `fetch()` langsung di dalam komponen atau page
+Never introduce an unnecessary backend.
 
 ---
 
-## 4. Design Tokens
+# 3. Tech Stack
 
-Palet warna diturunkan dari logo resmi CV Bintang Berjaya Satu (gold + hitam). Definisikan sebagai CSS variable di `assets/css/main.css` dan mapping ke Tailwind config — **jangan hardcode hex code di komponen**.
+| Layer              | Technology                               |
+| ------------------ | ---------------------------------------- |
+| Framework          | Nuxt 4                                   |
+| CMS                | Nuxt Studio                              |
+| Content            | Nuxt Content                             |
+| Styling            | Tailwind CSS                             |
+| Images             | Nuxt Studio Assets (Cloudinary optional) |
+| Validation         | Zod                                      |
+| Hosting            | Vercel                                   |
+| Image Optimization | Nuxt Image                               |
 
-```css
-:root {
-  --color-ink: #1A1A18;        /* teks utama, background gelap (footer) */
-  --color-gold: #CBA135;       /* aksen utama, CTA, label section */
-  --color-gold-dark: #8A6D1F;  /* hover state, teks aksen di atas putih */
-  --color-neutral: #6B6A64;    /* teks sekunder */
-  --color-bg-soft: #F5F4F0;    /* placeholder image, section alternate */
-  --color-border: #E5E3DC;
-}
+---
+
+# 4. Folder Structure
+
+```
+app/
+components/
+content/
+layouts/
+pages/
+assets/
+public/
+types/
+utils/
+content.config.ts
 ```
 
-**Aturan pemakaian warna:**
-- Gold **tidak** dipakai sebagai warna latar besar (section penuh) — hanya untuk aksen: label kecil di atas heading, tombol CTA utama, garis bawah/badge
-- Tombol CTA utama: background gold, teks `--color-ink` (bukan putih)
-- Tombol sekunder: outline netral, transparan
-- Dark section (kalau dipakai, misal footer) pakai `--color-ink`, teks di atasnya pakai putih/`--color-bg-soft`
+Inside content:
 
-**Tipografi:**
-- Heading: font bold/condensed yang senada dengan wordmark logo (bukan Inter default) — cek dulu apakah klien punya brand font resmi, kalau tidak ada gunakan alternatif dengan karakter serupa (mis. font sans-serif dengan weight 600-700)
-- Body: sans-serif netral, regular weight, line-height minimal 1.6 untuk paragraf
+```
+content/
 
----
+products/
 
-## 5. Konvensi Kode
+services/
 
-- Semua komponen Vue pakai `<script setup lang="ts">`
-- Nama file komponen: PascalCase (`ProductCard.vue`)
-- Nama composable: camelCase dengan prefix `use` (`useProducts.ts`)
-- Props dan emit didefinisikan dengan `defineProps<T>()` dan `defineEmits<T>()` bertipe, bukan runtime declaration
-- Jangan pakai `any` — definisikan tipe di `types/` dan reuse
-- Untuk data yang berasal dari luar (form input, response API nanti), definisikan schema Zod di `types/` sebagai sumber kebenaran, lalu infer TypeScript type darinya (`z.infer<typeof schema>`) — jangan tulis interface manual terpisah dari schema Zod untuk hal yang sama
-- Teks UI (label, button, heading statis) dalam Bahasa Indonesia. Nama variabel/fungsi dalam Bahasa Inggris
-- Gunakan `useFetch`/`useAsyncData` Nuxt untuk data fetching di halaman (SSR-friendly), bukan `onMounted` + manual fetch
+industries/
+
+blog/
+
+pages/
+```
+
+Never place dynamic content inside `/assets`.
+
+All editable content belongs inside `/content`.
 
 ---
 
-## 6. Integrasi API (Backend Go)
+# 5. Content Collections
 
-- Base URL API disimpan di `.env` sebagai `NUXT_PUBLIC_API_BASE`
-- Semua request lewat `composables/useApi.ts` yang sudah handle base URL, header, dan error handling terpusat
-- Endpoint publik (produk, artikel, industri) tidak butuh auth
-- Endpoint admin (`/admin/*` di backend) butuh JWT — dikirim otomatis via HttpOnly cookie, jangan simpan token di localStorage
-- Struktur response API mengikuti pola yang sama dengan project ticketing sebelumnya: `{ data, error }` — cek dokumentasi API backend sebelum asumsi shape response
+## Products
 
----
+Fields
 
-## 7. Halaman Admin
-
-Panduan detail admin panel (scope modul, auth flow, pola CRUD, shadcn-vue setup) dipindah ke **`ADMIN_AGENTS.md`** karena cukup kompleks untuk didokumentasikan terpisah. **Baca file itu sebelum mengerjakan apa pun di `pages/admin/*` atau `components/admin/*`.**
-
-Ringkasan singkat scope (detail lengkap ada di ADMIN_AGENTS.md bagian 1): admin panel mengelola Produk, Jasa, Galeri, Artikel, Kategori Produk (CRUD terbatas — slug terkunci), dan Pengaturan Umum (kontak, jam operasional, PDF company profile).
-
-Aturan umum yang tetap berlaku dari sini (bukan duplikat, ini level project bukan level modul):
-- Layout `admin.vue` terpisah total dari layout publik — tidak ada navbar/footer publik di dalam admin
-- Setiap halaman di bawah `pages/admin/` (kecuali `login.vue`) wajib pakai middleware `admin-auth`
-- Upload gambar/file (produk, artikel, galeri, company profile PDF) nantinya lewat endpoint backend yang handle ke R2 — jangan upload langsung dari frontend ke storage provider. Sementara backend belum ada, ikuti pola simulasi upload yang dijelaskan di ADMIN_AGENTS.md
+- title
+- slug
+- category
+- thumbnail
+- gallery
+- excerpt
+- body
+- featured
+- order
 
 ---
 
-## 8. SEO & Performa
+## Services
 
-- Setiap halaman publik wajib set `useSeoMeta()` (title, description) — penting karena artikel per-industri/per-kota adalah strategi SEO utama klien
-- Gambar produk pakai `<NuxtImg>` dengan lazy loading, bukan `<img>` biasa
-- Hindari client-only rendering untuk konten yang perlu terindeks (produk, artikel) — pastikan SSR jalan normal untuk halaman-halaman ini
+Fields
 
----
-
-## 9. Struktur Navbar
-
-**Update dari client (final, override struktur navbar versi sebelumnya):**
-
-1. **Belt Conveyor** (dropdown) — PVC Belt, PU, Flat Belt, Rubber Belt
-   → link ke `/produk/belt-conveyor/[kategori]`
-2. **Produk Lainnya** (dropdown) — Timing Belt, Fastener, Cleat, Gravity Roll
-   → link ke `/produk/lainnya/[kategori]`
-3. **Jasa** (dropdown) — Incline Cleated Belt, Profile Guide Belt, Jasa Reparasi, Jasa Onsite Joint
-   → link ke `/jasa/[slug]`
-   → **Penting**: ini bukan kategori produk, ini layanan/servis. Butuh tipe data terpisah (`types/service.ts`, `useServices` composable, mock data sendiri) — jangan dipaksakan pakai struktur produk yang sama.
-4. **Tentang Kami** (`/tentang-kami`)
-5. **Artikel** (`/artikel`) — gabungan dari "Blog" dan "Sharing & Tips" di situs lama, jangan dipisah lagi
-6. **Kontak** (`/kontak`)
-
-Tidak ada menu "Galeri" atau "Industri" terpisah di level navbar utama — halaman `/galeri` tetap ada sebagai halaman tersendiri (linked dari homepage section atau footer), tapi tidak wajib jadi item navbar utama karena client tidak memintanya di struktur ini.
-
-**Kebutuhan teknis untuk dropdown navbar:**
-- `AppNavbar.vue` perlu didesain ulang untuk support submenu on-hover (desktop) dan accordion/expand (mobile) — bukan lagi flat link list
-- Setiap dropdown item (Belt Conveyor, Produk Lainnya, Jasa) sendiri juga harus bisa diklik langsung ke halaman listing-nya (bukan cuma trigger dropdown), sebelum user pilih sub-kategori
-- Gunakan komponen reusable untuk dropdown, misal `components/layout/NavDropdown.vue`, supaya tidak duplikasi markup 3x untuk Belt Conveyor/Produk Lainnya/Jasa
-
-CTA di kanan navbar: "Hubungi Kami" → ke `/kontak`. Situs lama punya dua nomor sales WhatsApp terpisah (Sales 1 & Sales 2) — pertimbangkan ini saat desain halaman kontak, jangan cuma satu nomor generik.
-
-## 10. Urutan Section Homepage
-
-Urutan ini final, ikuti persis — jangan menyusun ulang tanpa diskusi:
-
-1. **HeroSection** — statis, termasuk tombol unduh Company Profile PDF (fitur asli yang harus dipertahankan, penting untuk keperluan procurement B2B)
-2. **ProductCategoriesSection** — grid kategori produk (data dari useProducts)
-3. **WhyChooseUsSection** — "Kenapa Pilih BBS Conveyor", 5 value proposition statis (Kualitas, Harga Bersaing, Lead Time Cepat, Customer Oriented, Responsif) — konten asli dari situs lama, jangan dihilangkan
-4. **IndustriesSection** — industri yang dilayani (data dari useIndustries)
-5. **LatestArticlesSection** — artikel terbaru, 3 entri terakhir (data dari useArticles)
-
-## 11. Yang Harus Dikonfirmasi Sebelum Implementasi Lanjut
-
-- [ ] Kontrak API final dari backend Go (endpoint, shape response, error format)
-- [ ] Apakah artikel butuh kategori/tag, atau cukup satu label sederhana
-- [ ] Apakah produk butuh varian (ukuran, ketebalan) atau cukup satu entri per produk
-- [ ] Font resmi brand (kalau klien punya brand guideline lebih detail dari logo)
+- title
+- slug
+- thumbnail
+- excerpt
+- body
 
 ---
 
-## 12. Yang Tidak Boleh Dilakukan Agent
+## Industries
 
-- Jangan generate dummy content berbahasa Inggris untuk teks yang akan tampil ke user publik (semua public-facing copy harus Bahasa Indonesia)
-- Jangan install library UI framework besar (Vuetify, PrimeVue, dll) — styling murni Tailwind + komponen custom
-- Jangan taruh API key atau secret apa pun di kode frontend — semua lewat `.env` dan tidak pernah di-commit
-- Jangan ubah struktur folder di atas tanpa alasan kuat — kalau perlu struktur baru, diskusikan dulu sebelum eksekusi
+Fields
+
+- title
+- slug
+- icon
+- description
+
+---
+
+## Blog
+
+Fields
+
+- title
+- slug
+- thumbnail
+- excerpt
+- author
+- publishedAt
+- tags
+- body
+
+---
+
+## Pages
+
+Examples
+
+- About
+- Contact
+- Privacy Policy
+- Terms
+
+Fields
+
+- title
+- body
+
+---
+
+# 6. Homepage
+
+Homepage content should also be editable.
+
+Create collections for:
+
+Hero
+
+Why Choose Us
+
+Company Information
+
+CTA
+
+SEO
+
+Homepage layout should remain fixed.
+
+Only content is editable.
+
+Never allow editors to modify layout.
+
+---
+
+# 7. Routing
+
+Products
+
+/products
+
+/products/[slug]
+
+Services
+
+/services
+
+/services/[slug]
+
+Industries
+
+/industries/[slug]
+
+Blog
+
+/blog
+
+/blog/[slug]
+
+Pages
+
+/about
+
+/contact
+
+---
+
+# 8. Components
+
+Components must remain reusable.
+
+Prefer composition over duplication.
+
+Examples
+
+ProductCard
+
+ProductGrid
+
+IndustryCard
+
+BlogCard
+
+SectionTitle
+
+CTASection
+
+HeroSection
+
+Do not couple components to specific pages.
+
+---
+
+# 9. Design System
+
+Color palette comes from the official BBS Conveyor logo.
+
+Never hardcode colors.
+
+Use CSS variables.
+
+Gold is an accent color only.
+
+Do not create large gold backgrounds.
+
+Spacing should feel generous.
+
+Use plenty of white space.
+
+Typography should prioritize readability.
+
+Animations should be subtle.
+
+Avoid flashy effects.
+
+---
+
+# 10. Coding Standards
+
+Always use
+
+```
+<script setup lang="ts">
+```
+
+Never use
+
+```
+any
+```
+
+Use Zod schemas.
+
+Use composables when logic is reused.
+
+Prefer server components and SSR where appropriate.
+
+Do not fetch content manually if Nuxt Content already provides it.
+
+---
+
+# 11. Content Rules
+
+Content is loaded only through Nuxt Content.
+
+Never create REST endpoints for:
+
+Products
+
+Articles
+
+Services
+
+Industries
+
+Pages
+
+Use queryCollection() and Nuxt Content utilities.
+
+---
+
+# 12. Images
+
+Dynamic images belong to Nuxt Studio Assets.
+
+Use
+
+```
+<NuxtImg>
+```
+
+instead of
+
+```
+<img>
+```
+
+whenever possible.
+
+Optimize every image.
+
+---
+
+# 13. SEO
+
+Every public page must include
+
+- title
+- description
+- Open Graph image
+- canonical URL
+
+Generate metadata from content whenever possible.
+
+Blog articles should support:
+
+- published date
+- author
+- reading time
+- tags
+
+---
+
+# 14. Performance
+
+The website should prioritize
+
+- SEO
+- Accessibility
+- Core Web Vitals
+
+Avoid unnecessary JavaScript.
+
+Prefer server rendering.
+
+Keep Lighthouse scores above
+
+Performance ≥ 95
+
+SEO ≥ 100
+
+Accessibility ≥ 95
+
+Best Practices ≥ 95
+
+---
+
+# 15. Deployment
+
+Production hosting
+
+Vercel
+
+Content Management
+
+Nuxt Studio
+
+Deployment should remain automatic.
+
+Git is the source of truth.
+
+---
+
+# 16. Agent Workflow
+
+Before making code changes
+
+1. Analyze the existing implementation.
+
+2. Explain what will change.
+
+3. Explain why.
+
+4. Produce a migration plan.
+
+5. Wait for approval if the refactor is large.
+
+Never perform massive refactors without explaining them first.
+
+---
+
+# 17. Things the Agent Must Never Do
+
+Do not introduce a backend unless explicitly requested.
+
+Do not introduce a database for content.
+
+Do not duplicate content.
+
+Do not hardcode business data inside Vue components.
+
+Do not fetch content through REST APIs.
+
+Do not redesign existing UI unless requested.
+
+Do not introduce large UI frameworks.
+
+Do not install unnecessary dependencies.
+
+Do not create tightly coupled components.
+
+Always keep the project modular, maintainable, and content-driven.

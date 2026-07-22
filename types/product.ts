@@ -9,7 +9,7 @@ export const productSchema = z.object({
   category: z.string(),
   description: z.string(),
   detail: z.string(),
-  image: z.string(),
+  image: z.string().nullable(),
   specs: z.record(z.string(), z.string()),
 })
 

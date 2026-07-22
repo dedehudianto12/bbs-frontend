@@ -3,11 +3,11 @@ const route = useRoute()
 const slug = route.params.slug as string
 
 const { getBySlug } = useArticles()
-const article = getBySlug(slug)
+const { data: article } = await useAsyncData(`article-${slug}`, () => getBySlug(slug))
 
 useSeoMeta({
-  title: article ? `${article.title} — BBS Conveyor` : 'Artikel Tidak Ditemukan — BBS Conveyor',
-  description: article?.excerpt ?? ''
+  title: article.value ? `${article.value.title} — BBS Conveyor` : 'Artikel Tidak Ditemukan — BBS Conveyor',
+  description: article.value?.excerpt ?? ''
 })
 </script>
 
@@ -15,7 +15,7 @@ useSeoMeta({
   <article v-if="article" class="max-w-3xl mx-auto px-4 py-12">
     <div class="flex items-center gap-4 mb-6">
       <NuxtLink to="/artikel" class="text-sm text-gold-dark hover:text-gold transition-colors">
-        ← Kembali ke Artikel
+        &larr; Kembali ke Artikel
       </NuxtLink>
       <span class="text-xs text-gold-dark font-medium uppercase tracking-wide">{{ article.tag }}</span>
     </div>
@@ -24,7 +24,7 @@ useSeoMeta({
 
     <div class="flex items-center gap-3 text-sm text-neutral mb-8">
       <span>{{ article.author }}</span>
-      <span>·</span>
+      <span>&middot;</span>
       <time :datetime="article.publishedAt">{{ new Date(article.publishedAt).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) }}</time>
     </div>
 
@@ -39,7 +39,7 @@ useSeoMeta({
     <h1 class="text-2xl font-bold text-ink mb-4">Artikel Tidak Ditemukan</h1>
     <p class="text-neutral mb-8">Artikel yang Anda cari tidak tersedia.</p>
     <NuxtLink to="/artikel" class="text-gold-dark hover:text-gold font-medium transition-colors">
-      ← Kembali ke Artikel
+      &larr; Kembali ke Artikel
     </NuxtLink>
   </div>
 </template>

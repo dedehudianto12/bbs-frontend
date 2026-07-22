@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { JASA_SLUGS, getSlugs } from '~/types/category'
+import { JASA_SLUGS } from '~/types/category'
 
 const route = useRoute()
 const slug = route.params.slug as string
 
 const { getBySlug } = useServices()
-const service = getBySlug(slug)
+const { data: service } = await useAsyncData(`service-${slug}`, () => getBySlug(slug))
 
 const currentLabel = computed(() => {
   const match = JASA_SLUGS.find((j) => j.slug === slug)
@@ -13,15 +13,15 @@ const currentLabel = computed(() => {
 })
 
 useSeoMeta({
-  title: service ? `${service.name} — Jasa — BBS Conveyor` : 'Jasa Tidak Ditemukan — BBS Conveyor',
-  description: service?.shortDescription ?? ''
+  title: service.value ? `${service.value.name} — Jasa — BBS Conveyor` : 'Jasa Tidak Ditemukan — BBS Conveyor',
+  description: service.value?.shortDescription ?? ''
 })
 </script>
 
 <template>
   <div v-if="service" class="max-w-4xl mx-auto px-4 py-12">
     <NuxtLink to="/jasa" class="text-sm text-gold-dark hover:text-gold transition-colors mb-4 inline-block">
-      ← Kembali ke Jasa
+      &larr; Kembali ke Jasa
     </NuxtLink>
 
     <h1 class="text-3xl font-bold text-ink mb-6">{{ service.name }}</h1>
@@ -59,7 +59,7 @@ useSeoMeta({
     <h1 class="text-2xl font-bold text-ink mb-4">Jasa Tidak Ditemukan</h1>
     <p class="text-neutral mb-8">Layanan "{{ slug }}" tidak tersedia.</p>
     <NuxtLink to="/jasa" class="text-gold-dark hover:text-gold font-medium transition-colors">
-      ← Kembali ke Jasa
+      &larr; Kembali ke Jasa
     </NuxtLink>
   </div>
 </template>
