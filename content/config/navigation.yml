@@ -1,0 +1,80 @@
+# Navigation Configuration
+# Single source of truth for all site navigation.
+# Edit this file in Nuxt Studio — no code changes needed.
+
+header:
+  - label: Belt Conveyor
+    href: /produk/belt-conveyor
+    children:
+      - label: PVC Belt
+        href: /produk/belt-conveyor/pvc-belt
+      - label: PU
+        href: /produk/belt-conveyor/pu
+      - label: Flat Belt
+        href: /produk/belt-conveyor/flat-belt
+      - label: Rubber Belt
+        href: /produk/belt-conveyor/rubber-belt
+
+  - label: Produk Lainnya
+    href: /produk/lainnya
+    children:
+      - label: Timing Belt
+        href: /produk/lainnya/timing-belt
+      - label: Fastener
+        href: /produk/lainnya/fastener
+      - label: Cleat
+        href: /produk/lainnya/cleat
+      - label: Gravity Roll
+        href: /produk/lainnya/gravity-roll
+
+  - label: Jasa
+    href: /jasa
+    children:
+      - label: Incline Cleated Belt
+        href: /jasa/incline-cleated-belt
+      - label: Profile Guide Belt
+        href: /jasa/profile-guide-belt
+      - label: Jasa Reparasi
+        href: /jasa/jasa-reparasi
+      - label: Jasa Onsite Joint
+        href: /jasa/jasa-onsite-joint
+
+  - label: Tentang Kami
+    href: /tentang-kami
+
+  - label: Artikel
+    href: /artikel
+
+  - label: Kontak
+    href: /kontak
+
+cta:
+  label: Hubungi Kami
+  href: https://wa.me/6281234567890
+  external: true
+
+footer:
+  - title: Produk
+    links:
+      - label: Belt Conveyor
+        href: /produk/belt-conveyor
+      - label: Produk Lainnya
+        href: /produk/lainnya
+      - label: Jasa
+        href: /jasa
+
+  - title: Perusahaan
+    links:
+      - label: Tentang Kami
+        href: /tentang-kami
+      - label: Artikel
+        href: /artikel
+      - label: Galeri
+        href: /galeri
+
+  - title: Hubungi Kami
+    links:
+      - label: Kontak
+        href: /kontak
+      - label: WhatsApp
+        href: https://wa.me/6281234567890

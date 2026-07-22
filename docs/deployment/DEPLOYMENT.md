@@ -455,6 +455,67 @@ Keep dependencies updated.
 
 ---
 
+# Nuxt Studio Setup
+
+## How Nuxt Studio Works
+
+Nuxt Studio is a hosted CMS that connects directly to your GitHub repository.
+
+No npm module or plugin is required beyond `@nuxt/content`.
+
+Studio reads `content.config.ts` to discover collections and their schemas, then provides a visual editor for all content files in the `content/` directory.
+
+## Connecting a Project
+
+1. Push the project to a GitHub repository.
+2. Go to [nuxt.studio](https://nuxt.studio) and sign in with GitHub.
+3. Import the repository — Studio auto-detects `@nuxt/content` and `content.config.ts`.
+4. Grant read/write access to the `content/` directory.
+
+## Editing Content
+
+- Navigate to any collection in the Studio sidebar.
+- Edit frontmatter fields using the form UI (auto-generated from Zod schemas).
+- Edit Markdown body with the built-in editor.
+- Upload images via Studio Assets.
+- Changes are committed directly to the GitHub repository.
+- Each commit triggers a Vercel redeploy automatically.
+
+## Collections Auto-Discovery
+
+Studio discovers collections from `content.config.ts`:
+- `type: 'page'` → Markdown files with frontmatter + body
+- `type: 'data'` → YAML/JSON configuration files
+- `source` glob → determines which files belong to the collection
+- `schema` (Zod) → generates the form UI and validates input
+
+## Adding a New Collection
+
+1. Add a new `defineCollection()` entry in `content.config.ts`.
+2. Create the corresponding directory under `content/` (e.g., `content/team/`).
+3. Add a `.md` or `.yml` file as a starting template.
+4. Push to GitHub — Studio picks up the new collection automatically.
+
+No Vue component changes are needed for data-only additions. If the new collection needs to be displayed on the website, update the relevant page component to query it via `queryCollection()`.
+
+## Local Development
+
+```bash
+npm install
+npm run dev
+```
+
+Content edits made locally in `content/` are reflected immediately (HMR).
+
+Edits made in Nuxt Studio are committed to Git — pull before starting local work to avoid conflicts.
+
+## Environment Variables
+
+| Variable | Purpose | Required |
+|---|---|---|
+| `NUXT_SITE_URL` | Canonical site URL for sitemap | Production only |
+| `NUXT_STUDIO_TOKEN` | Studio API token (auto-managed by Studio) | No — Studio handles this |
+
 # Agent Workflow
 
 Before deployment

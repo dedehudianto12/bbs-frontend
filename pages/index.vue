@@ -1,13 +1,25 @@
 <script setup lang="ts">
-// Fetch homepage content from Nuxt Content collections
-const { data: hero } = await useAsyncData('homepage-hero', () =>
-  queryCollection('homepage').where('section', '=', 'hero').first()
+// Fetch homepage config from content/config/homepage.yml
+const { data: hp } = await useAsyncData('homepage-config', () =>
+  queryCollection('homepageConfig').first()
 )
 
-const { data: whyChooseUs } = await useAsyncData('homepage-why-choose-us', () =>
-  queryCollection('homepage').where('section', '=', 'why-choose-us').first()
+const hpData = computed(() => (hp.value as any) ?? {})
+
+const heroProps = computed(() => ({
+  headline: hpData.value?.hero?.headline ?? 'Solusi Belt & Roller Conveyor untuk Bisnis Anda',
+  subheadline: hpData.value?.hero?.subheadline ?? '',
+  primaryCTA: hpData.value?.hero?.primaryCTA ?? 'Lihat Produk',
+  primaryLink: hpData.value?.hero?.primaryLink ?? '/produk/belt-conveyor',
+  secondaryCTA: hpData.value?.hero?.secondaryCTA,
+  secondaryLink: hpData.value?.hero?.secondaryLink,
+}))
+
+const whyChooseUsItems = computed(() =>
+  hpData.value?.whyChooseUs?.items ?? []
 )
 
+// Product categories, industries, articles — from their own collections
 const { data: products } = await useAsyncData('homepage-products', () =>
   queryCollection('products').all()
 )
@@ -20,32 +32,17 @@ const { data: articles } = await useAsyncData('homepage-articles', () =>
   queryCollection('blog').all()
 )
 
-// Derive unique product categories
 const productCategories = computed(() => {
   const cats = (Array.isArray(products.value) ? products.value : []).map((p: any) => p.category)
   return [...new Set(cats)]
 })
-
-// Map content data to section props
-const heroProps = computed(() => ({
-  headline: (hero.value as any)?.headline ?? 'Solusi Belt & Roller Conveyor untuk Bisnis Anda',
-  subheadline: (hero.value as any)?.subheadline ?? 'CV Bintang Berjaya Satu menyediakan belt conveyor, roller, dan komponen industri berkualitas untuk manufaktur, tambang, dan pengolahan di seluruh Indonesia.',
-  primaryCTA: (hero.value as any)?.primaryCTA ?? 'Lihat Produk',
-  primaryLink: (hero.value as any)?.primaryLink ?? '/produk/belt-conveyor',
-  secondaryCTA: (hero.value as any)?.secondaryCTA,
-  secondaryLink: (hero.value as any)?.secondaryLink,
-}))
-
-const whyChooseUsItems = computed(() =>
-  (whyChooseUs.value as any)?.items ?? []
-)
 
 const industryItems = computed(() =>
   (Array.isArray(industries.value) ? industries.value : []).map((i: any) => ({
     name: i.title,
     description: i.excerpt,
     slug: i.slug,
-  })) ?? []
+  }))
 )
 
 const latestArticles = computed(() =>
@@ -60,13 +57,13 @@ const latestArticles = computed(() =>
     image: a.thumbnail ?? null,
     tag: a.tags?.[0] ?? '',
     publishedAt: a.publishedAt,
-    author: (a as any).author ?? '',
-  })) ?? []
+    author: a.author ?? '',
+  }))
 )
 
 useSeoMeta({
-  title: 'BBS Conveyor — Solusi Belt & Roller Conveyor Industri',
-  description: 'CV Bintang Berjaya Satu menyediakan belt conveyor, roller, dan komponen industri berkualitas untuk manufaktur, tambang, dan pengolahan di Indonesia.'
+  title: hpData.value?.seo?.title ?? 'BBS Conveyor — Solusi Belt & Roller Conveyor Industri',
+  description: hpData.value?.seo?.description ?? '',
 })
 </script>
 

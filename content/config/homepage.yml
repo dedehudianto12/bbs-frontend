@@ -1,0 +1,47 @@
+# Homepage Configuration
+# Single source of truth for all homepage content.
+# Edit this file in Nuxt Studio — no code changes needed.
+
+hero:
+  headline: Solusi Belt & Roller Conveyor untuk Bisnis Anda
+  subheadline: CV Bintang Berjaya Satu menyediakan belt conveyor, roller, dan komponen industri berkualitas untuk manufaktur, tambang, dan pengolahan di seluruh Indonesia.
+  primaryCTA: Lihat Produk
+  primaryLink: /produk/belt-conveyor
+  secondaryCTA: Hubungi Kami
+  secondaryLink: /kontak
+  image: /images/hero-conveyor.webp
+
+company:
+  companyName: CV Bintang Berjaya Satu
+  tagline: Connecting Power and Motion to Drive Industrial Excellence
+  description: BBS Conveyor adalah supplier conveyor terpercaya di Indonesia yang menyediakan belt conveyor, roller, dan komponen industri berkualitas tinggi untuk berbagai sektor manufaktur, tambang, dan pengolahan.
+
+whyChooseUs:
+  items:
+    - title: Kualitas Terjamin
+      description: Produk conveyor dan komponen dipilih dari material berkualitas tinggi, melalui proses quality control ketat sebelum dikirim ke pelanggan.
+    - title: Harga Bersaing
+      description: Kami menawarkan harga kompetitif tanpa mengorbankan kualitas, cocok untuk kebutuhan pengadaan B2B maupun proyek skala besar.
+    - title: Lead Time Cepat
+      description: Proses produksi dan pengiriman yang efisien memastikan pesanan Anda tiba tepat waktu, menjaga operasional tetap berjalan.
+    - title: Customer Oriented
+      description: Setiap kebutuhan pelanggan kami tangani secara personal — dari konsultasi pemilihan produk hingga dukungan purna jual.
+    - title: Responsif
+      description: Tim kami siap merespons pertanyaan dan permintaan Anda dengan cepat, melalui telepon, WhatsApp, atau email.
+
+statistics:
+  projects: 500
+  years: 20
+  clients: 100
+  engineers: 15
+
+cta:
+  headline: Butuh Solusi Conveyor untuk Bisnis Anda?
+  description: Tim engineer kami siap membantu — dari konsultasi, desain, hingga instalasi.
+  buttonText: Hubungi Kami Sekarang
+  buttonLink: /kontak
+
+seo:
+  title: BBS Conveyor — Solusi Belt & Roller Conveyor Industri
+  description: CV Bintang Berjaya Satu menyediakan belt conveyor, roller, dan komponen industri berkualitas untuk manufaktur, tambang, dan pengolahan di Indonesia.
+  ogImage: /images/og-home.webp
