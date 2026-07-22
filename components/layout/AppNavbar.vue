@@ -1,19 +1,12 @@
 <script setup lang="ts">
-import { JASA_SLUGS } from '~/types/category'
-
-const { getByGroup } = useKategori()
-const { settings } = useSettings()
+defineProps<{
+  beltConveyorItems: { label: string; link: string }[]
+  produkLainnyaItems: { label: string; link: string }[]
+  jasaItems: { label: string; link: string }[]
+  waSales1: string
+}>()
 
 const isOpen = ref(false)
-
-function toNavItems(items: { slug: string; label: string }[], base: string) {
-  return items.map((k) => ({ label: k.label, link: `${base}/${k.slug}` }))
-}
-
-const beltConveyorItems = computed(() => toNavItems(getByGroup('belt-conveyor'), '/produk/belt-conveyor'))
-const produkLainnyaItems = computed(() => toNavItems(getByGroup('lainnya'), '/produk/lainnya'))
-
-const jasaItems = toNavItems([...JASA_SLUGS], '/jasa')
 </script>
 
 <template>
@@ -37,7 +30,7 @@ const jasaItems = toNavItems([...JASA_SLUGS], '/jasa')
 
       <!-- Desktop CTA -->
       <div class="hidden md:block shrink-0">
-        <a :href="`https://wa.me/${settings.waSales1}`" target="_blank" rel="noopener noreferrer" class="inline-block bg-ink text-white px-4 py-2 rounded font-medium hover:bg-gold hover:text-ink transition-colors">
+        <a :href="`https://wa.me/${waSales1}`" target="_blank" rel="noopener noreferrer" class="inline-block bg-ink text-white px-4 py-2 rounded font-medium hover:bg-gold hover:text-ink transition-colors">
           Hubungi Kami
         </a>
       </div>
@@ -58,7 +51,7 @@ const jasaItems = toNavItems([...JASA_SLUGS], '/jasa')
       <NuxtLink to="/tentang-kami" class="text-neutral hover:text-ink transition-colors" @click="isOpen = false">Tentang Kami</NuxtLink>
       <NuxtLink to="/artikel" class="text-neutral hover:text-ink transition-colors" @click="isOpen = false">Artikel</NuxtLink>
       <NuxtLink to="/kontak" class="text-neutral hover:text-ink transition-colors" @click="isOpen = false">Kontak</NuxtLink>
-      <a :href="`https://wa.me/${settings.waSales1}`" target="_blank" rel="noopener noreferrer" class="bg-ink text-white px-4 py-2 rounded font-medium text-center hover:bg-gold hover:text-ink transition-colors" @click="isOpen = false">
+      <a :href="`https://wa.me/${waSales1}`" target="_blank" rel="noopener noreferrer" class="bg-ink text-white px-4 py-2 rounded font-medium text-center hover:bg-gold hover:text-ink transition-colors" @click="isOpen = false">
         Hubungi Kami
       </a>
     </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const { getLatest } = useArticles()
-
-const latest = computed(() => getLatest().slice(0, 3))
+defineProps<{
+  articles: { slug: string; title: string; excerpt: string; tag: string }[]
+}>()
 </script>
 
 <template>
@@ -13,9 +13,9 @@ const latest = computed(() => getLatest().slice(0, 3))
 
       <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <ArticleCard
-          v-for="article in latest"
-          :key="article.id"
-          :article="article"
+          v-for="article in articles"
+          :key="article.slug"
+          v-bind="article"
         />
       </div>
     </div>

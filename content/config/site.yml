@@ -1,0 +1,39 @@
+# Site Configuration — BBS Conveyor
+# Source: seed.sql categories + settings
+
+categories:
+  belt-conveyor:
+    - slug: pvc-belt
+      label: PVC Belt
+      order: 1
+    - slug: pu
+      label: PU
+      order: 2
+    - slug: flat-belt
+      label: Flat Belt
+      order: 3
+    - slug: rubber-belt
+      label: Rubber Belt
+      order: 4
+  lainnya:
+    - slug: timing-belt
+      label: Timing Belt
+      order: 5
+    - slug: fastener
+      label: Fastener
+      order: 6
+    - slug: cleat
+      label: Cleat
+      order: 7
+    - slug: gravity-roll
+      label: Gravity Roll
+      order: 8
+
+site:
+  companyName: CV Bintang Berjaya Satu
+  tagline: Connecting Power and Motion to Drive Industrial Excellence
+  waSales1: "6281234567890"
+  waSales2: "6281234567891"
+  email: info@bbsconveyor.com
+  alamat: "Jl. Industri Raya No. 123\nKawasan Industri Pulogadung\nJakarta Timur 13930"
+  jamOperasional: "Senin – Jumat, 08:00 – 17:00 WIB\nSabtu by appointment"

@@ -1,33 +1,47 @@
 <script setup lang="ts">
-import { getSlugs } from '~/types/category'
-
 const route = useRoute()
 const router = useRouter()
-const kategori = route.params.kategori as string
+const subcat = route.params.kategori as string
 
-const { getByKategori } = useProducts()
-const { getByGroup: getKategoriByGroup } = useKategori()
+const { data: allProducts } = await useAsyncData(`produk-lainnya-${subcat}`, () =>
+  queryCollection('products').all()
+)
 
-const kategoriList = getKategoriByGroup('lainnya')
-const validKategoris = getSlugs(kategoriList)
-const isValid = validKategoris.includes(kategori)
+const otherProducts = computed(() =>
+  (Array.isArray(allProducts.value) ? allProducts.value : [])
+    .filter((p: any) => p.group !== 'belt-conveyor')
+    .map((p: any) => ({
+      slug: p.slug,
+      title: p.title,
+      category: p.category,
+      description: p.excerpt,
+      _categoryClean: p.category.toLowerCase().replace(/\s+/g, '-'),
+    }))
+)
 
-const products = computed(() => (isValid ? getByKategori('lainnya', kategori) : []))
+const products = computed(() =>
+  otherProducts.value.filter((p) => p._categoryClean === subcat)
+)
 
-function onFilterChange(newKategori: string) {
-  router.push(`/produk/lainnya/${newKategori}`)
-}
+const isValid = computed(() => products.value.length > 0)
 
-const filterOptions = kategoriList.map((k) => ({ label: k.label, value: k.slug }))
+const subCategories = computed(() => {
+  const cats = [...new Set(otherProducts.value.map((p) => p.category))]
+  return cats.map((c) => ({ label: c, value: c.toLowerCase().replace(/\s+/g, '-') }))
+})
 
 const currentLabel = computed(() => {
-  const match = kategoriList.find((k) => k.slug === kategori)
-  return match?.label ?? kategori
+  const match = subCategories.value.find((s) => s.value === subcat)
+  return match?.label ?? subcat
 })
+
+function onFilterChange(newSubcat: string) {
+  router.push(`/produk/lainnya/${newSubcat}`)
+}
 
 useSeoMeta({
   title: `${currentLabel.value} — Produk Lainnya — BBS Conveyor`,
-  description: `${currentLabel.value} berkualitas untuk kebutuhan industri. Tersedia berbagai spesifikasi dari BBS Conveyor.`
+  description: `${currentLabel.value} berkualitas untuk kebutuhan industri. Tersedia dari BBS Conveyor.`
 })
 </script>
 
@@ -37,8 +51,8 @@ useSeoMeta({
     <p class="text-neutral mb-8">Produk Lainnya kategori {{ currentLabel }}.</p>
 
     <ProductFilter
-      :model-value="kategori"
-      :options="filterOptions"
+      :model-value="subcat"
+      :options="subCategories"
       class="mb-8"
       @update:model-value="onFilterChange"
     />
@@ -48,9 +62,8 @@ useSeoMeta({
 
   <div v-else class="max-w-6xl mx-auto px-4 py-20 text-center">
     <h1 class="text-2xl font-bold text-ink mb-4">Kategori Tidak Ditemukan</h1>
-    <p class="text-neutral mb-8">Kategori produk lainnya "{{ kategori }}" tidak tersedia.</p>
     <NuxtLink to="/produk/lainnya" class="text-gold-dark hover:text-gold font-medium transition-colors">
-      ← Kembali ke Produk Lainnya
+      &larr; Kembali ke Produk Lainnya
     </NuxtLink>
   </div>
 </template>

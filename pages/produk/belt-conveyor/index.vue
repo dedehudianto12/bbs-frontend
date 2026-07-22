@@ -1,19 +1,34 @@
 <script setup lang="ts">
 const router = useRouter()
-const { getByGroup: getProductsByGroup } = useProducts()
-const { getByGroup: getKategoriByGroup } = useKategori()
 
-const kategoriList = getKategoriByGroup('belt-conveyor')
-const filterOptions = kategoriList.map((k) => ({ label: k.label, value: k.slug }))
-const products = getProductsByGroup('belt-conveyor')
+const { data: allProducts } = await useAsyncData('produk-belt-conveyor', () =>
+  queryCollection('products').all()
+)
 
-function onFilterChange(kategori: string) {
-  router.push(`/produk/belt-conveyor/${kategori}`)
+const products = computed(() =>
+  (Array.isArray(allProducts.value) ? allProducts.value : [])
+    .filter((p: any) => p.group === 'belt-conveyor')
+    .map((p: any) => ({
+      slug: p.slug,
+      title: p.title,
+      category: p.category,
+      description: p.excerpt,
+    }))
+)
+
+// ponytail: unique categories from filtered products for filter buttons
+const subCategories = computed(() => {
+  const cats = [...new Set(products.value.map((p) => p.category))]
+  return cats.map((c) => ({ label: c, value: c.toLowerCase().replace(/\s+/g, '-') }))
+})
+
+function onFilterChange(subcat: string) {
+  router.push(`/produk/belt-conveyor/${subcat}`)
 }
 
 useSeoMeta({
   title: 'Belt Conveyor — BBS Conveyor',
-  description: 'PVC Belt, PU, Flat Belt, dan Rubber Belt berkualitas untuk kebutuhan industri Anda. Tersedia berbagai ukuran dan spesifikasi.'
+  description: 'PVC Belt, PU, Flat Belt, dan Rubber Belt berkualitas untuk kebutuhan industri Anda.'
 })
 </script>
 
@@ -24,7 +39,7 @@ useSeoMeta({
 
     <ProductFilter
       model-value=""
-      :options="filterOptions"
+      :options="subCategories"
       class="mb-8"
       @update:model-value="onFilterChange"
     />

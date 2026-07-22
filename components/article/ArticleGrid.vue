@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { Article } from '~/types/article'
-
-defineProps<{ articles: Article[] }>()
+defineProps<{
+  articles: { slug: string; title: string; excerpt: string; tag: string }[]
+}>()
 </script>
 
 <template>
   <div v-if="articles.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    <ArticleCard v-for="article in articles" :key="article.id" :article="article" />
+    <ArticleCard v-for="article in articles" :key="article.slug" v-bind="article" />
   </div>
   <p v-else class="text-neutral text-center py-12">Belum ada artikel.</p>
 </template>

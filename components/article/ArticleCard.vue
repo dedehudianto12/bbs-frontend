@@ -1,19 +1,21 @@
 <script setup lang="ts">
-import type { Article } from '~/types/article'
-
 defineProps<{
-  article: Article
+  slug: string
+  title: string
+  excerpt?: string | null
+  tag: string
 }>()
 </script>
 
 <template>
-  <NuxtLink :to="`/artikel/${article.slug}`" class="group block">
+  <NuxtLink :to="`/artikel/${slug}`" class="group block">
     <div class="aspect-video bg-bg-soft rounded-lg" />
     <span class="mt-3 inline-block text-gold text-xs font-medium tracking-wide uppercase">
-      {{ article.tag }}
+      {{ tag }}
     </span>
+    <p v-if="excerpt" class="mt-2 text-sm text-neutral line-clamp-2">{{ excerpt }}</p>
     <h3 class="mt-1 text-ink font-medium leading-snug line-clamp-2">
-      {{ article.title }}
+      {{ title }}
     </h3>
   </NuxtLink>
 </template>

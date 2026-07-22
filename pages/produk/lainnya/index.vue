@@ -1,19 +1,34 @@
 <script setup lang="ts">
 const router = useRouter()
-const { getByGroup: getProductsByGroup } = useProducts()
-const { getByGroup: getKategoriByGroup } = useKategori()
 
-const kategoriList = getKategoriByGroup('lainnya')
-const filterOptions = kategoriList.map((k) => ({ label: k.label, value: k.slug }))
-const products = getProductsByGroup('lainnya')
+const { data: allProducts } = await useAsyncData('produk-lainnya', () =>
+  queryCollection('products').all()
+)
 
-function onFilterChange(kategori: string) {
-  router.push(`/produk/lainnya/${kategori}`)
+// ponytail: non-belt products → lainnya group
+const products = computed(() =>
+  (Array.isArray(allProducts.value) ? allProducts.value : [])
+    .filter((p: any) => p.group !== 'belt-conveyor')
+    .map((p: any) => ({
+      slug: p.slug,
+      title: p.title,
+      category: p.category,
+      description: p.excerpt,
+    }))
+)
+
+const subCategories = computed(() => {
+  const cats = [...new Set(products.value.map((p) => p.category))]
+  return cats.map((c) => ({ label: c, value: c.toLowerCase().replace(/\s+/g, '-') }))
+})
+
+function onFilterChange(subcat: string) {
+  router.push(`/produk/lainnya/${subcat}`)
 }
 
 useSeoMeta({
   title: 'Produk Lainnya — BBS Conveyor',
-  description: 'Timing Belt, Fastener, Cleat, Gravity Roll, dan komponen conveyor pendukung berkualitas untuk industri Anda.'
+  description: 'Timing Belt, Fastener, Cleat, Gravity Roll, dan komponen conveyor pendukung berkualitas.'
 })
 </script>
 
@@ -24,7 +39,7 @@ useSeoMeta({
 
     <ProductFilter
       model-value=""
-      :options="filterOptions"
+      :options="subCategories"
       class="mb-8"
       @update:model-value="onFilterChange"
     />

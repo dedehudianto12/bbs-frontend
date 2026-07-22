@@ -1,4 +1,12 @@
 <script setup lang="ts">
+const { data: whyChooseUs } = await useAsyncData('about-why-choose-us', () =>
+  queryCollection('homepage').where('section', '=', 'why-choose-us').first()
+)
+
+const whyChooseUsItems = computed(() =>
+  (whyChooseUs.value as any)?.items ?? []
+)
+
 useSeoMeta({
   title: 'Tentang Kami — BBS Conveyor',
   description: 'CV Bintang Berjaya Satu (BBS Conveyor) — supplier belt conveyor, roller, dan komponen industri terpercaya melayani manufaktur, tambang, dan pengolahan di Indonesia.'
@@ -7,7 +15,6 @@ useSeoMeta({
 
 <template>
   <div>
-    <!-- 1. Page header -->
     <section class="py-16 md:py-24">
       <div class="max-w-3xl mx-auto px-4 text-center">
         <h1 class="text-3xl md:text-4xl font-bold text-ink mb-4">CV Bintang Berjaya Satu</h1>
@@ -15,7 +22,6 @@ useSeoMeta({
       </div>
     </section>
 
-    <!-- 2. Company description -->
     <section class="pb-16 md:pb-24">
       <div class="max-w-3xl mx-auto px-4 space-y-5 text-neutral leading-relaxed">
         <p>
@@ -30,44 +36,29 @@ useSeoMeta({
       </div>
     </section>
 
-    <!-- 3. Why Choose Us (reused from homepage) -->
-    <WhyChooseUsSection />
+    <WhyChooseUsSection :items="whyChooseUsItems" />
 
-    <!-- 4. Photo gallery preview -->
     <section class="py-16 md:py-24">
       <div class="max-w-6xl mx-auto px-4">
         <span class="text-gold text-sm font-semibold tracking-[0.2em] uppercase">Galeri Proyek</span>
-
         <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div
-            v-for="i in 4"
-            :key="i"
-            class="aspect-[4/3] bg-bg-soft rounded-lg flex items-center justify-center text-neutral text-sm"
-          >
+          <div v-for="i in 4" :key="i" class="aspect-[4/3] bg-bg-soft rounded-lg flex items-center justify-center text-neutral text-sm">
             Foto Proyek {{ i }}
           </div>
         </div>
-
         <div class="mt-8 text-center">
-          <NuxtLink
-            to="/galeri"
-            class="inline-block bg-ink text-white px-6 py-3 rounded font-medium hover:bg-gold hover:text-ink transition-colors"
-          >
+          <NuxtLink to="/galeri" class="inline-block bg-ink text-white px-6 py-3 rounded font-medium hover:bg-gold hover:text-ink transition-colors">
             Lihat Galeri Lengkap
           </NuxtLink>
         </div>
       </div>
     </section>
 
-    <!-- 5. Closing CTA -->
     <section class="py-16 md:py-24 bg-bg-soft">
       <div class="max-w-2xl mx-auto px-4 text-center">
         <h2 class="text-2xl font-bold text-ink mb-4">Tertarik bekerja sama dengan kami?</h2>
         <p class="text-neutral mb-8">Konsultasikan kebutuhan belt conveyor dan komponen industri Anda dengan tim kami. Kami siap membantu.</p>
-        <NuxtLink
-          to="/kontak"
-          class="inline-block bg-ink text-white px-6 py-3 rounded font-medium hover:bg-gold hover:text-ink transition-colors"
-        >
+        <NuxtLink to="/kontak" class="inline-block bg-ink text-white px-6 py-3 rounded font-medium hover:bg-gold hover:text-ink transition-colors">
           Hubungi Kami
         </NuxtLink>
       </div>

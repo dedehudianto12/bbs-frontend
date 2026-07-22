@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const { industries } = useIndustries()
+defineProps<{
+  industries: { name: string; description: string; slug: string }[]
+}>()
 </script>
 
 <template>
@@ -12,7 +14,7 @@ const { industries } = useIndustries()
       <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
         <div
           v-for="industry in industries"
-          :key="industry.id"
+          :key="industry.slug"
           class="border border-border rounded-lg p-6"
         >
           <p class="text-ink font-bold">{{ industry.name }}</p>

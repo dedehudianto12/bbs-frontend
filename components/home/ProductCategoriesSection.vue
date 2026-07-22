@@ -1,11 +1,7 @@
 <script setup lang="ts">
-const { products } = useProducts()
-
-// ponytail: derive unique categories from product data instead of separate mock file
-const categories = computed(() => {
-  const cats = products.value.map(p => p.category) ?? []
-  return [...new Set(cats)]
-})
+defineProps<{
+  categories: string[]
+}>()
 </script>
 
 <template>

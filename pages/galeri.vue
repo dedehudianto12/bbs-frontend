@@ -1,5 +1,13 @@
 <script setup lang="ts">
-const { items } = useGallery()
+// ponytail: gallery is static placeholder — content/ galleries collection TBD
+const galleryItems = [
+  { caption: 'Instalasi Belt Conveyor di Pabrik Manufaktur — Jakarta' },
+  { caption: 'Onsite Joint Rubber Belt di Tambang — Kalimantan' },
+  { caption: 'Penggantian Roller Conveyor — Surabaya' },
+  { caption: 'Proyek Conveyor System — Semarang' },
+  { caption: 'PVC Belt Food Grade — Pabrik Makanan' },
+  { caption: 'Maintenance Conveyor — Kawasan Industri' },
+]
 
 useSeoMeta({
   title: 'Galeri Proyek — BBS Conveyor',
@@ -12,13 +20,11 @@ useSeoMeta({
     <h1 class="text-3xl font-bold text-ink mb-2">Galeri Proyek Kami</h1>
     <p class="text-neutral mb-8">Dokumentasi hasil kerja kami di berbagai proyek dan lokasi di Indonesia.</p>
 
-    <div v-if="items.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div v-for="item in items" :key="item.id" class="group">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-for="(item, i) in galleryItems" :key="i" class="group">
         <div class="aspect-[4/3] bg-bg-soft rounded-lg" />
         <p class="mt-2 text-sm text-neutral leading-snug">{{ item.caption }}</p>
       </div>
     </div>
-
-    <p v-else class="text-neutral text-center py-12">Belum ada foto proyek.</p>
   </div>
 </template>
