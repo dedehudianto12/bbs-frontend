@@ -10,28 +10,31 @@ defineProps<{
 </script>
 
 <template>
-  <section class="bg-bg-soft py-20 md:py-28">
-    <div class="mx-auto max-w-3xl px-4 text-center">
-      <h1 class="text-ink text-3xl md:text-5xl font-bold leading-tight">
+  <section class="relative bg-bg-soft overflow-hidden">
+    <!-- Subtle geometric pattern -->
+    <div class="absolute inset-0 opacity-[0.03] pointer-events-none" aria-hidden="true">
+      <div class="absolute inset-0" style="background-image: radial-gradient(circle at 1px 1px, var(--color-ink) 1px, transparent 0); background-size: 40px 40px;" />
+    </div>
+
+    <div class="relative mx-auto max-w-4xl px-4 py-20 md:py-32 text-center">
+      <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-ink leading-[1.08] tracking-tight">
         {{ headline }}
       </h1>
-      <p class="mt-6 text-neutral text-base md:text-lg leading-relaxed max-w-xl mx-auto">
+      <p v-if="subheadline" class="mt-6 text-base md:text-lg text-neutral leading-relaxed max-w-2xl mx-auto">
         {{ subheadline }}
       </p>
-      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-        <NuxtLink
-          :to="primaryLink"
-          class="inline-block bg-gold text-ink font-semibold px-6 py-3 rounded hover:bg-gold-dark transition-colors"
-        >
+      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <Button :to="primaryLink" variant="primary" size="lg">
           {{ primaryCTA }}
-        </NuxtLink>
-        <NuxtLink
+        </Button>
+        <Button
           v-if="secondaryCTA && secondaryLink"
           :to="secondaryLink"
-          class="inline-block border border-neutral text-neutral font-semibold px-6 py-3 rounded hover:border-ink hover:text-ink transition-colors"
+          variant="outline"
+          size="lg"
         >
           {{ secondaryCTA }}
-        </NuxtLink>
+        </Button>
       </div>
     </div>
   </section>

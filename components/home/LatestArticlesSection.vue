@@ -1,22 +1,28 @@
 <script setup lang="ts">
 defineProps<{
-  articles: { slug: string; title: string; excerpt: string; tag: string }[]
+  articles: {
+    slug: string
+    title: string
+    excerpt?: string | null
+    tag: string
+    image?: string | null
+    publishedAt?: string
+    author?: string
+  }[]
 }>()
 </script>
 
 <template>
   <section class="py-16 md:py-24">
     <div class="mx-auto max-w-6xl px-4">
-      <span class="text-gold text-sm font-semibold tracking-[0.2em] uppercase">
-        Artikel Terbaru
-      </span>
+      <SectionTitle
+        eyebrow="Artikel Terbaru"
+        title="Tips & Informasi Seputar Conveyor"
+        description="Pelajari cara merawat dan mengoptimalkan sistem conveyor Anda."
+      />
 
-      <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <ArticleCard
-          v-for="article in articles"
-          :key="article.slug"
-          v-bind="article"
-        />
+      <div class="mt-12">
+        <ArticleGrid :articles="articles" />
       </div>
     </div>
   </section>

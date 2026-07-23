@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   label: string
   href: string
   items: { label: string; href: string }[]
@@ -9,6 +9,12 @@ const isOpen = ref(false)
 const closeTimer = ref<ReturnType<typeof setTimeout> | null>(null)
 const dropdownRef = ref<HTMLDivElement | null>(null)
 const activeIndex = ref(-1)
+
+const route = useRoute()
+
+const isActive = computed(() =>
+  props.items.some((item) => route.path.startsWith(item.href))
+)
 
 function open() {
   if (closeTimer.value) {
@@ -27,58 +33,34 @@ function close() {
 
 function onKeydown(e: KeyboardEvent) {
   if (!isOpen.value) return
-
-  if (e.key === 'Escape') {
-    isOpen.value = false
-    activeIndex.value = -1
-    return
-  }
-
-  if (e.key === 'ArrowDown') {
-    e.preventDefault()
-    activeIndex.value = Math.min(activeIndex.value + 1, items.length - 1)
-    return
-  }
-
-  if (e.key === 'ArrowUp') {
-    e.preventDefault()
-    activeIndex.value = Math.max(activeIndex.value - 1, 0)
-    return
-  }
-
+  if (e.key === 'Escape') { isOpen.value = false; activeIndex.value = -1; return }
+  if (e.key === 'ArrowDown') { e.preventDefault(); activeIndex.value = Math.min(activeIndex.value + 1, props.items.length - 1); return }
+  if (e.key === 'ArrowUp') { e.preventDefault(); activeIndex.value = Math.max(activeIndex.value - 1, 0); return }
   if (e.key === 'Enter' && activeIndex.value >= 0) {
     e.preventDefault()
-    const item = items[activeIndex.value]
+    const item = props.items[activeIndex.value]
     if (item) navigateTo(item.href)
     isOpen.value = false
     activeIndex.value = -1
   }
 }
 
-// ponytail: close on route change
-const route = useRoute()
 watch(() => route.path, () => { isOpen.value = false; activeIndex.value = -1 })
 </script>
 
 <template>
   <!-- Desktop: hover dropdown -->
-  <div
-    class="hidden md:block relative"
-    @mouseenter="open"
-    @mouseleave="close"
-  >
+  <div class="hidden md:block relative" @mouseenter="open" @mouseleave="close">
     <NuxtLink
       :to="href"
-      class="text-sm font-medium text-neutral hover:text-ink transition-colors flex items-center gap-1 py-2"
+      class="relative text-sm font-medium py-2 px-3 transition-colors flex items-center gap-1"
+      :class="isActive ? 'text-ink' : 'text-neutral hover:text-ink'"
     >
       {{ label }}
-      <svg
-        class="w-3 h-3 transition-transform duration-200"
-        :class="{ 'rotate-180': isOpen }"
-        viewBox="0 0 12 12"
-      >
+      <svg class="w-3 h-3 transition-transform duration-200" :class="{ 'rotate-180': isOpen }" viewBox="0 0 12 12">
         <path d="M3 5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" />
       </svg>
+      <span v-if="isActive" class="absolute bottom-0 left-3 right-3 h-0.5 bg-gold rounded-full" />
     </NuxtLink>
 
     <Transition
@@ -92,15 +74,17 @@ watch(() => route.path, () => { isOpen.value = false; activeIndex.value = -1 })
       <div
         v-if="isOpen"
         ref="dropdownRef"
-        class="absolute top-full left-0 mt-1 bg-white border border-border rounded-lg shadow-md py-2 w-[220px] z-50"
+        class="absolute top-full left-0 mt-1 bg-white border border-border rounded-xl shadow-md py-2 w-[220px] z-50"
         @keydown="onKeydown"
       >
         <NuxtLink
           v-for="(item, i) in items"
           :key="item.label"
           :to="item.href"
-          class="block px-4 py-2.5 text-sm text-neutral hover:text-ink hover:bg-[#F5F5F5] transition-colors cursor-pointer"
-          :class="{ 'bg-[#F5F5F5] text-ink': i === activeIndex }"
+          class="block px-4 py-2.5 text-sm transition-colors"
+          :class="i === activeIndex || route.path.startsWith(item.href)
+            ? 'text-ink bg-bg-soft'
+            : 'text-neutral hover:text-ink hover:bg-bg-soft'"
         >
           {{ item.label }}
         </NuxtLink>
@@ -111,7 +95,7 @@ watch(() => route.path, () => { isOpen.value = false; activeIndex.value = -1 })
   <!-- Mobile: accordion -->
   <div class="md:hidden">
     <div class="flex items-center justify-between">
-      <NuxtLink :to="href" class="text-neutral hover:text-ink transition-colors py-1">
+      <NuxtLink :to="href" class="text-neutral hover:text-ink transition-colors py-1" :class="isActive ? 'text-ink font-medium' : ''">
         {{ label }}
       </NuxtLink>
       <button
@@ -119,11 +103,7 @@ watch(() => route.path, () => { isOpen.value = false; activeIndex.value = -1 })
         @click="isOpen = !isOpen"
         aria-label="Toggle submenu"
       >
-        <svg
-          class="w-3 h-3 transition-transform duration-200"
-          :class="{ 'rotate-180': isOpen }"
-          viewBox="0 0 12 12"
-        >
+        <svg class="w-3 h-3 transition-transform duration-200" :class="{ 'rotate-180': isOpen }" viewBox="0 0 12 12">
           <path d="M3 5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" />
         </svg>
       </button>

@@ -1,509 +1,224 @@
-# DESIGN.md — Design System
+# DESIGN.md
 
-This document defines the visual design language for the project.
-
-All pages and components should follow these guidelines.
-
-Consistency is more important than creativity.
-
----
-
-# Design Philosophy
-
-The website should communicate:
-
-- Professionalism
-- Reliability
-- Engineering Excellence
-- Industrial Expertise
-
-The visual style should feel
-
-- Modern
-- Clean
-- Minimal
-- Premium
-- Trustworthy
-
-Avoid decorative or trendy UI that distracts from the content.
+> Primary design specification for the BBS Conveyor website.
+>
+> This document is the single source of truth for all UI and UX decisions.
+> Any external design references (Apple, Vercel, IBM, Linear) are secondary.
+> If any reference conflicts with this document, always follow this document.
 
 ---
 
-# Design Principles
+# DESIGN.md
 
-Every interface should prioritize
-
-1. Clarity
-2. Readability
-3. Simplicity
-4. Consistency
-5. Accessibility
-
-Users should find information quickly.
+> This document defines the global design rules for the project.
+> It is the primary design authority and the single source of truth.
+>
+> This document should be read before any other design documentation.
 
 ---
 
-# Layout
+# Documentation Reading Order
 
-Use a centered container.
+When designing, implementing, or modifying any UI, always read the following documents in order.
 
-Recommended max width
+1. DESIGN.md
+2. PAGE_BLUEPRINTS.md
+3. UI_PATTERNS.md
+4. COMPONENTS.md
+5. references/
 
-```
-1280px
-```
+If any reference document conflicts with DESIGN.md, always follow DESIGN.md.
 
-Standard horizontal padding
+Reference documents are inspirational only.
 
-```
-Mobile
-16px
-
-Tablet
-24px
-
-Desktop
-32px
-```
+Never reproduce another product's UI literally.
 
 ---
 
-# Spacing
+# Reference Usage
 
-Use an 8-point spacing system.
+The reference documents each have a different responsibility.
 
-Examples
+## VERCEL.md
 
-```
-4
-8
-16
-24
-32
-48
-64
-96
-128
-```
+Use as inspiration for:
 
-Avoid arbitrary spacing values.
+- typography
+- spacing
+- layout rhythm
+- navigation
+- information hierarchy
 
 ---
 
-# Border Radius
+## IBM.md
 
-Small
+Use as inspiration for:
 
-```
-8px
-```
-
-Medium
-
-```
-12px
-```
-
-Large
-
-```
-16px
-```
-
-Extra Large
-
-```
-24px
-```
-
-Avoid excessive rounded corners.
+- enterprise layouts
+- grids
+- forms
+- structured information
+- B2B presentation
 
 ---
 
-# Shadows
+## APPLE.md
 
-Use subtle shadows.
+Use as inspiration for:
 
-Cards
-
-Small shadow.
-
-Dropdowns
-
-Medium shadow.
-
-Avoid heavy shadows.
+- product presentation
+- visual storytelling
+- imagery
+- premium perception
 
 ---
 
-# Color Palette
+## LINEAR.md
 
-Primary
+Use as inspiration for:
 
-Industrial Yellow
-
-Secondary
-
-Dark Gray
-
-Background
-
-White
-
-Surface
-
-Light Gray
-
-Text
-
-Near Black
-
-Success
-
-Green
-
-Warning
-
-Amber
-
-Error
-
-Red
-
-Colors should provide sufficient contrast.
+- micro interactions
+- animations
+- hover states
+- transitions
+- polished UX
 
 ---
 
-# Typography
+# Design Workflow
 
-Use one font family.
+Before generating any UI:
 
-Recommended
+1. Understand the page purpose from PAGE_BLUEPRINTS.md.
+2. Review the relevant UI patterns from UI_PATTERNS.md.
+3. Review the required components from COMPONENTS.md.
+4. Consult the reference documents for visual inspiration.
+5. Synthesize the final design following the rules in DESIGN.md.
 
-Geist
+Do not blindly copy any single reference.
 
-or
-
-Inter
-
-Fallback
-
-system-ui
+Every page should feel like BBS Conveyor, not Apple, IBM, Vercel, or Linear.
 
 ---
 
-# Font Scale
+Never copy layouts directly.
 
-Display
+Instead, combine the strengths of each reference into a unified industrial design language suitable for BBS Conveyor.
 
-48–64px
+# Icons
 
-H1
+Use a consistent icon library.
 
-40px
+Icons should support content.
 
-H2
-
-32px
-
-H3
-
-24px
-
-H4
-
-20px
-
-Body
-
-16px
-
-Small
-
-14px
-
-Caption
-
-12px
-
----
-
-# Font Weight
-
-Heading
-
-600–700
-
-Body
-
-400
-
-Button
-
-600
-
-Avoid extremely thin fonts.
-
----
-
-# Buttons
-
-Primary
-
-Filled
-
-Secondary
-
-Outline
-
-Ghost
-
-Text only
-
-Danger
-
-Red
-
-Buttons should have
-
-- hover state
-- focus state
-- disabled state
-
----
-
-# Cards
-
-Cards should
-
-- have consistent padding
-- use subtle borders
-- use minimal shadows
-- avoid excessive decoration
+Never become decoration.
 
 ---
 
 # Forms
 
-Inputs should
+Forms should feel simple.
 
-- have labels
-- show validation messages
-- use consistent spacing
+Clear labels.
 
-Never rely on placeholders as labels.
+Helpful validation.
 
----
-
-# Icons
-
-Use
-
-Lucide
-
-Only one icon library should be used.
-
-Icons should support the content,
-not replace text.
+Minimal required fields.
 
 ---
 
-# Images
+# Product Pages
 
-Use high-quality images.
+Product pages are one of the most important experiences.
 
-Prefer
+Prioritize:
 
-- Real products
-- Installations
-- Factory environments
-- Engineering work
+- imagery
+- specifications
+- applications
+- downloads
+- related products
+- CTA
 
-Avoid
-
-- Generic stock photos
-- AI-generated office people
-- Decorative imagery
-
-Always optimize images.
-
-Use
-
-```
-<NuxtImg>
-```
+Do not overwhelm users.
 
 ---
 
-# Responsive Design
+# Article Pages
 
-Design mobile-first.
+Articles should maximize readability.
 
-Breakpoints
+Readable width.
 
-```
-Mobile
+Comfortable typography.
 
-↓
+Large headings.
 
-Tablet
+Proper spacing.
 
-↓
-
-Desktop
-```
-
-Never hide important content.
-
-Reflow layouts instead.
-
----
-
-# Navigation
-
-Navbar should remain simple.
-
-Include
-
-- Logo
-- Main Navigation
-- Primary CTA
-
-Avoid large multi-level menus unless required.
-
----
-
-# Hero Section
-
-A hero should contain
-
-- Badge (optional)
-- Headline
-- Description
-- Primary CTA
-- Secondary CTA (optional)
-- Supporting image
-
-Keep the message concise.
-
----
-
-# Sections
-
-Every section should contain
-
-- Section title
-- Short description (optional)
-- Main content
-
-Maintain consistent spacing between sections.
-
----
-
-# Animations
-
-Animations should be subtle.
-
-Allowed
-
-- Fade
-- Slide
-- Scale
-- Opacity
-
-Avoid
-
-- Bounce
-- Spin
-- Flash
-- Long transitions
-
-Duration
-
-150–300ms
+Good image presentation.
 
 ---
 
 # Accessibility
 
-Maintain sufficient color contrast.
+Minimum contrast should meet WCAG AA.
 
-Every image must have alt text.
+Keyboard navigation should work.
 
-Interactive elements must support keyboard navigation.
+Focus states are required.
 
-Focus states must always be visible.
-
----
-
-# Empty States
-
-Display
-
-- Illustration (optional)
-- Title
-- Description
-- CTA
-
-Avoid blank screens.
+Semantic HTML is mandatory.
 
 ---
 
-# Loading States
+# Responsive Design
 
-Use skeleton loaders where appropriate.
+Desktop first.
 
-Never leave users wondering if content is loading.
+Tablet optimized.
 
----
+Mobile polished.
 
-# Error States
-
-Show
-
-- Clear message
-- Suggested action
-- Retry option (when applicable)
-
-Avoid exposing technical errors to users.
+Never hide critical information.
 
 ---
 
-# Consistency Rules
+# Performance
 
-The same component should always look the same.
+Performance is part of the design.
 
-Buttons should not change style between pages.
+Avoid unnecessary animations.
 
-Cards should share the same visual language.
+Avoid unnecessary JavaScript.
 
-Typography should remain consistent.
+Optimize images.
 
----
-
-# Agent Rules
-
-When designing a new page
-
-1. Follow PAGE_BLUEPRINTS.md
-2. Reuse UI_PATTERNS.md
-3. Reuse COMPONENTS.md
-4. Follow this design system
-
-Do not invent new visual styles unless explicitly requested.
+Lazy load when appropriate.
 
 ---
 
-# Things the Agent Must Never Do
+# AI Rules
 
-Do not mix multiple visual styles.
+When generating UI:
 
-Do not use inconsistent spacing.
+Always ask:
 
-Do not overuse colors.
+"Does this feel like a premium engineering company?"
 
-Do not overuse animations.
+If the answer is no,
 
-Do not create multiple button styles for the same purpose.
+simplify.
 
-Always prioritize clarity and consistency.
+Reduce.
+
+Refine.
+
+Repeat.
+
+Never generate SaaS dashboards.
+
+Never generate startup marketing pages.
+
+Never sacrifice usability for aesthetics.

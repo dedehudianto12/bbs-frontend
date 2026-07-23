@@ -5,7 +5,6 @@ const { data: allProducts } = await useAsyncData('produk-lainnya', () =>
   queryCollection('products').all()
 )
 
-// ponytail: non-belt products → lainnya group
 const products = computed(() =>
   (Array.isArray(allProducts.value) ? allProducts.value : [])
     .filter((p: any) => p.group !== 'belt-conveyor')
@@ -33,17 +32,30 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="max-w-6xl mx-auto px-4 py-12">
-    <h1 class="text-3xl font-bold text-ink mb-2">Produk Lainnya</h1>
-    <p class="text-neutral mb-8">Komponen conveyor pendukung untuk melengkapi sistem material handling Anda.</p>
+  <div>
+    <section class="bg-bg-soft py-14 md:py-20">
+      <div class="max-w-3xl mx-auto px-4 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold text-ink tracking-tight">Produk Lainnya</h1>
+        <p class="mt-4 text-neutral text-lg">Komponen conveyor pendukung untuk melengkapi sistem material handling Anda.</p>
+      </div>
+    </section>
 
-    <ProductFilter
-      model-value=""
-      :options="subCategories"
-      class="mb-8"
-      @update:model-value="onFilterChange"
+    <div class="max-w-6xl mx-auto px-4 py-12">
+      <ProductFilter
+        model-value=""
+        :options="subCategories"
+        class="mb-8"
+        @update:model-value="onFilterChange"
+      />
+
+      <ProductGrid :products="products" />
+    </div>
+
+    <CTASection
+      headline="Butuh Komponen Khusus?"
+      description="Kami menyediakan berbagai komponen conveyor sesuai spesifikasi Anda."
+      button-text="Hubungi Kami"
+      button-link="/kontak"
     />
-
-    <ProductGrid :products="products" />
   </div>
 </template>

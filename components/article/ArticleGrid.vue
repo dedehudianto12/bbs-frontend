@@ -1,6 +1,14 @@
 <script setup lang="ts">
 defineProps<{
-  articles: { slug: string; title: string; excerpt: string; tag: string }[]
+  articles: {
+    slug: string
+    title: string
+    excerpt?: string | null
+    tag: string
+    image?: string | null
+    publishedAt?: string
+    author?: string
+  }[]
 }>()
 </script>
 

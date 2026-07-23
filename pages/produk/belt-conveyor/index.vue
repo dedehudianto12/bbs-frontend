@@ -16,7 +16,6 @@ const products = computed(() =>
     }))
 )
 
-// ponytail: unique categories from filtered products for filter buttons
 const subCategories = computed(() => {
   const cats = [...new Set(products.value.map((p) => p.category))]
   return cats.map((c) => ({ label: c, value: c.toLowerCase().replace(/\s+/g, '-') }))
@@ -33,17 +32,30 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="max-w-6xl mx-auto px-4 py-12">
-    <h1 class="text-3xl font-bold text-ink mb-2">Belt Conveyor</h1>
-    <p class="text-neutral mb-8">Pilih dari berbagai jenis belt conveyor untuk aplikasi industri Anda.</p>
+  <div>
+    <section class="bg-bg-soft py-14 md:py-20">
+      <div class="max-w-3xl mx-auto px-4 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold text-ink tracking-tight">Belt Conveyor</h1>
+        <p class="mt-4 text-neutral text-lg">Pilih dari berbagai jenis belt conveyor untuk aplikasi industri Anda.</p>
+      </div>
+    </section>
 
-    <ProductFilter
-      model-value=""
-      :options="subCategories"
-      class="mb-8"
-      @update:model-value="onFilterChange"
+    <div class="max-w-6xl mx-auto px-4 py-12">
+      <ProductFilter
+        model-value=""
+        :options="subCategories"
+        class="mb-8"
+        @update:model-value="onFilterChange"
+      />
+
+      <ProductGrid :products="products" />
+    </div>
+
+    <CTASection
+      headline="Tidak Menemukan yang Anda Cari?"
+      description="Tim kami siap membantu merekomendasikan belt conveyor yang sesuai dengan kebutuhan spesifik Anda."
+      button-text="Konsultasi Gratis"
+      button-link="/kontak"
     />
-
-    <ProductGrid :products="products" />
   </div>
 </template>

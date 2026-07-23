@@ -7,26 +7,32 @@ const year = new Date().getFullYear()
 </script>
 
 <template>
-  <footer class="bg-ink text-bg-soft py-12">
+  <footer class="bg-ink text-white py-16">
     <div class="mx-auto max-w-6xl px-4">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
         <!-- Brand -->
         <div>
-          <p class="font-bold text-lg">CV Bintang Berjaya Satu</p>
-          <p class="mt-2 text-bg-soft/70 text-sm leading-relaxed">
+          <p class="font-bold text-lg tracking-tight">
+            <span class="text-white">BBS</span>
+            <span class="text-gold">Conveyor</span>
+          </p>
+          <p class="mt-3 text-white/50 text-sm leading-relaxed">
             Connecting Power and Motion to Drive Industrial Excellence
+          </p>
+          <p class="mt-3 text-white/30 text-xs">
+            CV Bintang Berjaya Satu
           </p>
         </div>
 
-        <!-- Dynamic columns from navigation -->
+        <!-- Dynamic columns -->
         <div v-for="col in footerColumns" :key="col.title">
-          <p class="font-semibold text-sm mb-3">{{ col.title }}</p>
-          <ul class="space-y-2">
+          <p class="font-semibold text-xs tracking-wider text-white/60 uppercase mb-4">{{ col.title }}</p>
+          <ul class="space-y-2.5">
             <li v-for="link in col.links" :key="link.label">
               <NuxtLink
                 v-if="!link.href.startsWith('http')"
                 :to="link.href"
-                class="text-bg-soft/60 text-sm hover:text-gold transition-colors"
+                class="text-white/50 text-sm hover:text-gold transition-colors"
               >
                 {{ link.label }}
               </NuxtLink>
@@ -35,7 +41,7 @@ const year = new Date().getFullYear()
                 :href="link.href"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-bg-soft/60 text-sm hover:text-gold transition-colors"
+                class="text-white/50 text-sm hover:text-gold transition-colors"
               >
                 {{ link.label }}
               </a>
@@ -44,8 +50,8 @@ const year = new Date().getFullYear()
         </div>
       </div>
 
-      <div class="mt-10 pt-6 border-t border-neutral/30 text-bg-soft/50 text-xs">
-        &copy; {{ year }} CV Bintang Berjaya Satu. All rights reserved.
+      <div class="mt-12 pt-6 border-t border-white/10 text-white/30 text-xs flex flex-col sm:flex-row sm:justify-between gap-2">
+        <span>&copy; {{ year }} CV Bintang Berjaya Satu. All rights reserved.</span>
       </div>
     </div>
   </footer>

@@ -46,24 +46,36 @@ useSeoMeta({
 </script>
 
 <template>
-  <div v-if="isValid" class="max-w-6xl mx-auto px-4 py-12">
-    <h1 class="text-3xl font-bold text-ink mb-2">{{ currentLabel }}</h1>
-    <p class="text-neutral mb-8">Belt Conveyor kategori {{ currentLabel }}.</p>
+  <div v-if="isValid">
+    <section class="bg-bg-soft py-14">
+      <div class="max-w-3xl mx-auto px-4 text-center">
+        <Breadcrumb
+          :items="[
+            { label: 'Beranda', href: '/' },
+            { label: 'Belt Conveyor', href: '/produk/belt-conveyor' },
+            { label: currentLabel },
+          ]"
+        />
+        <h1 class="text-3xl font-bold text-ink tracking-tight">{{ currentLabel }}</h1>
+        <p class="mt-3 text-neutral">Belt Conveyor kategori {{ currentLabel }}.</p>
+      </div>
+    </section>
 
-    <ProductFilter
-      :model-value="subcat"
-      :options="subCategories"
-      class="mb-8"
-      @update:model-value="onFilterChange"
-    />
-
-    <ProductGrid :products="products" />
+    <div class="max-w-6xl mx-auto px-4 py-12">
+      <ProductFilter
+        :model-value="subcat"
+        :options="subCategories"
+        class="mb-8"
+        @update:model-value="onFilterChange"
+      />
+      <ProductGrid :products="products" />
+    </div>
   </div>
 
   <div v-else class="max-w-6xl mx-auto px-4 py-20 text-center">
     <h1 class="text-2xl font-bold text-ink mb-4">Kategori Tidak Ditemukan</h1>
-    <NuxtLink to="/produk/belt-conveyor" class="text-gold-dark hover:text-gold font-medium transition-colors">
+    <Button to="/produk/belt-conveyor" variant="outline">
       &larr; Kembali ke Belt Conveyor
-    </NuxtLink>
+    </Button>
   </div>
 </template>

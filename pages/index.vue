@@ -19,6 +19,24 @@ const whyChooseUsItems = computed(() =>
   hpData.value?.whyChooseUs?.items ?? []
 )
 
+const stats = computed(() => {
+  const s = hpData.value?.statistics
+  if (!s) return []
+  return [
+    { label: 'Tahun Pengalaman', value: `${s.years}+` },
+    { label: 'Proyek Selesai', value: `${s.projects}+` },
+    { label: 'Klien Aktif', value: `${s.clients}+` },
+    { label: 'Tenaga Teknisi', value: `${s.engineers}+` },
+  ].filter((item) => !item.value.startsWith('undefined'))
+})
+
+const ctaProps = computed(() => ({
+  headline: hpData.value?.cta?.headline ?? 'Butuh Solusi Conveyor?',
+  description: hpData.value?.cta?.description ?? 'Konsultasikan kebutuhan industri Anda dengan tim kami.',
+  buttonText: hpData.value?.cta?.buttonText ?? 'Hubungi Kami',
+  buttonLink: hpData.value?.cta?.buttonLink ?? '/kontak',
+}))
+
 // Product categories, industries, articles — from their own collections
 const { data: products } = await useAsyncData('homepage-products', () =>
   queryCollection('products').all()
@@ -50,12 +68,11 @@ const latestArticles = computed(() =>
     ? [...articles.value].sort((a: any, b: any) => b.publishedAt.localeCompare(a.publishedAt)).slice(0, 3)
     : []
   ).map((a: any) => ({
-    id: a.slug,
     slug: a.slug,
     title: a.title,
     excerpt: a.excerpt,
-    image: a.thumbnail ?? null,
     tag: a.tags?.[0] ?? '',
+    image: a.thumbnail ?? null,
     publishedAt: a.publishedAt,
     author: a.author ?? '',
   }))
@@ -72,5 +89,7 @@ useSeoMeta({
   <ProductCategoriesSection :categories="productCategories" />
   <WhyChooseUsSection :items="whyChooseUsItems" />
   <IndustriesSection :industries="industryItems" />
+  <StatisticsSection v-if="stats.length" :items="stats" />
   <LatestArticlesSection :articles="latestArticles" />
+  <CTASection v-bind="ctaProps" />
 </template>
