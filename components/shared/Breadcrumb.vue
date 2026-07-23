@@ -1,23 +1,29 @@
 <script setup lang="ts">
-defineProps<{
+withDefaults(defineProps<{
   items: { label: string; href?: string }[]
-}>()
+  invert?: boolean
+}>(), {
+  invert: false,
+})
 </script>
 
 <template>
-  <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-sm text-neutral mb-8">
+  <nav
+    aria-label="Breadcrumb"
+    class="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.1em]"
+    :class="invert ? 'text-white/45' : 'text-muted'"
+  >
     <template v-for="(item, i) in items" :key="item.label">
-      <svg v-if="i > 0" class="w-3 h-3 shrink-0 text-neutral/50" viewBox="0 0 12 12">
-        <path d="M4 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" />
-      </svg>
+      <span v-if="i > 0" class="shrink-0" :class="invert ? 'text-white/25' : 'text-muted/40'">/</span>
       <NuxtLink
         v-if="item.href"
         :to="item.href"
-        class="hover:text-ink transition-colors"
+        class="transition-colors"
+        :class="invert ? 'hover:text-white' : 'hover:text-ink'"
       >
         {{ item.label }}
       </NuxtLink>
-      <span v-else class="text-ink font-medium">{{ item.label }}</span>
+      <span v-else :class="invert ? 'text-white' : 'text-ink'">{{ item.label }}</span>
     </template>
   </nav>
 </template>

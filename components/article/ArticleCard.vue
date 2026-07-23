@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   slug: string
   title: string
   excerpt?: string | null
@@ -8,24 +8,33 @@ defineProps<{
   publishedAt?: string
   author?: string
 }>()
+
+// deterministic gradient theme per article
+const themeIndex = computed(() => {
+  let h = 0
+  for (const ch of props.slug) h = (h * 31 + ch.charCodeAt(0)) >>> 0
+  return h
+})
 </script>
 
 <template>
-  <NuxtLink :to="`/artikel/${slug}`" class="group block bg-white border border-border rounded-xl overflow-hidden hover:shadow-sm hover:border-gold/30 transition-all duration-200">
-    <div class="aspect-[16/9] bg-bg-soft flex items-center justify-center text-neutral text-sm">
-      <!-- ponytail: placeholder until real images wired up -->
-      <svg class="w-10 h-10 text-neutral/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+  <NuxtLink
+    :to="`/artikel/${slug}`"
+    class="group block overflow-hidden rounded-xl border border-line bg-white transition-all duration-200 hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-md hover:shadow-ink/5"
+  >
+    <div class="p-2 pb-0">
+      <GradientPanel :index="themeIndex" rounded="rounded-lg" class="aspect-[16/9]" />
     </div>
-    <div class="p-5">
-      <div v-if="tag" class="flex items-center gap-2 mb-2">
-        <span class="text-xs font-medium text-gold-dark bg-gold/10 px-2 py-0.5 rounded-full">{{ tag }}</span>
-      </div>
-      <h3 class="font-semibold text-ink group-hover:text-gold-dark transition-colors line-clamp-2 leading-snug">{{ title }}</h3>
-      <p v-if="excerpt" class="mt-2 text-sm text-neutral line-clamp-2">{{ excerpt }}</p>
-      <div v-if="publishedAt" class="mt-3 flex items-center gap-2 text-xs text-neutral/60">
-        <span v-if="author">{{ author }}</span>
-        <span v-if="author && publishedAt">&middot;</span>
-        <time v-if="publishedAt" :datetime="publishedAt">{{ new Date(publishedAt).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' }) }}</time>
+    <div class="p-4">
+      <p class="flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted">
+        <span class="h-2.5 w-2.5 shrink-0 border-l-2 border-t-2 border-accent" aria-hidden="true" />
+        {{ tag || 'Artikel' }}
+      </p>
+      <h3 class="mt-2.5 text-[15px] font-semibold leading-snug text-ink transition-colors line-clamp-2 group-hover:text-accent">
+        {{ title }}
+      </h3>
+      <div v-if="publishedAt" class="mt-3 text-[10.5px] font-medium uppercase tracking-[0.1em] tabular-nums text-muted/70">
+        <time :datetime="publishedAt">{{ new Date(publishedAt).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' }) }}</time>
       </div>
     </div>
   </NuxtLink>

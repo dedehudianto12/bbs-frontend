@@ -19,18 +19,17 @@ useSeoMeta({
 
 <template>
   <div>
-    <section class="bg-bg-soft py-14 md:py-20">
-      <div class="max-w-3xl mx-auto px-4 text-center">
-        <h1 class="text-3xl md:text-4xl font-bold text-ink tracking-tight">Jasa Kami</h1>
-        <p class="mt-4 text-neutral text-lg">Layanan profesional untuk kebutuhan belt conveyor industri Anda.</p>
-      </div>
-    </section>
+    <PageHero
+      eyebrow="Layanan"
+      title="Jasa Kami"
+      description="Layanan profesional untuk kebutuhan belt conveyor industri Anda."
+    />
 
-    <div class="max-w-6xl mx-auto px-4 py-12">
-      <div v-if="serviceList.length" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+    <div class="container-tech py-16 md:py-24">
+      <div v-if="serviceList.length" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <ServiceCard v-for="s in serviceList" :key="s.slug" v-bind="s" />
       </div>
-      <p v-else class="text-neutral text-center py-12">Belum ada layanan tersedia.</p>
+      <p v-else class="rounded-2xl border border-dashed border-line py-16 text-center text-sm text-muted">Belum ada layanan tersedia.</p>
     </div>
 
     <CTASection

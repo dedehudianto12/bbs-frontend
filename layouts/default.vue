@@ -9,6 +9,7 @@ const footerCols = computed(() => (navData.value as any)?.footer ?? [])
 </script>
 
 <template>
+  <AnnouncementBar />
   <AppNavbar
     :nav-items="headerNav"
     :cta-label="cta.label"

@@ -37,6 +37,11 @@ const ctaProps = computed(() => ({
   buttonLink: hpData.value?.cta?.buttonLink ?? '/kontak',
 }))
 
+const mission = computed(() =>
+  hpData.value?.company?.description ??
+  'BBS Conveyor adalah supplier conveyor terpercaya di Indonesia yang menyediakan belt conveyor, roller, dan komponen industri berkualitas tinggi.'
+)
+
 // Product categories, industries, articles — from their own collections
 const { data: products } = await useAsyncData('homepage-products', () =>
   queryCollection('products').all()
@@ -50,9 +55,16 @@ const { data: articles } = await useAsyncData('homepage-articles', () =>
   queryCollection('blog').all()
 )
 
-const productCategories = computed(() => {
-  const cats = (Array.isArray(products.value) ? products.value : []).map((p: any) => p.category)
-  return [...new Set(cats)]
+// Unique categories with group + product count, in first-seen order
+const catItems = computed(() => {
+  const list = Array.isArray(products.value) ? products.value : []
+  const map = new Map<string, { cat: string; group: string; count: number }>()
+  for (const p of list as any[]) {
+    const entry = map.get(p.category) ?? { cat: p.category, group: p.group, count: 0 }
+    entry.count++
+    map.set(p.category, entry)
+  }
+  return [...map.values()]
 })
 
 const industryItems = computed(() =>
@@ -65,7 +77,7 @@ const industryItems = computed(() =>
 
 const latestArticles = computed(() =>
   (Array.isArray(articles.value)
-    ? [...articles.value].sort((a: any, b: any) => b.publishedAt.localeCompare(a.publishedAt)).slice(0, 3)
+    ? [...articles.value].sort((a: any, b: any) => b.publishedAt.localeCompare(a.publishedAt)).slice(0, 6)
     : []
   ).map((a: any) => ({
     slug: a.slug,
@@ -81,15 +93,32 @@ const latestArticles = computed(() =>
 useSeoMeta({
   title: hpData.value?.seo?.title ?? 'BBS Conveyor — Solusi Belt & Roller Conveyor Industri',
   description: hpData.value?.seo?.description ?? '',
+  ogImage: hpData.value?.seo?.ogImage ?? '/images/og-home.webp',
+  twitterCard: 'summary_large_image',
 })
 </script>
 
 <template>
   <HeroSection v-bind="heroProps" />
-  <ProductCategoriesSection :categories="productCategories" />
-  <WhyChooseUsSection :items="whyChooseUsItems" />
-  <IndustriesSection :industries="industryItems" />
+  <ProductCategoriesSection :items="catItems" />
   <StatisticsSection v-if="stats.length" :items="stats" />
+  <WhyChooseUsSection :items="whyChooseUsItems" />
+
+  <!-- Mission band (cream cell) -->
+  <section class="bg-paper">
+    <div class="frame border-b border-line">
+      <div class="bg-paper-soft px-6 py-20 text-center md:py-28">
+        <p class="display mx-auto max-w-3xl text-2xl leading-snug text-ink md:text-[2.4rem]">
+          {{ mission }}
+        </p>
+        <div class="mt-10 flex justify-center">
+          <Button to="/tentang-kami" variant="white">Selengkapnya</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <IndustriesSection :industries="industryItems" />
   <LatestArticlesSection :articles="latestArticles" />
   <CTASection v-bind="ctaProps" />
 </template>

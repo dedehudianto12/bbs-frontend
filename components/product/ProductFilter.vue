@@ -14,10 +14,10 @@ defineEmits<{
     <button
       v-for="opt in options"
       :key="opt.value"
-      class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+      class="rounded-md border px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] transition-colors"
       :class="modelValue === opt.value
-        ? 'bg-ink text-white'
-        : 'bg-bg-soft text-neutral hover:bg-border'"
+        ? 'border-accent bg-accent text-white'
+        : 'border-line bg-white text-muted hover:border-ink/30 hover:text-ink'"
       @click="$emit('update:modelValue', opt.value)"
     >
       {{ opt.label }}

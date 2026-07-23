@@ -1,95 +1,202 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ──────────────────────────────────────────────────────────
+   Design tokens — BBS Conveyor: Safety Orange + Steel
+   Industrial supplier identity. Light-first concrete/paper canvas,
+   safety-orange accent used sparingly, a single steel dark anchor.
+   Fonts (Inter) loaded in nuxt.config. No monospace in the UI voice.
+   ────────────────────────────────────────────────────────── */
 :root {
-  --color-ink: #1A1A18;
-  --color-gold: #CBA135;
-  --color-gold-dark: #8A6D1F;
-  --color-neutral: #6B6A64;
-  --color-bg-soft: #F5F4F0;
-  --color-border: #E5E3DC;
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
+  /* RGB channel triples so Tailwind can apply the /opacity modifier */
 
-/* ponytail: font brand dikonfirmasi ke klien, fallback system sans-serif */
+  /* Light surfaces */
+  --paper: 244 242 238;      /* #F4F2EE concrete / off-white — section base */
+  --paper-soft: 250 249 246; /* #FAF9F6 soft paper — raised cells / bands */
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* Text */
+  --ink: 28 30 34;           /* #1C1E22 graphite ink — primary text */
+  --muted: 91 96 104;        /* #5B6068 muted steel — secondary text */
+
+  /* Structure */
+  --line: 226 224 219;       /* #E2E0DB hairline borders on light */
+  --steel: 58 61 66;         /* #3A3D42 steel — the single dark anchor */
+  --steel-soft: 69 72 78;    /* #45484E raised surfaces on the steel anchor */
+
+  /* Accent — safety orange, deliberate + sparing */
+  --accent: 228 87 27;       /* #E4571B safety orange */
+  --accent-glow: 242 107 50; /* #F26B32 lighter hover */
+
+  /* Operational signal — machine-status green, status dots only */
+  --signal: 46 150 92;       /* #2E965C */
+  --signal-glow: 74 190 122; /* #4ABE7A */
+
+  --radius: 0.5rem;
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-background text-foreground;
-    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
-    color: var(--color-ink);
+    @apply bg-paper text-ink antialiased;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
     line-height: 1.6;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+
+  ::selection {
+    background: rgb(var(--accent));
+    color: #fff;
+  }
+
+  :where(a, button, input, textarea, select):focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+}
+
+@layer components {
+  /* ── The framed page column: continuous 1px side borders ── */
+  .frame {
+    @apply mx-auto w-full max-w-6xl border-x border-line;
+  }
+  /* Hairlines on the steel anchor band (footer) */
+  .frame-dark {
+    @apply border-white/10;
+  }
+
+  /* Framed column + default text padding (text-style pages) */
+  .container-tech {
+    @apply mx-auto w-full max-w-6xl border-x border-line px-5 md:px-10;
+  }
+
+  .section {
+    @apply py-20 md:py-28;
+  }
+
+  /* ── Eyebrow / kicker — uppercase tracked SANS (no monospace) ── */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 font-sans text-[11px] font-semibold uppercase tracking-[0.18em];
+  }
+
+  /* Display heading — neutral grotesque, medium weight, tight */
+  .display {
+    @apply font-display font-medium tracking-[-0.02em];
+    line-height: 1.08;
+  }
+
+  /* ── Industrial motifs ─────────────────────────────────── */
+
+  /* Faint blueprint / graph-paper grid on light surfaces */
+  .blueprint-grid {
+    background-image:
+      linear-gradient(to right, rgb(var(--ink) / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(var(--ink) / 0.05) 1px, transparent 1px);
+    background-size: 26px 26px;
+  }
+  /* Blueprint grid tuned for the steel anchor band */
+  .blueprint-grid-steel {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: 26px 26px;
+  }
+
+  /* Restrained caution / hazard cue in safety orange */
+  .hazard-stripe {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      rgb(var(--accent)) 0 8px,
+      transparent 8px 16px
+    );
+  }
+
+  /* Concrete grain texture over panels/banners */
+  .bg-grain {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>");
+    background-size: 160px 160px;
+  }
+
+  /* ── Markdown (Nuxt Content) — hand-rolled, no typography plugin ── */
+  .prose-tech {
+    @apply text-ink/75;
+    font-size: 1.0625rem;
+    line-height: 1.75;
+  }
+  .prose-tech > * + * {
+    margin-top: 1.25rem;
+  }
+  .prose-tech h2 {
+    @apply font-display text-2xl md:text-3xl font-semibold text-ink tracking-tight;
+    line-height: 1.2;
+    margin-top: 2.75rem;
+    margin-bottom: 0.75rem;
+  }
+  .prose-tech h3 {
+    @apply font-display text-xl md:text-2xl font-semibold text-ink tracking-tight;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .prose-tech h4 {
+    @apply font-sans text-base font-semibold text-ink;
+    margin-top: 1.5rem;
+  }
+  .prose-tech p {
+    @apply text-ink/75;
+  }
+  .prose-tech a {
+    @apply text-accent underline decoration-accent/30 underline-offset-4 transition-colors hover:decoration-accent;
+  }
+  .prose-tech strong {
+    @apply font-semibold text-ink;
+  }
+  .prose-tech ul {
+    @apply list-disc space-y-2 pl-5 text-ink/75;
+  }
+  .prose-tech ol {
+    @apply list-decimal space-y-2 pl-5 text-ink/75;
+  }
+  .prose-tech li {
+    @apply leading-7;
+  }
+  .prose-tech li::marker {
+    color: rgb(var(--accent));
+  }
+  .prose-tech blockquote {
+    @apply border-l-2 border-accent/50 pl-4 italic text-ink/65;
+  }
+  .prose-tech code {
+    @apply rounded bg-ink/5 px-1.5 py-0.5 font-mono text-[0.85em] text-ink;
+  }
+  .prose-tech pre {
+    @apply overflow-x-auto rounded-lg bg-steel p-4 font-mono text-sm text-white/90;
+  }
+  .prose-tech pre code {
+    @apply bg-transparent p-0 text-inherit;
+  }
+  .prose-tech img {
+    @apply rounded-lg border border-line;
+  }
+  .prose-tech hr {
+    @apply my-10 border-line;
+  }
+  /* Datasheet-style tables */
+  .prose-tech table {
+    @apply w-full text-sm;
+  }
+  .prose-tech th {
+    @apply border-b border-line py-2 text-left font-sans text-xs font-semibold uppercase tracking-[0.12em] text-muted;
+  }
+  .prose-tech td {
+    @apply border-b border-line py-2 tabular-nums text-ink/75;
   }
 }

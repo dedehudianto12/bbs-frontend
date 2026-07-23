@@ -47,26 +47,27 @@ useSeoMeta({
 
 <template>
   <div>
-    <!-- Hero -->
-    <section class="bg-bg-soft py-16 md:py-24">
-      <div class="max-w-3xl mx-auto px-4 text-center">
-        <h1 class="text-3xl md:text-5xl font-bold text-ink tracking-tight">Artikel</h1>
-        <p class="mt-4 text-neutral text-lg">Tips, panduan, dan informasi seputar belt conveyor dan komponen industri.</p>
-      </div>
-    </section>
+    <PageHero
+      eyebrow="Blog"
+      title="Artikel"
+      description="Tips, panduan, dan informasi seputar belt conveyor dan komponen industri."
+    />
 
-    <div class="max-w-6xl mx-auto px-4 py-12">
+    <div class="container-tech py-16 md:py-24">
       <!-- Featured Article -->
       <div v-if="featuredArticle && !tag" class="mb-16">
-        <span class="text-gold text-xs font-semibold tracking-[0.2em] uppercase mb-4 block">Artikel Unggulan</span>
+        <p class="eyebrow mb-5 text-accent">
+          <span class="inline-block h-1 w-1 rounded-full bg-accent" />
+          Artikel Unggulan
+        </p>
         <ArticleCard v-bind="featuredArticle" />
       </div>
 
       <!-- Tag filter -->
-      <div v-if="allTags.length" class="flex flex-wrap gap-2 mb-10">
+      <div v-if="allTags.length" class="mb-10 flex flex-wrap gap-2">
         <button
-          class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-          :class="tag === '' ? 'bg-ink text-white' : 'bg-bg-soft text-neutral hover:bg-border'"
+          class="rounded-md border px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] transition-colors"
+          :class="tag === '' ? 'border-accent bg-accent text-white' : 'border-line bg-white text-muted hover:border-ink/30 hover:text-ink'"
           @click="tag = ''"
         >
           Semua
@@ -74,8 +75,8 @@ useSeoMeta({
         <button
           v-for="t in allTags"
           :key="t"
-          class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-          :class="tag === t ? 'bg-ink text-white' : 'bg-bg-soft text-neutral hover:bg-border'"
+          class="rounded-md border px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] transition-colors"
+          :class="tag === t ? 'border-accent bg-accent text-white' : 'border-line bg-white text-muted hover:border-ink/30 hover:text-ink'"
           @click="tag = t"
         >
           {{ t }}

@@ -47,8 +47,12 @@ useSeoMeta({
 
 <template>
   <div v-if="isValid">
-    <section class="bg-bg-soft py-14">
-      <div class="max-w-3xl mx-auto px-4 text-center">
+    <PageHero
+      eyebrow="Belt Conveyor"
+      :title="currentLabel"
+      :description="`Belt Conveyor kategori ${currentLabel}.`"
+    >
+      <template #breadcrumb>
         <Breadcrumb
           :items="[
             { label: 'Beranda', href: '/' },
@@ -56,26 +60,24 @@ useSeoMeta({
             { label: currentLabel },
           ]"
         />
-        <h1 class="text-3xl font-bold text-ink tracking-tight">{{ currentLabel }}</h1>
-        <p class="mt-3 text-neutral">Belt Conveyor kategori {{ currentLabel }}.</p>
-      </div>
-    </section>
+      </template>
+    </PageHero>
 
-    <div class="max-w-6xl mx-auto px-4 py-12">
+    <div class="container-tech py-16 md:py-24">
       <ProductFilter
         :model-value="subcat"
         :options="subCategories"
-        class="mb-8"
+        class="mb-10"
         @update:model-value="onFilterChange"
       />
       <ProductGrid :products="products" />
     </div>
   </div>
 
-  <div v-else class="max-w-6xl mx-auto px-4 py-20 text-center">
-    <h1 class="text-2xl font-bold text-ink mb-4">Kategori Tidak Ditemukan</h1>
-    <Button to="/produk/belt-conveyor" variant="outline">
-      &larr; Kembali ke Belt Conveyor
-    </Button>
+  <div v-else class="container-tech py-24 md:py-32 text-center">
+    <h1 class="display text-3xl text-ink md:text-4xl">Kategori Tidak Ditemukan</h1>
+    <div class="mt-8 flex justify-center">
+      <Button to="/produk/belt-conveyor" variant="ghost" arrow>Kembali ke Belt Conveyor</Button>
+    </div>
   </div>
 </template>

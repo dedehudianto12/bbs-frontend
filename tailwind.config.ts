@@ -1,5 +1,4 @@
 import type { Config } from 'tailwindcss'
-import animate from 'tailwindcss-animate'
 
 export default <Config>{
   content: [
@@ -12,71 +11,79 @@ export default <Config>{
   theme: {
     extend: {
       colors: {
-        ink: 'var(--color-ink)',
-        gold: 'var(--color-gold)',
-        'gold-dark': 'var(--color-gold-dark)',
-        'neutral-color': 'var(--color-neutral)',
-        'bg-soft': 'var(--color-bg-soft)',
-        'color-border': 'var(--color-border)',
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
-        card: {
-          DEFAULT: 'var(--card)',
-          foreground: 'var(--card-foreground)',
+        // ── Steel: the single dark anchor (footer) ──
+        steel: {
+          DEFAULT: 'rgb(var(--steel) / <alpha-value>)',
+          soft: 'rgb(var(--steel-soft) / <alpha-value>)',
         },
-        popover: {
-          DEFAULT: 'var(--popover)',
-          foreground: 'var(--popover-foreground)',
+        // Back-compat alias — retired "void" band name now maps to steel
+        void: {
+          DEFAULT: 'rgb(var(--steel) / <alpha-value>)',
+          soft: 'rgb(var(--steel-soft) / <alpha-value>)',
         },
-        primary: {
-          DEFAULT: 'var(--primary)',
-          foreground: 'var(--primary-foreground)',
+        // ── Light surfaces ──
+        paper: {
+          DEFAULT: 'rgb(var(--paper) / <alpha-value>)',
+          soft: 'rgb(var(--paper-soft) / <alpha-value>)',
         },
-        secondary: {
-          DEFAULT: 'var(--secondary)',
-          foreground: 'var(--secondary-foreground)',
-        },
-        muted: {
-          DEFAULT: 'var(--muted)',
-          foreground: 'var(--muted-foreground)',
-        },
+        ink: 'rgb(var(--ink) / <alpha-value>)',
+        muted: 'rgb(var(--muted) / <alpha-value>)',
+        line: 'rgb(var(--line) / <alpha-value>)',
+        // ── Safety-orange accent ──
         accent: {
-          DEFAULT: 'var(--accent)',
-          foreground: 'var(--accent-foreground)',
+          DEFAULT: 'rgb(var(--accent) / <alpha-value>)',
+          glow: 'rgb(var(--accent-glow) / <alpha-value>)',
         },
-        destructive: {
-          DEFAULT: 'var(--destructive)',
-          foreground: 'var(--destructive-foreground)',
+        // ── Operational signal green (status only) ──
+        signal: {
+          DEFAULT: 'rgb(var(--signal) / <alpha-value>)',
+          glow: 'rgb(var(--signal-glow) / <alpha-value>)',
         },
-        border: 'var(--border)',
-        input: 'var(--input)',
-        ring: 'var(--ring)',
-        'chart-1': 'var(--chart-1)',
-        'chart-2': 'var(--chart-2)',
-        'chart-3': 'var(--chart-3)',
-        'chart-4': 'var(--chart-4)',
-        'chart-5': 'var(--chart-5)',
-        sidebar: {
-          DEFAULT: 'var(--sidebar)',
-          foreground: 'var(--sidebar-foreground)',
-          primary: 'var(--sidebar-primary)',
-          'primary-foreground': 'var(--sidebar-primary-foreground)',
-          accent: 'var(--sidebar-accent)',
-          'accent-foreground': 'var(--sidebar-accent-foreground)',
-          border: 'var(--sidebar-border)',
-          ring: 'var(--sidebar-ring)',
+        // Back-compat alias — old "jade" status green
+        jade: {
+          DEFAULT: 'rgb(var(--signal) / <alpha-value>)',
+          glow: 'rgb(var(--signal-glow) / <alpha-value>)',
         },
+        // ── Base-layer aliases (used by @apply in main.css) ──
+        background: 'rgb(var(--paper) / <alpha-value>)',
+        foreground: 'rgb(var(--ink) / <alpha-value>)',
+        border: 'rgb(var(--line) / <alpha-value>)',
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+        display: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+        // mono retained for code samples only — never for UI labels
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
       borderRadius: {
-        sm: 'calc(var(--radius) - 4px)',
+        sm: 'calc(var(--radius) - 3px)',
         md: 'calc(var(--radius) - 2px)',
         lg: 'var(--radius)',
         xl: 'calc(var(--radius) + 4px)',
+        '2xl': 'calc(var(--radius) + 10px)',
       },
-      fontFamily: {
-        heading: 'var(--font-sans)',
+      keyframes: {
+        'fade-up': {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'pulse-glow': {
+          '0%, 100%': { opacity: '0.55' },
+          '50%': { opacity: '1' },
+        },
+        // one dash-period of the BrandMark belt overlay (pattern length 7.85)
+        'belt-travel': {
+          to: { strokeDashoffset: '-7.85' },
+        },
+      },
+      animation: {
+        'fade-up': 'fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both',
+        'fade-up-fast': 'fade-up 0.22s cubic-bezier(0.22, 1, 0.36, 1) both',
+        rise: 'fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both',
+        'pulse-glow': 'pulse-glow 2.4s ease-in-out infinite',
+        'belt-travel': 'belt-travel 4.5s linear infinite',
       },
     }
   },
-  plugins: [animate]
+  plugins: []
 }

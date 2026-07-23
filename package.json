@@ -14,9 +14,11 @@
     "@nuxtjs/seo": "^5.3.6",
     "@takumi-rs/core": "^2.4.1",
     "better-sqlite3": "^12.11.1",
-    "nuxt": "^3.21.8",
+    "motion-v": "^2.3.0",
+    "nuxt": "^4.5.0",
     "nuxt-og-image": "^6.7.4",
     "tailwindcss-animate": "^1.0.7",
+    "v-gsap-nuxt": "^1.5.12",
     "vue": "^3.5.39",
     "vue-router": "^5.1.0",
     "zod": "^4.4.3"

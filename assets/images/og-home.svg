@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- OG image: dark void band, wordmark + tagline left, belt-loop mark right -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b0b0d"/>
+      <stop offset="1" stop-color="#15161a"/>
+    </linearGradient>
+    <linearGradient id="belt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#34d399"/>
+      <stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#34d399" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#34d399" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <!-- hairline frame, .frame-dark style -->
+  <rect x="40" y="40" width="1120" height="550" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+  <line x1="40" y1="150" x2="1160" y2="150" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+
+  <!-- eyebrow -->
+  <text x="92" y="112" font-family="DejaVu Sans Mono, monospace" font-size="22" letter-spacing="6" fill="rgba(255,255,255,0.45)">CV BINTANG BERJAYA SATU</text>
+
+  <!-- wordmark + tagline -->
+  <text x="88" y="290" font-family="DejaVu Sans, sans-serif" font-weight="bold" font-size="72" fill="#ffffff">BBS Conveyor</text>
+  <text x="90" y="356" font-family="DejaVu Sans, sans-serif" font-size="30" fill="rgba(255,255,255,0.55)">Solusi Belt &amp; Roller Conveyor Industri</text>
+
+  <!-- spec-plate style chips -->
+  <g font-family="DejaVu Sans Mono, monospace" font-size="22" fill="rgba(255,255,255,0.65)">
+    <rect x="90" y="430" width="196" height="52" rx="10" fill="none" stroke="rgba(255,255,255,0.18)"/>
+    <text x="114" y="464">PVC BELT</text>
+    <rect x="306" y="430" width="160" height="52" rx="10" fill="none" stroke="rgba(255,255,255,0.18)"/>
+    <text x="330" y="464">PU BELT</text>
+    <rect x="486" y="430" width="170" height="52" rx="10" fill="none" stroke="rgba(255,255,255,0.18)"/>
+    <text x="510" y="464">ROLLER</text>
+  </g>
+
+  <text x="92" y="560" font-family="DejaVu Sans Mono, monospace" font-size="24" fill="rgba(255,255,255,0.4)">bbsconveyor.com</text>
+
+  <!-- belt-loop mark, right side -->
+  <circle cx="982" cy="322" r="210" fill="url(#glow)"/>
+  <g transform="translate(852,192)">
+    <rect x="0" y="0" width="260" height="260" rx="58" fill="url(#belt)"/>
+    <rect x="54" y="88" width="152" height="85" rx="42.5" fill="none" stroke="#ffffff" stroke-width="15"/>
+    <circle cx="97" cy="130" r="15" fill="#ffffff"/>
+    <circle cx="163" cy="130" r="15" fill="#ffffff"/>
+  </g>
+</svg>

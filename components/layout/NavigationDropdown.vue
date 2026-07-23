@@ -50,17 +50,17 @@ watch(() => route.path, () => { isOpen.value = false; activeIndex.value = -1 })
 
 <template>
   <!-- Desktop: hover dropdown -->
-  <div class="hidden md:block relative" @mouseenter="open" @mouseleave="close">
+  <div class="relative hidden lg:block" @mouseenter="open" @mouseleave="close">
     <NuxtLink
       :to="href"
-      class="relative text-sm font-medium py-2 px-3 transition-colors flex items-center gap-1"
-      :class="isActive ? 'text-ink' : 'text-neutral hover:text-ink'"
+      class="relative flex items-center gap-1.5 px-3 py-2 text-sm font-medium transition-colors"
+      :class="isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'"
     >
       {{ label }}
-      <svg class="w-3 h-3 transition-transform duration-200" :class="{ 'rotate-180': isOpen }" viewBox="0 0 12 12">
+      <svg class="h-3 w-3 transition-transform duration-200" :class="{ 'rotate-180': isOpen }" viewBox="0 0 12 12" aria-hidden="true">
         <path d="M3 5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" />
       </svg>
-      <span v-if="isActive" class="absolute bottom-0 left-3 right-3 h-0.5 bg-gold rounded-full" />
+      <span v-if="isActive" class="absolute -bottom-[3px] left-3 right-3 h-px bg-accent" />
     </NuxtLink>
 
     <Transition
@@ -74,18 +74,19 @@ watch(() => route.path, () => { isOpen.value = false; activeIndex.value = -1 })
       <div
         v-if="isOpen"
         ref="dropdownRef"
-        class="absolute top-full left-0 mt-1 bg-white border border-border rounded-xl shadow-md py-2 w-[220px] z-50"
+        class="absolute left-0 top-full z-50 mt-2 w-[230px] rounded-xl border border-line bg-white p-1.5 shadow-xl shadow-ink/5"
         @keydown="onKeydown"
       >
         <NuxtLink
           v-for="(item, i) in items"
           :key="item.label"
           :to="item.href"
-          class="block px-4 py-2.5 text-sm transition-colors"
+          class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13.5px] font-medium transition-colors"
           :class="i === activeIndex || route.path.startsWith(item.href)
-            ? 'text-ink bg-bg-soft'
-            : 'text-neutral hover:text-ink hover:bg-bg-soft'"
+            ? 'bg-paper-soft text-ink'
+            : 'text-ink/60 hover:bg-paper-soft hover:text-ink'"
         >
+          <span class="text-[10px] font-semibold tabular-nums text-accent/70">{{ String(i + 1).padStart(2, '0') }}</span>
           {{ item.label }}
         </NuxtLink>
       </div>
@@ -93,27 +94,31 @@ watch(() => route.path, () => { isOpen.value = false; activeIndex.value = -1 })
   </div>
 
   <!-- Mobile: accordion -->
-  <div class="md:hidden">
+  <div class="border-b border-line py-1 lg:hidden">
     <div class="flex items-center justify-between">
-      <NuxtLink :to="href" class="text-neutral hover:text-ink transition-colors py-1" :class="isActive ? 'text-ink font-medium' : ''">
+      <NuxtLink
+        :to="href"
+        class="py-2 text-[15px] font-medium transition-colors"
+        :class="isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'"
+      >
         {{ label }}
       </NuxtLink>
       <button
-        class="p-1 text-neutral hover:text-ink transition-colors"
+        class="p-2 text-ink/40 transition-colors hover:text-ink"
         @click="isOpen = !isOpen"
         aria-label="Toggle submenu"
       >
-        <svg class="w-3 h-3 transition-transform duration-200" :class="{ 'rotate-180': isOpen }" viewBox="0 0 12 12">
+        <svg class="h-3.5 w-3.5 transition-transform duration-200" :class="{ 'rotate-180': isOpen }" viewBox="0 0 12 12" aria-hidden="true">
           <path d="M3 5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" />
         </svg>
       </button>
     </div>
-    <div v-show="isOpen" class="ml-4 mt-1 flex flex-col gap-1">
+    <div v-show="isOpen" class="mb-2 ml-1 flex flex-col border-l border-line pl-4">
       <NuxtLink
         v-for="item in items"
         :key="item.label"
         :to="item.href"
-        class="text-sm text-neutral hover:text-ink transition-colors py-1"
+        class="py-2 text-sm text-ink/55 transition-colors hover:text-ink"
         @click="isOpen = false"
       >
         {{ item.label }}

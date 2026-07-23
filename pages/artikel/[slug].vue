@@ -34,8 +34,9 @@ useSeoMeta({
 </script>
 
 <template>
-  <article v-if="article" class="max-w-3xl mx-auto px-4 py-12">
+  <article v-if="article" class="mx-auto max-w-3xl px-5 py-12 md:px-8 md:py-16">
     <Breadcrumb
+      class="mb-8"
       :items="[
         { label: 'Beranda', href: '/' },
         { label: 'Artikel', href: '/artikel' },
@@ -43,37 +44,39 @@ useSeoMeta({
       ]"
     />
 
-    <div class="flex flex-wrap items-center gap-3 mb-4">
-      <span v-if="article.tags?.[0]" class="text-xs font-medium text-gold-dark bg-gold/10 px-2.5 py-1 rounded-full">
+    <div v-if="article.tags?.[0]" class="mb-5">
+      <span class="inline-block rounded-full bg-accent/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-accent">
         {{ article.tags[0] }}
       </span>
     </div>
 
-    <h1 class="text-3xl md:text-4xl font-bold text-ink tracking-tight mb-4">{{ article.title }}</h1>
+    <h1 class="display text-4xl text-ink md:text-5xl">{{ article.title }}</h1>
 
-    <div class="flex items-center gap-3 text-sm text-neutral mb-10">
+    <div class="mt-6 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.1em] text-muted">
       <span>{{ article.author }}</span>
-      <span>&middot;</span>
+      <span class="text-muted/40">/</span>
       <time :datetime="article.publishedAt">
         {{ new Date(article.publishedAt).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) }}
       </time>
     </div>
 
-    <div class="prose prose-neutral max-w-none">
+    <div class="prose-tech mt-10 max-w-none">
       <ContentRenderer :value="article" />
     </div>
 
     <!-- Related articles -->
-    <div v-if="relatedArticles.length" class="mt-20 border-t border-border pt-12">
-      <h2 class="text-xl font-bold text-ink mb-6">Artikel Terkait</h2>
-      <ArticleGrid :articles="relatedArticles" />
+    <div v-if="relatedArticles.length" class="mt-20 border-t border-line pt-12">
+      <h2 class="display text-2xl text-ink md:text-3xl">Artikel Terkait</h2>
+      <div class="mt-8">
+        <ArticleGrid :articles="relatedArticles" />
+      </div>
     </div>
   </article>
 
-  <div v-else class="max-w-6xl mx-auto px-4 py-20 text-center">
-    <h1 class="text-2xl font-bold text-ink mb-4">Artikel Tidak Ditemukan</h1>
-    <Button to="/artikel" variant="outline">
-      &larr; Kembali ke Artikel
-    </Button>
+  <div v-else class="container-tech py-24 md:py-32 text-center">
+    <h1 class="display text-3xl text-ink md:text-4xl">Artikel Tidak Ditemukan</h1>
+    <div class="mt-8 flex justify-center">
+      <Button to="/artikel" variant="ghost" arrow>Kembali ke Artikel</Button>
+    </div>
   </div>
 </template>

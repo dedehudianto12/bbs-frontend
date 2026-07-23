@@ -17,8 +17,9 @@ useSeoMeta({
 </script>
 
 <template>
-  <div v-if="service" class="max-w-4xl mx-auto px-4 py-12">
+  <div v-if="service" class="mx-auto max-w-4xl px-5 py-12 md:px-8 md:py-16">
     <Breadcrumb
+      class="mb-8"
       :items="[
         { label: 'Beranda', href: '/' },
         { label: 'Jasa', href: '/jasa' },
@@ -26,23 +27,27 @@ useSeoMeta({
       ]"
     />
 
-    <h1 class="text-3xl font-bold text-ink tracking-tight mb-6">{{ service.title }}</h1>
+    <p class="eyebrow mb-4 text-accent">
+      <span class="inline-block h-1 w-1 rounded-full bg-accent" />
+      Layanan
+    </p>
+    <h1 class="display text-4xl text-ink md:text-5xl">{{ service.title }}</h1>
 
-    <div class="prose prose-neutral max-w-none mb-8">
+    <div class="prose-tech mt-10 max-w-none">
       <ContentRenderer :value="service" />
     </div>
 
-    <div class="border-t border-border pt-8 mt-8">
-      <Button to="/kontak">
+    <div class="mt-12 border-t border-line pt-8">
+      <Button to="/kontak" variant="accent" arrow>
         Konsultasi Jasa Ini
       </Button>
     </div>
   </div>
 
-  <div v-else class="max-w-6xl mx-auto px-4 py-20 text-center">
-    <h1 class="text-2xl font-bold text-ink mb-4">Jasa Tidak Ditemukan</h1>
-    <Button to="/jasa" variant="outline">
-      &larr; Kembali ke Jasa
-    </Button>
+  <div v-else class="container-tech py-24 md:py-32 text-center">
+    <h1 class="display text-3xl text-ink md:text-4xl">Jasa Tidak Ditemukan</h1>
+    <div class="mt-8 flex justify-center">
+      <Button to="/jasa" variant="ghost" arrow>Kembali ke Jasa</Button>
+    </div>
   </div>
 </template>

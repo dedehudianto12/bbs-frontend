@@ -8,14 +8,31 @@ defineProps<{
 </script>
 
 <template>
-  <section class="py-16 md:py-24 bg-bg-soft">
-    <div class="max-w-2xl mx-auto px-4 text-center">
-      <h2 class="text-2xl md:text-3xl font-bold text-ink tracking-tight">{{ headline }}</h2>
-      <p class="mt-4 text-neutral leading-relaxed">{{ description }}</p>
-      <div class="mt-8">
-        <Button :to="buttonLink" variant="primary" size="lg">
-          {{ buttonText }}
-        </Button>
+  <section class="bg-paper">
+    <div class="frame border-b border-line">
+      <div class="relative isolate overflow-hidden bg-paper-soft px-6 py-20 text-center md:px-10 md:py-28">
+        <div class="pointer-events-none absolute inset-0 blueprint-grid opacity-70" aria-hidden="true" />
+        <!-- restrained hazard cue -->
+        <div class="hazard-stripe pointer-events-none absolute inset-x-0 top-0 h-1 opacity-80" aria-hidden="true" />
+        <div class="relative">
+          <p class="eyebrow justify-center text-accent">
+            Mulai sekarang
+          </p>
+          <h2 class="display mx-auto mt-5 max-w-2xl text-3xl text-ink md:text-[2.75rem]">
+            {{ headline }}
+          </h2>
+          <p class="mx-auto mt-5 max-w-xl leading-relaxed text-muted">
+            {{ description }}
+          </p>
+          <div class="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Button :to="buttonLink" variant="solid" arrow>
+              {{ buttonText }}
+            </Button>
+            <Button href="https://wa.me/6281234567890" external variant="white">
+              WhatsApp
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   </section>

@@ -1,11 +1,28 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
+  // Nuxt 4 defaults srcDir to `app/`; keep the existing flat root layout
+  // (pages/, components/, layouts/, assets/, app.vue all live at the root)
+  // so the `~`/`@` aliases resolve to the project root as they did on Nuxt 3.
+  srcDir: '.',
   devtools: { enabled: true },
 
-  modules: ['@nuxtjs/tailwindcss', '@nuxt/content', '@nuxtjs/seo'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/content', '@nuxtjs/seo', 'v-gsap-nuxt'],
 
   css: ['~/assets/css/main.css'],
+
+  app: {
+    head: {
+      link: [
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap',
+        },
+      ],
+    },
+  },
 
   components: {
     dirs: [

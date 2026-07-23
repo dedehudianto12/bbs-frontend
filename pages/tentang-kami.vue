@@ -32,16 +32,15 @@ useSeoMeta({
 
 <template>
   <div>
-    <section class="py-16 md:py-24 bg-bg-soft">
-      <div class="max-w-3xl mx-auto px-4 text-center">
-        <span class="text-gold text-sm font-semibold tracking-[0.2em] uppercase mb-3 block">Tentang Kami</span>
-        <h1 class="text-3xl md:text-4xl font-bold text-ink tracking-tight mb-4">CV Bintang Berjaya Satu</h1>
-        <p class="text-lg text-neutral italic">"Connecting Power and Motion to Drive Industrial Excellence"</p>
-      </div>
-    </section>
+    <PageHero
+      size="lg"
+      eyebrow="Tentang Kami"
+      title="CV Bintang Berjaya Satu"
+      description="Connecting Power and Motion to Drive Industrial Excellence"
+    />
 
-    <section class="py-16 md:py-24">
-      <div class="max-w-3xl mx-auto px-4 space-y-5 text-neutral leading-relaxed">
+    <section class="container-tech py-16 md:py-24">
+      <div class="max-w-3xl space-y-6 text-lg leading-relaxed text-muted">
         <p>
           CV Bintang Berjaya Satu — dikenal luas sebagai <strong class="text-ink">BBS Conveyor</strong> — adalah perusahaan yang bergerak di bidang penyediaan belt conveyor, roller, dan komponen industri sejak 2010. Berawal dari bengkel kecil di kawasan industri Jakarta Timur, kami telah berkembang menjadi mitra terpercaya bagi ratusan pabrik manufaktur, fasilitas tambang, dan instalasi pengolahan di seluruh Indonesia.
         </p>

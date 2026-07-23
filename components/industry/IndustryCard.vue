@@ -8,14 +8,13 @@ defineProps<{
 </script>
 
 <template>
-  <div class="flex flex-col p-6 rounded-xl bg-white border border-border">
-    <div class="w-10 h-10 rounded-lg bg-bg-soft flex items-center justify-center text-gold mb-4">
-      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <rect x="3" y="3" width="18" height="18" rx="2" />
-        <path d="M3 9h18M9 21V9" />
+  <div class="group flex flex-col rounded-2xl border border-line bg-paper p-6 transition-all duration-200 hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg hover:shadow-ink/5">
+    <span class="grid h-10 w-10 place-items-center rounded-xl bg-accent/10 text-accent">
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M3 21h18M4 21V8l6-4v17M14 21V4l6 4v13M8 9h.01M8 13h.01M8 17h.01M17 9h.01M17 13h.01" stroke-linecap="round" />
       </svg>
-    </div>
-    <h3 class="text-ink font-bold">{{ title }}</h3>
-    <p v-if="description" class="mt-2 text-neutral text-sm leading-relaxed">{{ description }}</p>
+    </span>
+    <h3 class="mt-5 font-semibold text-ink">{{ title }}</h3>
+    <p v-if="description" class="mt-2 text-sm leading-relaxed text-muted">{{ description }}</p>
   </div>
 </template>

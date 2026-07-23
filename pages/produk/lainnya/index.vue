@@ -33,18 +33,17 @@ useSeoMeta({
 
 <template>
   <div>
-    <section class="bg-bg-soft py-14 md:py-20">
-      <div class="max-w-3xl mx-auto px-4 text-center">
-        <h1 class="text-3xl md:text-4xl font-bold text-ink tracking-tight">Produk Lainnya</h1>
-        <p class="mt-4 text-neutral text-lg">Komponen conveyor pendukung untuk melengkapi sistem material handling Anda.</p>
-      </div>
-    </section>
+    <PageHero
+      eyebrow="Katalog Produk"
+      title="Produk Lainnya"
+      description="Komponen conveyor pendukung untuk melengkapi sistem material handling Anda."
+    />
 
-    <div class="max-w-6xl mx-auto px-4 py-12">
+    <div class="container-tech py-16 md:py-24">
       <ProductFilter
         model-value=""
         :options="subCategories"
-        class="mb-8"
+        class="mb-10"
         @update:model-value="onFilterChange"
       />
 
