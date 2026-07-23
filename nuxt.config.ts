@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
 
-  modules: ['@nuxtjs/tailwindcss', '@nuxt/content'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/content', '@nuxtjs/seo'],
 
   css: ['~/assets/css/main.css'],
 
@@ -13,12 +13,67 @@ export default defineNuxtConfig({
     ],
   },
 
-  // Site metadata for SEO (used by nuxt-seo-utils / sitemap if added later)
+  // ── Site identity (digunakan oleh semua sub-module SEO) ──
   site: {
     url: 'https://bbsconveyor.com',
     name: 'BBS Conveyor',
     description: 'CV Bintang Berjaya Satu — Solusi Belt & Roller Conveyor Industri',
     defaultLocale: 'id',
+  },
+
+  // ── OG Image auto-generate ──
+  ogImage: {
+    enabled: false, // ponytail: disabled — nuxt-og-image@6.7.4 crashes (originalName.split is not a function)
+  },
+
+  // ── Sitemap ──
+  sitemap: {
+    autoLastmod: true,
+    sources: [
+      '/__sitemap__/urls',
+    ],
+    credits: false,
+  },
+
+  // ── Robots ──
+  robots: {
+    enabled: true,
+    credits: false,
+    groups: [
+      { userAgent: '*', allow: ['/'] },
+    ],
+  },
+
+  // ── Schema.org JSON-LD ──
+  schemaOrg: {
+    identity: {
+      type: 'Organization',
+      name: 'CV Bintang Berjaya Satu',
+      alternateName: 'BBS Conveyor',
+      description: 'Supplier belt conveyor, roller, dan komponen industri terpercaya di Indonesia.',
+      url: 'https://bbsconveyor.com',
+      logo: '/logo.png',
+      sameAs: [
+        'https://wa.me/6281234567890',
+      ],
+      contactPoint: {
+        contactType: 'Sales',
+        telephone: '+6281234567890',
+        email: 'info@bbsconveyor.com',
+      },
+      address: {
+        addressLocality: 'Jakarta Timur',
+        addressRegion: 'DKI Jakarta',
+        addressCountry: 'ID',
+        streetAddress: 'Jl. Industri Raya No. 123, Kawasan Industri Pulogadung',
+      },
+    },
+  },
+
+  // ── SEO utils (canonical, i18n, etc.) ──
+  seo: {
+    fallbackTitle: true,
+    automaticDefaults: true,
   },
 
   // Static generation friendly
