@@ -1,65 +1,57 @@
 <script setup lang="ts">
-// Fetch homepage config from content/config/homepage.yml
-const { data: hp } = await useAsyncData('homepage-config', () =>
-  queryCollection('homepageConfig').first()
-)
+import { homepageConfig, whyChooseUsItems } from '~/data/homepage'
 
-const hpData = computed(() => (hp.value as any) ?? {})
+const { get } = useApi()
+
+const hpData = homepageConfig
 
 const heroProps = computed(() => ({
-  headline: hpData.value?.hero?.headline ?? 'Solusi Belt & Roller Conveyor untuk Bisnis Anda',
-  subheadline: hpData.value?.hero?.subheadline ?? '',
-  primaryCTA: hpData.value?.hero?.primaryCTA ?? 'Lihat Produk',
-  primaryLink: hpData.value?.hero?.primaryLink ?? '/produk/belt-conveyor',
-  secondaryCTA: hpData.value?.hero?.secondaryCTA,
-  secondaryLink: hpData.value?.hero?.secondaryLink,
+  headline: hpData.hero.headline,
+  subheadline: hpData.hero.subheadline,
+  primaryCTA: hpData.hero.primaryCTA,
+  primaryLink: hpData.hero.primaryLink,
+  secondaryCTA: hpData.hero.secondaryCTA,
+  secondaryLink: hpData.hero.secondaryLink,
 }))
 
-const whyChooseUsItems = computed(() =>
-  hpData.value?.whyChooseUs?.items ?? []
-)
-
 const stats = computed(() => {
-  const s = hpData.value?.statistics
-  if (!s) return []
+  const s = hpData.statistics
   return [
     { label: 'Tahun Pengalaman', value: `${s.years}+` },
     { label: 'Proyek Selesai', value: `${s.projects}+` },
     { label: 'Klien Aktif', value: `${s.clients}+` },
     { label: 'Tenaga Teknisi', value: `${s.engineers}+` },
-  ].filter((item) => !item.value.startsWith('undefined'))
+  ]
 })
 
 const ctaProps = computed(() => ({
-  headline: hpData.value?.cta?.headline ?? 'Butuh Solusi Conveyor?',
-  description: hpData.value?.cta?.description ?? 'Konsultasikan kebutuhan industri Anda dengan tim kami.',
-  buttonText: hpData.value?.cta?.buttonText ?? 'Hubungi Kami',
-  buttonLink: hpData.value?.cta?.buttonLink ?? '/kontak',
+  headline: hpData.cta.headline,
+  description: hpData.cta.description,
+  buttonText: hpData.cta.buttonText,
+  buttonLink: hpData.cta.buttonLink,
 }))
 
-const mission = computed(() =>
-  hpData.value?.company?.description ??
-  'BBS Conveyor adalah supplier conveyor terpercaya di Indonesia yang menyediakan belt conveyor, roller, dan komponen industri berkualitas tinggi.'
+const mission = computed(() => hpData.company.description)
+
+// Product categories, industries, articles — from backend
+const { data: productRes } = await useAsyncData('homepage-products', () =>
+  get<any[]>('/produk')
+)
+const { data: industryRes } = await useAsyncData('homepage-industries', () =>
+  get<any[]>('/industri')
+)
+const { data: articleRes } = await useAsyncData('homepage-articles', () =>
+  get<any[]>('/artikel')
 )
 
-// Product categories, industries, articles — from their own collections
-const { data: products } = await useAsyncData('homepage-products', () =>
-  queryCollection('products').all()
-)
-
-const { data: industries } = await useAsyncData('homepage-industries', () =>
-  queryCollection('industries').all()
-)
-
-const { data: articles } = await useAsyncData('homepage-articles', () =>
-  queryCollection('blog').all()
-)
+const products = computed(() => productRes.value?.data ?? [])
+const industries = computed(() => industryRes.value?.data ?? [])
+const allArticles = computed(() => articleRes.value?.data ?? [])
 
 // Unique categories with group + product count, in first-seen order
 const catItems = computed(() => {
-  const list = Array.isArray(products.value) ? products.value : []
   const map = new Map<string, { cat: string; group: string; count: number }>()
-  for (const p of list as any[]) {
+  for (const p of products.value) {
     const entry = map.get(p.category) ?? { cat: p.category, group: p.group, count: 0 }
     entry.count++
     map.set(p.category, entry)
@@ -68,32 +60,32 @@ const catItems = computed(() => {
 })
 
 const industryItems = computed(() =>
-  (Array.isArray(industries.value) ? industries.value : []).map((i: any) => ({
-    name: i.title,
-    description: i.excerpt,
+  industries.value.map((i: any) => ({
+    name: i.name,
+    description: i.description,
     slug: i.slug,
   }))
 )
 
 const latestArticles = computed(() =>
-  (Array.isArray(articles.value)
-    ? [...articles.value].sort((a: any, b: any) => b.publishedAt.localeCompare(a.publishedAt)).slice(0, 6)
-    : []
-  ).map((a: any) => ({
-    slug: a.slug,
-    title: a.title,
-    excerpt: a.excerpt,
-    tag: a.tags?.[0] ?? '',
-    image: a.thumbnail ?? null,
-    publishedAt: a.publishedAt,
-    author: a.author ?? '',
-  }))
+  [...allArticles.value]
+    .sort((a: any, b: any) => b.publishedAt.localeCompare(a.publishedAt))
+    .slice(0, 6)
+    .map((a: any) => ({
+      slug: a.slug,
+      title: a.title,
+      excerpt: a.excerpt,
+      tag: a.tag ?? '',
+      image: a.image ?? null,
+      publishedAt: a.publishedAt,
+      author: a.author ?? '',
+    }))
 )
 
 useSeoMeta({
-  title: hpData.value?.seo?.title ?? 'BBS Conveyor — Solusi Belt & Roller Conveyor Industri',
-  description: hpData.value?.seo?.description ?? '',
-  ogImage: hpData.value?.seo?.ogImage ?? '/images/og-home.webp',
+  title: hpData.seo.title,
+  description: hpData.seo.description,
+  ogImage: hpData.seo.ogImage,
   twitterCard: 'summary_large_image',
 })
 </script>

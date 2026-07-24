@@ -2,21 +2,20 @@
 const route = useRoute()
 const router = useRouter()
 const subcat = route.params.kategori as string
+const { get } = useApi()
 
-const { data: allProducts } = await useAsyncData(`produk-belt-conveyor-${subcat}`, () =>
-  queryCollection('products').all()
+const { data: productRes } = await useAsyncData(`produk-belt-conveyor-${subcat}`, () =>
+  get<any[]>('/produk', { group: 'belt-conveyor' })
 )
 
 const beltProducts = computed(() =>
-  (Array.isArray(allProducts.value) ? allProducts.value : [])
-    .filter((p: any) => p.group === 'belt-conveyor')
-    .map((p: any) => ({
-      slug: p.slug,
-      title: p.title,
-      category: p.category,
-      description: p.excerpt,
-      _categoryClean: p.category.toLowerCase().replace(/\s+/g, '-'),
-    }))
+  (productRes.value?.data ?? []).map((p: any) => ({
+    slug: p.slug,
+    title: p.name,
+    category: p.category,
+    description: p.description,
+    _categoryClean: p.category.toLowerCase().replace(/\s+/g, '-'),
+  }))
 )
 
 const products = computed(() =>

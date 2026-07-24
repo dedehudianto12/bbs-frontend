@@ -1,24 +1,26 @@
 <script setup lang="ts">
+const { get } = useApi()
 const tag = ref('')
 
-const { data: allArticles } = await useAsyncData('artikel-listing', () =>
-  queryCollection('blog').all()
+const { data: articleRes } = await useAsyncData('artikel-listing', () =>
+  get<any[]>('/artikel')
 )
 
+const articles = computed(() => articleRes.value?.data ?? [])
+
 const articleList = computed(() =>
-  (Array.isArray(allArticles.value)
-    ? [...allArticles.value].sort((a: any, b: any) => b.publishedAt.localeCompare(a.publishedAt))
-    : []
-  ).map((a: any) => ({
-    slug: a.slug,
-    title: a.title,
-    excerpt: a.excerpt,
-    tag: a.tags?.[0] ?? '',
-    image: a.thumbnail ?? null,
-    publishedAt: a.publishedAt,
-    author: a.author ?? '',
-    _tags: a.tags ?? [],
-  }))
+  [...articles.value]
+    .sort((a: any, b: any) => b.publishedAt.localeCompare(a.publishedAt))
+    .map((a: any) => ({
+      slug: a.slug,
+      title: a.title,
+      excerpt: a.excerpt,
+      tag: a.tag ?? '',
+      image: a.image ?? null,
+      publishedAt: a.publishedAt,
+      author: a.author ?? '',
+      _tags: (a.tag ?? '').split(',').map((t: string) => t.trim()).filter(Boolean),
+    }))
 )
 
 const featuredArticle = computed(() => articleList.value[0] ?? null)
@@ -27,7 +29,6 @@ const filteredArticles = computed(() => {
   const list = tag.value
     ? articleList.value.filter((a) => a._tags.includes(tag.value))
     : articleList.value
-  // Remove featured from grid if showing all
   if (!tag.value && featuredArticle.value) {
     return list.slice(1)
   }

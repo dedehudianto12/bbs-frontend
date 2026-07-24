@@ -331,13 +331,3 @@ CROSS JOIN LATERAL (
   ])
 ) ps
 WHERE i.slug = 'farmasi-dan-kimia';
-
-INSERT INTO categories (slug, label, "group", sort_order) VALUES
-    ('pvc-belt',       'PVC Belt',       'belt-conveyor', 1),
-    ('pu',             'PU',             'belt-conveyor', 2),
-    ('flat-belt',      'Flat Belt',      'belt-conveyor', 3),
-    ('rubber-belt',    'Rubber Belt',    'belt-conveyor', 4),
-    ('timing-belt',    'Timing Belt',    'lainnya',       5),
-    ('fastener',       'Fastener',       'lainnya',       6),
-    ('cleat',          'Cleat',          'lainnya',       7),
-    ('gravity-roll',   'Gravity Roll',   'lainnya',       8);

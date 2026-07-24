@@ -1,13 +1,15 @@
 <script setup lang="ts">
-const { data: services } = await useAsyncData('jasa-listing', () =>
-  queryCollection('services').all()
+const { get } = useApi()
+
+const { data: serviceRes } = await useAsyncData('jasa-listing', () =>
+  get<any[]>('/jasa')
 )
 
 const serviceList = computed(() =>
-  (Array.isArray(services.value) ? services.value : []).map((s: any) => ({
+  (serviceRes.value?.data ?? []).map((s: any) => ({
     slug: s.slug,
-    title: s.title,
-    description: s.excerpt,
+    title: s.name,
+    description: s.shortDescription,
   }))
 )
 

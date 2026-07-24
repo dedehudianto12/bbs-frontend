@@ -27,3 +27,6 @@ logs
 # Claude AI
 claude_logs
 .claude
+
+#Vercel
+.vercel

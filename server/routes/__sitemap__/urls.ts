@@ -1,43 +1,44 @@
 import { defineSitemapEventHandler } from '#imports'
 
-// ponytail: sitemap URLs from Nuxt Content collections
+// ponytail: sitemap URLs from backend API
 export default defineSitemapEventHandler(async () => {
-  // Fetch all dynamic content for sitemap
-  const [products, blogPosts, services, industries, pages] = await Promise.all([
-    queryCollection('products').all(),
-    queryCollection('blog').all(),
-    queryCollection('services').all(),
-    queryCollection('industries').all(),
-    queryCollection('pages').all(),
+  const config = useRuntimeConfig()
+  const baseURL = config.public.apiBase as string
+
+  async function fetchAll(path: string) {
+    try {
+      const res = await $fetch<{ data: any[]; error: string | null }>(`${baseURL}${path}`)
+      return res.data ?? []
+    } catch {
+      return []
+    }
+  }
+
+  const [products, articles, services, industries] = await Promise.all([
+    fetchAll('/produk'),
+    fetchAll('/artikel'),
+    fetchAll('/jasa'),
+    fetchAll('/industri'),
   ])
 
   const urls: { loc: string; lastmod?: string }[] = []
 
-  // Products
-  for (const p of products as any[]) {
+  for (const p of products) {
     const group = p.group === 'belt-conveyor' ? 'belt-conveyor' : 'lainnya'
     urls.push({ loc: `/produk/${p.slug}`, lastmod: p.updatedAt })
     urls.push({ loc: `/produk/${group}/${(p.category as string).toLowerCase().replace(/\s+/g, '-')}`, lastmod: p.updatedAt })
   }
 
-  // Blog
-  for (const a of blogPosts as any[]) {
+  for (const a of articles) {
     urls.push({ loc: `/artikel/${a.slug}`, lastmod: a.updatedAt ?? a.publishedAt })
   }
 
-  // Services
-  for (const s of services as any[]) {
+  for (const s of services) {
     urls.push({ loc: `/jasa/${s.slug}`, lastmod: s.updatedAt })
   }
 
-  // Industries
-  for (const i of industries as any[]) {
+  for (const i of industries) {
     urls.push({ loc: `/industries/${i.slug}`, lastmod: i.updatedAt })
-  }
-
-  // Static pages (privacy, terms, etc.)
-  for (const pg of pages as any[]) {
-    urls.push({ loc: `/${pg.slug}`, lastmod: pg.updatedAt })
   }
 
   return urls

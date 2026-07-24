@@ -1,19 +1,18 @@
 <script setup lang="ts">
 const router = useRouter()
+const { get } = useApi()
 
-const { data: allProducts } = await useAsyncData('produk-belt-conveyor', () =>
-  queryCollection('products').all()
+const { data: productRes } = await useAsyncData('produk-belt-conveyor', () =>
+  get<any[]>('/produk', { group: 'belt-conveyor' })
 )
 
 const products = computed(() =>
-  (Array.isArray(allProducts.value) ? allProducts.value : [])
-    .filter((p: any) => p.group === 'belt-conveyor')
-    .map((p: any) => ({
-      slug: p.slug,
-      title: p.title,
-      category: p.category,
-      description: p.excerpt,
-    }))
+  (productRes.value?.data ?? []).map((p: any) => ({
+    slug: p.slug,
+    title: p.name,
+    category: p.category,
+    description: p.description,
+  }))
 )
 
 const subCategories = computed(() => {

@@ -1,18 +1,17 @@
 <script setup lang="ts">
 const route = useRoute()
 const slug = route.params.slug as string
+const { get } = useApi()
 
-const { data: allProducts } = await useAsyncData(`product-${slug}`, () =>
-  queryCollection('products').all()
+const { data: productRes } = await useAsyncData(`product-${slug}`, () =>
+  get<any>(`/produk/${slug}`).catch(() => ({ data: null, error: 'not found' }))
 )
 
-const product = computed(() =>
-  (Array.isArray(allProducts.value) ? allProducts.value : []).find((p: any) => p.slug === slug)
-)
+const product = computed(() => productRes.value?.data ?? null)
 
 const categoryLink = computed(() => {
   if (!product.value) return '/produk/belt-conveyor'
-  return (product.value as any).group === 'belt-conveyor'
+  return product.value.group === 'belt-conveyor'
     ? '/produk/belt-conveyor'
     : '/produk/lainnya'
 })
@@ -22,7 +21,7 @@ const waSales1 = '6281234567890'
 
 const waMessage = computed(() => {
   if (!product.value) return ''
-  return `Halo, saya ingin menanyakan ketersediaan ${(product.value as any).title}`
+  return `Halo, saya ingin menanyakan ketersediaan ${product.value.name}`
 })
 
 const heroTheme = computed(() => {
@@ -32,22 +31,26 @@ const heroTheme = computed(() => {
 })
 
 // Related products — same category, exclude current
+const { data: allProductRes } = await useAsyncData('produk-related', () =>
+  get<any[]>('/produk')
+)
+
 const relatedProducts = computed(() => {
   if (!product.value) return []
-  const cat = (product.value as any).category
-  return (Array.isArray(allProducts.value) ? allProducts.value : [])
+  const cat = product.value.category
+  return (allProductRes.value?.data ?? [])
     .filter((p: any) => p.category === cat && p.slug !== slug)
     .slice(0, 3)
     .map((p: any) => ({
       slug: p.slug,
-      title: p.title,
+      title: p.name,
       category: p.category,
-      description: p.excerpt,
+      description: p.description,
     }))
 })
 
 const breadcrumbItems = computed(() => {
-  const p = product.value as any
+  const p = product.value
   if (!p) return []
   const groupLabel = p.group === 'belt-conveyor' ? 'Belt Conveyor' : 'Produk Lainnya'
   const groupLink = p.group === 'belt-conveyor' ? '/produk/belt-conveyor' : '/produk/lainnya'
@@ -55,15 +58,15 @@ const breadcrumbItems = computed(() => {
     { label: 'Beranda', href: '/' },
     { label: 'Produk', href: '/produk/belt-conveyor' },
     { label: groupLabel, href: groupLink },
-    { label: p.title },
+    { label: p.name },
   ]
 })
 
 useSeoMeta({
   title: product.value
-    ? `${(product.value as any).title} — BBS Conveyor`
+    ? `${product.value.name} — BBS Conveyor`
     : 'Produk Tidak Ditemukan — BBS Conveyor',
-  description: (product.value as any)?.excerpt ?? ''
+  description: product.value?.description ?? ''
 })
 </script>
 
@@ -76,7 +79,7 @@ useSeoMeta({
       <GradientPanel :index="heroTheme" class="aspect-[4/3] w-full">
         <div class="absolute inset-0 flex flex-col justify-between p-7">
           <span class="text-xs font-semibold uppercase tracking-[0.16em] text-ink/55">BBS Conveyor</span>
-          <span class="font-display text-3xl leading-tight text-ink">{{ product.title }}</span>
+          <span class="font-display text-3xl leading-tight text-ink">{{ product.name }}</span>
         </div>
       </GradientPanel>
 
@@ -86,9 +89,9 @@ useSeoMeta({
           {{ product.category }}
         </span>
         <h1 class="display mt-4 text-3xl text-ink md:text-4xl">
-          {{ product.title }}
+          {{ product.name }}
         </h1>
-        <p class="mt-5 leading-relaxed text-muted">{{ product.excerpt }}</p>
+        <p class="mt-5 leading-relaxed text-muted">{{ product.description }}</p>
 
         <div class="mt-8 flex flex-wrap gap-3">
           <Button
@@ -107,11 +110,9 @@ useSeoMeta({
     </div>
 
     <!-- Body content -->
-    <div class="mt-20 border-t border-line pt-12">
+    <div v-if="product.detail" class="mt-20 border-t border-line pt-12">
       <h2 class="display text-2xl text-ink md:text-3xl">Detail Produk</h2>
-      <div class="prose-tech mt-6 max-w-3xl">
-        <ContentRenderer :value="product" />
-      </div>
+      <div class="prose-tech mt-6 max-w-3xl" v-html="product.detail" />
     </div>
 
     <!-- Related products -->

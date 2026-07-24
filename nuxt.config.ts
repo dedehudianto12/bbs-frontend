@@ -9,23 +9,9 @@ export default defineNuxtConfig({
 
   modules: [
     "@nuxtjs/tailwindcss",
-    "@nuxt/content",
     "@nuxtjs/seo",
     "v-gsap-nuxt",
-    "nuxt-studio",
   ],
-
-  // ── Nuxt Studio (CMS / visual editor for @nuxt/content) ──
-  studio: {
-    route: "/_studio",
-    repository: {
-      provider: "github",
-      owner: process.env.STUDIO_REPO_OWNER || "dedehudianto12",
-      repo: process.env.STUDIO_REPO_NAME || "bbs-frontend",
-      branch: process.env.STUDIO_REPO_BRANCH || "main",
-      private: true,
-    },
-  },
 
   css: ["~/assets/css/main.css"],
 
@@ -135,6 +121,7 @@ export default defineNuxtConfig({
     cloudinarySecret: process.env.CLOUDINARY_API_SECRET,
 
     public: {
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || "http://localhost:8080/api",
       cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
       cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
       cloudinaryUploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET,

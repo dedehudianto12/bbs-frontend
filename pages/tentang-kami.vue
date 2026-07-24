@@ -1,27 +1,14 @@
 <script setup lang="ts">
-const { data: whyChooseUs } = await useAsyncData('about-why-choose-us', () =>
-  queryCollection('homepage').where('section', '=', 'why-choose-us').first()
-)
-
-const whyChooseUsItems = computed(() =>
-  (whyChooseUs.value as any)?.items ?? []
-)
-
-const { data: hp } = await useAsyncData('about-hp', () =>
-  queryCollection('homepageConfig').first()
-)
-
-const hpData = computed(() => (hp.value as any) ?? {})
+import { homepageConfig, whyChooseUsItems } from '~/data/homepage'
 
 const stats = computed(() => {
-  const s = hpData.value?.statistics
-  if (!s) return []
+  const s = homepageConfig.statistics
   return [
     { label: 'Tahun Pengalaman', value: `${s.years}+` },
     { label: 'Proyek Selesai', value: `${s.projects}+` },
     { label: 'Klien Aktif', value: `${s.clients}+` },
     { label: 'Tenaga Teknisi', value: `${s.engineers}+` },
-  ].filter((item) => !item.value.startsWith('undefined'))
+  ]
 })
 
 useSeoMeta({

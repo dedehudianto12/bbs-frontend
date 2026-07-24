@@ -1,18 +1,17 @@
 <script setup lang="ts">
 const route = useRoute()
 const slug = route.params.slug as string
+const { get } = useApi()
 
-const { data: allServices } = await useAsyncData(`jasa-${slug}`, () =>
-  queryCollection('services').all()
+const { data: serviceRes } = await useAsyncData(`jasa-${slug}`, () =>
+  get<any>(`/jasa/${slug}`).catch(() => ({ data: null, error: 'not found' }))
 )
 
-const service = computed(() =>
-  (Array.isArray(allServices.value) ? allServices.value : []).find((s: any) => s.slug === slug)
-)
+const service = computed(() => serviceRes.value?.data ?? null)
 
 useSeoMeta({
-  title: service.value ? `${(service.value as any).title} — Jasa — BBS Conveyor` : 'Jasa Tidak Ditemukan — BBS Conveyor',
-  description: (service.value as any)?.excerpt ?? ''
+  title: service.value ? `${service.value.name} — Jasa — BBS Conveyor` : 'Jasa Tidak Ditemukan — BBS Conveyor',
+  description: service.value?.shortDescription ?? ''
 })
 </script>
 
@@ -23,7 +22,7 @@ useSeoMeta({
       :items="[
         { label: 'Beranda', href: '/' },
         { label: 'Jasa', href: '/jasa' },
-        { label: service.title },
+        { label: service.name },
       ]"
     />
 
@@ -31,11 +30,9 @@ useSeoMeta({
       <span class="inline-block h-1 w-1 rounded-full bg-accent" />
       Layanan
     </p>
-    <h1 class="display text-4xl text-ink md:text-5xl">{{ service.title }}</h1>
+    <h1 class="display text-4xl text-ink md:text-5xl">{{ service.name }}</h1>
 
-    <div class="prose-tech mt-10 max-w-none">
-      <ContentRenderer :value="service" />
-    </div>
+    <div class="prose-tech mt-10 max-w-none" v-html="service.fullDescription" />
 
     <div class="mt-12 border-t border-line pt-8">
       <Button to="/kontak" variant="accent" arrow>

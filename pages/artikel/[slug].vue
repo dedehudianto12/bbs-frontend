@@ -1,27 +1,30 @@
 <script setup lang="ts">
 const route = useRoute()
 const slug = route.params.slug as string
+const { get } = useApi()
 
-const { data: allArticles } = await useAsyncData(`artikel-${slug}`, () =>
-  queryCollection('blog').all()
+const { data: articleRes } = await useAsyncData(`artikel-${slug}`, () =>
+  get<any[]>(`/artikel/${slug}`).catch(() => ({ data: null, error: 'not found' }))
 )
 
-const article = computed(() =>
-  (Array.isArray(allArticles.value) ? allArticles.value : []).find((a: any) => a.slug === slug)
+const article = computed(() => articleRes.value?.data ?? null)
+
+// Related articles — same tag, exclude current
+const { data: allArticleRes } = await useAsyncData('artikel-related', () =>
+  get<any[]>('/artikel')
 )
 
-// Related articles — same tags, exclude current
 const relatedArticles = computed(() => {
   if (!article.value) return []
-  const tags = (article.value as any).tags ?? []
-  return (Array.isArray(allArticles.value) ? allArticles.value : [])
-    .filter((a: any) => a.slug !== slug && a.tags?.some((t: string) => tags.includes(t)))
+  const articleTag = (article.value as any).tag ?? ''
+  return (allArticleRes.value?.data ?? [])
+    .filter((a: any) => a.slug !== slug && a.tag === articleTag)
     .slice(0, 3)
     .map((a: any) => ({
       slug: a.slug,
       title: a.title,
       excerpt: a.excerpt,
-      tag: a.tags?.[0] ?? '',
+      tag: a.tag ?? '',
       publishedAt: a.publishedAt,
       author: a.author ?? '',
     }))
@@ -44,9 +47,9 @@ useSeoMeta({
       ]"
     />
 
-    <div v-if="article.tags?.[0]" class="mb-5">
+    <div v-if="article.tag" class="mb-5">
       <span class="inline-block rounded-full bg-accent/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-accent">
-        {{ article.tags[0] }}
+        {{ article.tag }}
       </span>
     </div>
 
@@ -60,9 +63,7 @@ useSeoMeta({
       </time>
     </div>
 
-    <div class="prose-tech mt-10 max-w-none">
-      <ContentRenderer :value="article" />
-    </div>
+    <div class="prose-tech mt-10 max-w-none" v-html="article.content" />
 
     <!-- Related articles -->
     <div v-if="relatedArticles.length" class="mt-20 border-t border-line pt-12">

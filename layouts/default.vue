@@ -1,20 +1,14 @@
 <script setup lang="ts">
-const { data: navData } = await useAsyncData('site-navigation', () =>
-  queryCollection('navigation').first()
-)
-
-const headerNav = computed(() => (navData.value as any)?.header ?? [])
-const cta = computed(() => (navData.value as any)?.cta ?? { label: 'Hubungi Kami', href: '#' })
-const footerCols = computed(() => (navData.value as any)?.footer ?? [])
+import { headerNav, navCta, footerColumns } from '~/data/navigation'
 </script>
 
 <template>
   <AnnouncementBar />
   <AppNavbar
     :nav-items="headerNav"
-    :cta-label="cta.label"
-    :cta-href="cta.href"
+    :cta-label="navCta.label"
+    :cta-href="navCta.href"
   />
   <slot />
-  <AppFooter :footer-columns="footerCols" />
+  <AppFooter :footer-columns="footerColumns" />
 </template>
