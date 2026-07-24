@@ -1,5 +1,5 @@
 import { t as tryUseNuxtApp } from '../virtual/entry.mjs';
-import { y as withoutTrailingSlash, I as getRequestHeaders } from '../nitro/nitro.mjs';
+import { A as withoutTrailingSlash, J as getRequestHeaders } from '../nitro/nitro.mjs';
 
 //#region virtual:nuxt:node_modules%2F.cache%2Fnuxt%2F.nuxt%2Fcontent%2Fmanifest.ts
 var checksums = {

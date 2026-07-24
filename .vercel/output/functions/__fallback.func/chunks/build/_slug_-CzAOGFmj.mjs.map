@@ -1,1 +1,1 @@
-{"version":3,"file":"_slug_-CzAOGFmj.mjs","sources":["../../../../../../node_modules/.cache/nuxt/.nuxt/dist/server/_nuxt/_slug_-CzAOGFmj.js"],"names":["useRoute","useHead"],"mappings":"","x_google_ignoreList":[0]}
+{"version":3,"file":"_slug_-CzAOGFmj.mjs","sources":["../../../../../../node_modules/.cache/nuxt/.nuxt/dist/server/_nuxt/_slug_-CzAOGFmj.js"],"names":["defineComponent","useRoute","withAsyncContext","computed","useHead","unref","mergeProps","withCtx","createTextVNode","useSSRContext"],"mappings":"","x_google_ignoreList":[0]}

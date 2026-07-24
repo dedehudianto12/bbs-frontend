@@ -1,8 +1,8 @@
-import { defineComponent, mergeProps, useSSRContext } from 'vue';
-import { ssrRenderAttrs, ssrRenderClass, ssrRenderSlot, ssrInterpolate } from 'vue/server-renderer';
+import { v as vueExports } from '../nitro/nitro.mjs';
+import { ssrRenderAttrs, ssrRenderClass, ssrRenderSlot, ssrInterpolate } from '@vue/server-renderer';
 
 //#region components/shared/PageHero.vue?vue&type=script&setup=true&lang.ts
-var PageHero_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComponent({
+var PageHero_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ vueExports.defineComponent({
 	__name: "PageHero",
 	__ssrInlineRender: true,
 	props: {
@@ -19,7 +19,7 @@ var PageHero_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineC
 			lg: "py-16 md:py-24"
 		};
 		return (_ctx, _push, _parent, _attrs) => {
-			_push(`<section${ssrRenderAttrs(mergeProps({ class: "bg-paper" }, _attrs))}><div class="frame border-b border-line"><div class="${ssrRenderClass([[padding[__props.size], __props.align === "center" ? "text-center" : ""], "px-5 md:px-10"])}">`);
+			_push(`<section${ssrRenderAttrs(vueExports.mergeProps({ class: "bg-paper" }, _attrs))}><div class="frame border-b border-line"><div class="${ssrRenderClass([[padding[__props.size], __props.align === "center" ? "text-center" : ""], "px-5 md:px-10"])}">`);
 			if (_ctx.$slots.breadcrumb) {
 				_push(`<div class="mb-6">`);
 				ssrRenderSlot(_ctx.$slots, "breadcrumb", {}, null, _push, _parent);
@@ -43,7 +43,7 @@ var PageHero_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineC
 //#region components/shared/PageHero.vue
 var _sfc_setup = PageHero_vue_vue_type_script_setup_true_lang_default.setup;
 PageHero_vue_vue_type_script_setup_true_lang_default.setup = (props, ctx) => {
-	const ssrContext = useSSRContext();
+	const ssrContext = vueExports.useSSRContext();
 	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/shared/PageHero.vue");
 	return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };

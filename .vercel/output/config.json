@@ -1,11 +1,11 @@
 {
   "version": 3,
   "overrides": {
-    "jasa/index.html": {
-      "path": "jasa"
-    },
     "artikel/index.html": {
       "path": "artikel"
+    },
+    "jasa/index.html": {
+      "path": "jasa"
     },
     "kontak/index.html": {
       "path": "kontak"

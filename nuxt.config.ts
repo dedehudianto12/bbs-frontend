@@ -106,6 +106,9 @@ export default defineNuxtConfig({
   // Static generation friendly
   nitro: {
     preset: "vercel",
+    // ponytail: inline vue — Vercel strips prebuilt node_modules, causing
+    // ERR_MODULE_NOT_FOUND at runtime. Remove if Vercel fixes this.
+    externals: { inline: ["vue", "vue-router", "vue-bundle-renderer"] },
     prerender: {
       routes: [
         "/",

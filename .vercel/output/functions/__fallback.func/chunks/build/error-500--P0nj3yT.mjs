@@ -1,10 +1,19 @@
 import { c as useHead$1 } from '../virtual/entry.mjs';
 import { _ as _plugin_vue_export_helper_default } from './_plugin-vue_export-helper-BOaGB7Aw.mjs';
-import { useSSRContext, mergeProps } from 'vue';
-import { ssrRenderAttrs, ssrInterpolate } from 'vue/server-renderer';
+import { v as vueExports } from '../nitro/nitro.mjs';
+import { ssrRenderAttrs, ssrInterpolate } from '@vue/server-renderer';
 import 'nostics';
 import 'nostics/formatters/ansi';
-import '../nitro/nitro.mjs';
+import 'fnv1a-64';
+import 'object-identity';
+import '@vue/shared';
+import 'perfect-debounce';
+import 'unhead/plugins';
+import 'unhead/utils';
+import '../routes/renderer.mjs';
+import 'unhead/server';
+import 'unhead/legacy';
+import 'devalue';
 import 'node:crypto';
 import 'node:http';
 import 'node:https';
@@ -12,24 +21,14 @@ import 'node:events';
 import 'node:buffer';
 import 'node:fs';
 import 'node:path';
+import '@vue/compiler-dom';
+import '@vue/runtime-dom';
 import 'consola';
 import 'minimatch';
 import 'node:fs/promises';
 import 'nuxtseo-shared/utils';
 import 'fast-xml-parser';
 import 'better-sqlite3';
-import 'fnv1a-64';
-import 'object-identity';
-import '@vue/shared';
-import 'vue-router';
-import 'perfect-debounce';
-import 'unhead/plugins';
-import 'unhead/utils';
-import '../routes/renderer.mjs';
-import 'unhead/server';
-import 'unhead/legacy';
-import 'vue-bundle-renderer/runtime';
-import 'devalue';
 
 //#region node_modules/nuxt/dist/app/components/error-500.vue
 var _sfc_main = {
@@ -65,13 +64,13 @@ var _sfc_main = {
 			style: [{ innerHTML: `*,:after,:before{box-sizing:border-box;border-style:solid;border-width:0;border-color:var(--un-default-border-color,#e5e7eb)}:after,:before{--un-content:""}html{-webkit-text-size-adjust:100%;tab-size:4;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;line-height:1.5}body{line-height:inherit;margin:0}h1,h2{font-size:inherit;font-weight:inherit}h1,h2,p{margin:0}*,:after,:before{--un-rotate:0;--un-rotate-x:0;--un-rotate-y:0;--un-rotate-z:0;--un-scale-x:1;--un-scale-y:1;--un-scale-z:1;--un-skew-x:0;--un-skew-y:0;--un-translate-x:0;--un-translate-y:0;--un-translate-z:0;--un-pan-x: ;--un-pan-y: ;--un-pinch-zoom: ;--un-scroll-snap-strictness:proximity;--un-ordinal: ;--un-slashed-zero: ;--un-numeric-figure: ;--un-numeric-spacing: ;--un-numeric-fraction: ;--un-border-spacing-x:0;--un-border-spacing-y:0;--un-ring-offset-shadow:0 0 #0000;--un-ring-shadow:0 0 #0000;--un-shadow-inset: ;--un-shadow:0 0 #0000;--un-ring-inset: ;--un-ring-offset-width:0px;--un-ring-offset-color:#fff;--un-ring-width:0px;--un-ring-color:#93c5fd80;--un-blur: ;--un-brightness: ;--un-contrast: ;--un-drop-shadow: ;--un-grayscale: ;--un-hue-rotate: ;--un-invert: ;--un-saturate: ;--un-sepia: ;--un-backdrop-blur: ;--un-backdrop-brightness: ;--un-backdrop-contrast: ;--un-backdrop-grayscale: ;--un-backdrop-hue-rotate: ;--un-backdrop-invert: ;--un-backdrop-opacity: ;--un-backdrop-saturate: ;--un-backdrop-sepia: }` }]
 		});
 		return (_ctx, _push, _parent, _attrs) => {
-			_push(`<div${ssrRenderAttrs(mergeProps({ class: "antialiased bg-white dark:bg-[#020420] dark:text-white font-sans grid min-h-screen overflow-hidden place-content-center text-[#020420] tracking-wide" }, _attrs))} data-v-1ae7a2c2><div class="max-w-520px text-center" data-v-1ae7a2c2><h1 class="font-semibold leading-none mb-4 sm:text-[110px] tabular-nums text-[80px]" data-v-1ae7a2c2>${ssrInterpolate(__props.status)}</h1><h2 class="font-semibold mb-2 sm:text-3xl text-2xl" data-v-1ae7a2c2>${ssrInterpolate(__props.statusText)}</h2><p class="mb-4 px-2 text-[#64748B] text-md" data-v-1ae7a2c2>${ssrInterpolate(__props.description)}</p></div></div>`);
+			_push(`<div${ssrRenderAttrs(vueExports.mergeProps({ class: "antialiased bg-white dark:bg-[#020420] dark:text-white font-sans grid min-h-screen overflow-hidden place-content-center text-[#020420] tracking-wide" }, _attrs))} data-v-1ae7a2c2><div class="max-w-520px text-center" data-v-1ae7a2c2><h1 class="font-semibold leading-none mb-4 sm:text-[110px] tabular-nums text-[80px]" data-v-1ae7a2c2>${ssrInterpolate(__props.status)}</h1><h2 class="font-semibold mb-2 sm:text-3xl text-2xl" data-v-1ae7a2c2>${ssrInterpolate(__props.statusText)}</h2><p class="mb-4 px-2 text-[#64748B] text-md" data-v-1ae7a2c2>${ssrInterpolate(__props.description)}</p></div></div>`);
 		};
 	}
 };
 var _sfc_setup = _sfc_main.setup;
 _sfc_main.setup = (props, ctx) => {
-	const ssrContext = useSSRContext();
+	const ssrContext = vueExports.useSSRContext();
 	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("node_modules/nuxt/dist/app/components/error-500.vue");
 	return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };

@@ -24,11 +24,11 @@ const sources = [
         },
         "urls": [
             {
-                "loc": "/jasa",
+                "loc": "/artikel",
                 "lastmod": "2026-07-24T08:46:05.473Z"
             },
             {
-                "loc": "/artikel",
+                "loc": "/jasa",
                 "lastmod": "2026-07-24T08:46:05.473Z"
             },
             {

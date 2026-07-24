@@ -1,6 +1,22 @@
 import { _ as _plugin_vue_export_helper_default } from './_plugin-vue_export-helper-BOaGB7Aw.mjs';
-import { useSSRContext } from 'vue';
-import { ssrRenderAttrs } from 'vue/server-renderer';
+import { v as vueExports } from '../nitro/nitro.mjs';
+import { ssrRenderAttrs } from '@vue/server-renderer';
+import 'node:crypto';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import '@vue/compiler-dom';
+import '@vue/runtime-dom';
+import '@vue/shared';
+import 'consola';
+import 'minimatch';
+import 'node:fs/promises';
+import 'nuxtseo-shared/utils';
+import 'fast-xml-parser';
+import 'better-sqlite3';
 
 //#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseHr.vue
 var _sfc_main = {};
@@ -9,7 +25,7 @@ function _sfc_ssrRender(_ctx, _push, _parent, _attrs) {
 }
 var _sfc_setup = _sfc_main.setup;
 _sfc_main.setup = (props, ctx) => {
-	const ssrContext = useSSRContext();
+	const ssrContext = vueExports.useSSRContext();
 	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseHr.vue");
 	return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };

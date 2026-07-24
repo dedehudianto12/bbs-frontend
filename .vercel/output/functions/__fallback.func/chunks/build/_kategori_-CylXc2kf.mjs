@@ -5,11 +5,21 @@ import { B as Breadcrumb_default } from './Breadcrumb-Cajep9qD.mjs';
 import { P as PageHero_default } from './PageHero-DA3ar5hD.mjs';
 import { P as ProductGrid_default } from './ProductGrid-U2mAnU68.mjs';
 import { P as ProductFilter_default } from './ProductFilter-C0-JgnjB.mjs';
-import { defineComponent, withAsyncContext, computed, unref, withCtx, createVNode, mergeProps, createTextVNode, useSSRContext } from 'vue';
-import { ssrRenderAttrs, ssrRenderComponent } from 'vue/server-renderer';
+import { v as vueExports } from '../nitro/nitro.mjs';
+import { ssrRenderAttrs, ssrRenderComponent } from '@vue/server-renderer';
 import 'nostics';
 import 'nostics/formatters/ansi';
-import '../nitro/nitro.mjs';
+import 'fnv1a-64';
+import 'object-identity';
+import '@vue/shared';
+import 'perfect-debounce';
+import 'unhead/plugins';
+import 'unhead/utils';
+import '../routes/renderer.mjs';
+import 'unhead/server';
+import 'unhead/legacy';
+import 'devalue';
+import './GradientPanel-CteABoXV.mjs';
 import 'node:crypto';
 import 'node:http';
 import 'node:https';
@@ -17,28 +27,17 @@ import 'node:events';
 import 'node:buffer';
 import 'node:fs';
 import 'node:path';
+import '@vue/compiler-dom';
+import '@vue/runtime-dom';
 import 'consola';
 import 'minimatch';
 import 'node:fs/promises';
 import 'nuxtseo-shared/utils';
 import 'fast-xml-parser';
 import 'better-sqlite3';
-import 'fnv1a-64';
-import 'object-identity';
-import '@vue/shared';
-import 'vue-router';
-import 'perfect-debounce';
-import 'unhead/plugins';
-import 'unhead/utils';
-import '../routes/renderer.mjs';
-import 'unhead/server';
-import 'unhead/legacy';
-import 'vue-bundle-renderer/runtime';
-import 'devalue';
-import './GradientPanel-CteABoXV.mjs';
 
 //#region pages/produk/belt-conveyor/[kategori].vue?vue&type=script&setup=true&lang.ts
-var _kategori__vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComponent({
+var _kategori__vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ vueExports.defineComponent({
 	__name: "[kategori]",
 	__ssrInlineRender: true,
 	async setup(__props) {
@@ -46,23 +45,23 @@ var _kategori__vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defin
 		const route = useRoute$1();
 		const router = useRouter();
 		const subcat = route.params.kategori;
-		const { data: allProducts } = ([__temp, __restore] = withAsyncContext(() => useAsyncData(`produk-belt-conveyor-${subcat}`, () => queryCollection("products").all())), __temp = await __temp, __restore(), __temp);
-		const beltProducts = computed(() => (Array.isArray(allProducts.value) ? allProducts.value : []).filter((p) => p.group === "belt-conveyor").map((p) => ({
+		const { data: allProducts } = ([__temp, __restore] = vueExports.withAsyncContext(() => useAsyncData(`produk-belt-conveyor-${subcat}`, () => queryCollection("products").all())), __temp = await __temp, __restore(), __temp);
+		const beltProducts = vueExports.computed(() => (Array.isArray(allProducts.value) ? allProducts.value : []).filter((p) => p.group === "belt-conveyor").map((p) => ({
 			slug: p.slug,
 			title: p.title,
 			category: p.category,
 			description: p.excerpt,
 			_categoryClean: p.category.toLowerCase().replace(/\s+/g, "-")
 		})));
-		const products = computed(() => beltProducts.value.filter((p) => p._categoryClean === subcat));
-		const isValid = computed(() => products.value.length > 0);
-		const subCategories = computed(() => {
+		const products = vueExports.computed(() => beltProducts.value.filter((p) => p._categoryClean === subcat));
+		const isValid = vueExports.computed(() => products.value.length > 0);
+		const subCategories = vueExports.computed(() => {
 			return [...new Set(beltProducts.value.map((p) => p.category))].map((c) => ({
 				label: c,
 				value: c.toLowerCase().replace(/\s+/g, "-")
 			}));
 		});
-		const currentLabel = computed(() => {
+		const currentLabel = vueExports.computed(() => {
 			return subCategories.value.find((s) => s.value === subcat)?.label ?? subcat;
 		});
 		function onFilterChange(newSubcat) {
@@ -81,14 +80,14 @@ var _kategori__vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defin
 			const _component_ProductFilter = ProductFilter_default;
 			const _component_ProductGrid = ProductGrid_default;
 			const _component_Button = Button_default;
-			if (unref(isValid)) {
+			if (vueExports.unref(isValid)) {
 				_push(`<div${ssrRenderAttrs(_attrs)}>`);
 				_push(ssrRenderComponent(_component_PageHero, {
 					eyebrow: "Belt Conveyor",
-					title: unref(currentLabel),
-					description: `Belt Conveyor kategori ${unref(currentLabel)}.`
+					title: vueExports.unref(currentLabel),
+					description: `Belt Conveyor kategori ${vueExports.unref(currentLabel)}.`
 				}, {
-					breadcrumb: withCtx((_, _push, _parent, _scopeId) => {
+					breadcrumb: vueExports.withCtx((_, _push, _parent, _scopeId) => {
 						if (_push) _push(ssrRenderComponent(_component_Breadcrumb, { items: [
 							{
 								label: "Beranda",
@@ -98,9 +97,9 @@ var _kategori__vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defin
 								label: "Belt Conveyor",
 								href: "/produk/belt-conveyor"
 							},
-							{ label: unref(currentLabel) }
+							{ label: vueExports.unref(currentLabel) }
 						] }, null, _parent, _scopeId));
-						else return [createVNode(_component_Breadcrumb, { items: [
+						else return [vueExports.createVNode(_component_Breadcrumb, { items: [
 							{
 								label: "Beranda",
 								href: "/"
@@ -109,30 +108,30 @@ var _kategori__vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defin
 								label: "Belt Conveyor",
 								href: "/produk/belt-conveyor"
 							},
-							{ label: unref(currentLabel) }
+							{ label: vueExports.unref(currentLabel) }
 						] }, null, 8, ["items"])];
 					}),
 					_: 1
 				}, _parent));
 				_push(`<div class="container-tech py-16 md:py-24">`);
 				_push(ssrRenderComponent(_component_ProductFilter, {
-					"model-value": unref(subcat),
-					options: unref(subCategories),
+					"model-value": vueExports.unref(subcat),
+					options: vueExports.unref(subCategories),
 					class: "mb-10",
 					"onUpdate:modelValue": onFilterChange
 				}, null, _parent));
-				_push(ssrRenderComponent(_component_ProductGrid, { products: unref(products) }, null, _parent));
+				_push(ssrRenderComponent(_component_ProductGrid, { products: vueExports.unref(products) }, null, _parent));
 				_push(`</div></div>`);
 			} else {
-				_push(`<div${ssrRenderAttrs(mergeProps({ class: "container-tech py-24 md:py-32 text-center" }, _attrs))}><h1 class="display text-3xl text-ink md:text-4xl">Kategori Tidak Ditemukan</h1><div class="mt-8 flex justify-center">`);
+				_push(`<div${ssrRenderAttrs(vueExports.mergeProps({ class: "container-tech py-24 md:py-32 text-center" }, _attrs))}><h1 class="display text-3xl text-ink md:text-4xl">Kategori Tidak Ditemukan</h1><div class="mt-8 flex justify-center">`);
 				_push(ssrRenderComponent(_component_Button, {
 					to: "/produk/belt-conveyor",
 					variant: "ghost",
 					arrow: ""
 				}, {
-					default: withCtx((_, _push, _parent, _scopeId) => {
+					default: vueExports.withCtx((_, _push, _parent, _scopeId) => {
 						if (_push) _push(`Kembali ke Belt Conveyor`);
-						else return [createTextVNode("Kembali ke Belt Conveyor")];
+						else return [vueExports.createTextVNode("Kembali ke Belt Conveyor")];
 					}),
 					_: 1
 				}, _parent));
@@ -145,7 +144,7 @@ var _kategori__vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defin
 //#region pages/produk/belt-conveyor/[kategori].vue
 var _sfc_setup = _kategori__vue_vue_type_script_setup_true_lang_default.setup;
 _kategori__vue_vue_type_script_setup_true_lang_default.setup = (props, ctx) => {
-	const ssrContext = useSSRContext();
+	const ssrContext = vueExports.useSSRContext();
 	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("pages/produk/belt-conveyor/[kategori].vue");
 	return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };

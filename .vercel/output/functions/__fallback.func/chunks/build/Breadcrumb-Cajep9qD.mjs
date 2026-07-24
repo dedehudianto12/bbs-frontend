@@ -1,9 +1,9 @@
 import { N as NuxtLink } from '../virtual/entry.mjs';
-import { defineComponent, mergeProps, withCtx, createTextVNode, toDisplayString, useSSRContext } from 'vue';
-import { ssrRenderAttrs, ssrRenderList, ssrRenderClass, ssrRenderComponent, ssrInterpolate } from 'vue/server-renderer';
+import { v as vueExports } from '../nitro/nitro.mjs';
+import { ssrRenderAttrs, ssrRenderList, ssrRenderClass, ssrRenderComponent, ssrInterpolate } from '@vue/server-renderer';
 
 //#region components/shared/Breadcrumb.vue?vue&type=script&setup=true&lang.ts
-var Breadcrumb_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComponent({
+var Breadcrumb_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ vueExports.defineComponent({
 	__name: "Breadcrumb",
 	__ssrInlineRender: true,
 	props: {
@@ -16,7 +16,7 @@ var Breadcrumb_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defin
 	setup(__props) {
 		return (_ctx, _push, _parent, _attrs) => {
 			const _component_NuxtLink = NuxtLink;
-			_push(`<nav${ssrRenderAttrs(mergeProps({
+			_push(`<nav${ssrRenderAttrs(vueExports.mergeProps({
 				"aria-label": "Breadcrumb",
 				class: ["flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.1em]", __props.invert ? "text-white/45" : "text-muted"]
 			}, _attrs))}><!--[-->`);
@@ -28,9 +28,9 @@ var Breadcrumb_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defin
 					to: item.href,
 					class: ["transition-colors", __props.invert ? "hover:text-white" : "hover:text-ink"]
 				}, {
-					default: withCtx((_, _push, _parent, _scopeId) => {
+					default: vueExports.withCtx((_, _push, _parent, _scopeId) => {
 						if (_push) _push(`${ssrInterpolate(item.label)}`);
-						else return [createTextVNode(toDisplayString(item.label), 1)];
+						else return [vueExports.createTextVNode(vueExports.toDisplayString(item.label), 1)];
 					}),
 					_: 2
 				}, _parent));
@@ -45,7 +45,7 @@ var Breadcrumb_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defin
 //#region components/shared/Breadcrumb.vue
 var _sfc_setup = Breadcrumb_vue_vue_type_script_setup_true_lang_default.setup;
 Breadcrumb_vue_vue_type_script_setup_true_lang_default.setup = (props, ctx) => {
-	const ssrContext = useSSRContext();
+	const ssrContext = vueExports.useSSRContext();
 	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/shared/Breadcrumb.vue");
 	return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };

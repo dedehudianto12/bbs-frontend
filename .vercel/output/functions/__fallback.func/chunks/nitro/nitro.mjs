@@ -5,7 +5,9 @@ import { EventEmitter } from 'node:events';
 import { Buffer as Buffer$1 } from 'node:buffer';
 import { promises, existsSync, mkdirSync } from 'node:fs';
 import { resolve as resolve$2, dirname, join, extname } from 'node:path';
-import { toValue } from 'vue';
+import * as compilerDom from '@vue/compiler-dom';
+import * as runtimeDom from '@vue/runtime-dom';
+import * as shared from '@vue/shared';
 import { createConsola, consola } from 'consola';
 import { minimatch } from 'minimatch';
 import { readFile as readFile$1 } from 'node:fs/promises';
@@ -4839,7 +4841,7 @@ function _expandFromEnv(value) {
 const _inlineRuntimeConfig = {
   "app": {
     "baseURL": "/",
-    "buildId": "8c062c1e-4d36-4f1f-8996-ed6b7d21788b",
+    "buildId": "8794bd7b-7a3f-464c-8594-c45961b31e27",
     "buildAssetsDir": "/_nuxt/",
     "cdnURL": ""
   },
@@ -5887,6 +5889,95 @@ function stringifyString(str) {
   return result;
 }
 
+function getDefaultExportFromNamespaceIfNotNamed (n) {
+	return n && Object.prototype.hasOwnProperty.call(n, 'default') && Object.keys(n).length === 1 ? n['default'] : n;
+}
+
+var vue = {exports: {}};
+
+var vue_cjs_prod = {};
+
+const require$$0 = /*@__PURE__*/getDefaultExportFromNamespaceIfNotNamed(compilerDom);
+
+const require$$1 = /*@__PURE__*/getDefaultExportFromNamespaceIfNotNamed(runtimeDom);
+
+const require$$2 = /*@__PURE__*/getDefaultExportFromNamespaceIfNotNamed(shared);
+
+/**
+* vue v3.5.40
+* (c) 2018-present Yuxi (Evan) You and Vue contributors
+* @license MIT
+**/
+
+(function (exports) {
+
+	Object.defineProperty(exports, '__esModule', { value: true });
+
+	var compilerDom = require$$0;
+	var runtimeDom = require$$1;
+	var shared = require$$2;
+
+	function _interopNamespaceDefault(e) {
+	  var n = Object.create(null);
+	  if (e) {
+	    for (var k in e) {
+	      n[k] = e[k];
+	    }
+	  }
+	  n.default = e;
+	  return Object.freeze(n);
+	}
+
+	var runtimeDom__namespace = /*#__PURE__*/_interopNamespaceDefault(runtimeDom);
+
+	const compileCache = /* @__PURE__ */ Object.create(null);
+	function compileToFunction(template, options) {
+	  if (!shared.isString(template)) {
+	    if (template.nodeType) {
+	      template = template.innerHTML;
+	    } else {
+	      return shared.NOOP;
+	    }
+	  }
+	  const key = shared.genCacheKey(template, options);
+	  const cached = compileCache[key];
+	  if (cached) {
+	    return cached;
+	  }
+	  if (template[0] === "#") {
+	    const el = document.querySelector(template);
+	    template = el ? el.innerHTML : ``;
+	  }
+	  const opts = shared.extend(
+	    {
+	      hoistStatic: true,
+	      onError: void 0,
+	      onWarn: shared.NOOP
+	    },
+	    options
+	  );
+	  if (!opts.isCustomElement && typeof customElements !== "undefined") {
+	    opts.isCustomElement = (tag) => !!customElements.get(tag);
+	  }
+	  const { code } = compilerDom.compile(template, opts);
+	  const render = new Function("Vue", code)(runtimeDom__namespace);
+	  render._rc = true;
+	  return compileCache[key] = render;
+	}
+	runtimeDom.registerRuntimeCompiler(compileToFunction);
+
+	exports.compile = compileToFunction;
+	Object.keys(runtimeDom).forEach(function (k) {
+	  if (k !== 'default' && !Object.prototype.hasOwnProperty.call(exports, k)) exports[k] = runtimeDom[k];
+	}); 
+} (vue_cjs_prod));
+
+{
+  vue.exports = vue_cjs_prod;
+}
+
+var vueExports = vue.exports;
+
 const SiteConfigPriority = {
   nitro: -4,
   runtime: 0
@@ -5944,7 +6035,7 @@ function createSiteConfigStack(options) {
     for (const o in stack.sort((a, b) => (a._priority || 0) - (b._priority || 0))) {
       for (const k in stack[o]) {
         const key = k;
-        const val = options2?.resolveRefs ? toValue(stack[o][k]) : stack[o][k];
+        const val = options2?.resolveRefs ? vueExports.toValue(stack[o][k]) : stack[o][k];
         if (!k.startsWith("_") && typeof val !== "undefined" && val !== "") {
           siteConfig[k] = val;
           if (typeof stack[o]._priority !== "undefined" && stack[o]._priority !== -1) {
@@ -5986,7 +6077,7 @@ const _TKW4lNwV1ZSBQwgdm84MhO_Yrqon1NP11KGm7dMMTI = defineNitroPlugin(async (nit
     const noSSR = !!process.env.NUXT_NO_SSR || event.context.nuxt?.noSSR || routeOptions.ssr === false && !isIsland || (false);
     if (noSSR) {
       const siteConfig = Object.fromEntries(
-        Object.entries(getSiteConfig(event)).map(([k, v]) => [k, toValue(v)])
+        Object.entries(getSiteConfig(event)).map(([k, v]) => [k, vueExports.toValue(v)])
       );
       ctx.body.push(`<script>window.__NUXT_SITE_CONFIG__=${devalue(siteConfig)}<\/script>`);
     }
@@ -8913,7 +9004,7 @@ const _rhcJV6 = defineEventHandler(async (e) => {
   }).filter(Boolean);
 });
 
-const staticConfig = {"isI18nMapped":false,"sitemapName":"sitemap.xml","isMultiSitemap":false,"excludeAppSources":[],"cacheMaxAgeSeconds":600,"experimentalStreaming":false,"autoLastmod":true,"defaultSitemapsChunkSize":1000,"minify":false,"sortEntries":true,"discoverImages":true,"discoverVideos":true,"sitemapsPathPrefix":"/__sitemap__/","isNuxtContentDocumentDriven":false,"xsl":"/__sitemap__/style.xsl","xslTips":true,"xslColumns":[{"label":"URL","width":"50%"},{"label":"Images","width":"25%","select":"count(image:image)"},{"label":"Last Updated","width":"25%","select":"concat(substring(sitemap:lastmod,0,11),concat(' ', substring(sitemap:lastmod,12,5)),concat(' ', substring(sitemap:lastmod,20,6)))"}],"credits":false,"version":"8.3.0","sitemaps":{"sitemap.xml":{"sitemapName":"sitemap.xml","route":"sitemap.xml","defaults":{"lastmod":"2026-07-24T10:13:33Z"},"include":[],"exclude":["/_**","/_nuxt/**","/__nuxt_content/**"],"includeAppSources":true}}};
+const staticConfig = {"isI18nMapped":false,"sitemapName":"sitemap.xml","isMultiSitemap":false,"excludeAppSources":[],"cacheMaxAgeSeconds":600,"experimentalStreaming":false,"autoLastmod":true,"defaultSitemapsChunkSize":1000,"minify":false,"sortEntries":true,"discoverImages":true,"discoverVideos":true,"sitemapsPathPrefix":"/__sitemap__/","isNuxtContentDocumentDriven":false,"xsl":"/__sitemap__/style.xsl","xslTips":true,"xslColumns":[{"label":"URL","width":"50%"},{"label":"Images","width":"25%","select":"count(image:image)"},{"label":"Last Updated","width":"25%","select":"concat(substring(sitemap:lastmod,0,11),concat(' ', substring(sitemap:lastmod,12,5)),concat(' ', substring(sitemap:lastmod,20,6)))"}],"credits":false,"version":"8.3.0","sitemaps":{"sitemap.xml":{"sitemapName":"sitemap.xml","route":"sitemap.xml","defaults":{"lastmod":"2026-07-24T10:45:57Z"},"include":[],"exclude":["/_**","/_nuxt/**","/__nuxt_content/**"],"includeAppSources":true}}};
 
 const logger = createConsola({
   defaults: {
@@ -12053,5 +12144,5 @@ const listener = function(req, res) {
   return handler(req, res);
 };
 
-export { $fetch$1 as $, baseURL as A, titleCase as B, stringifyQuery as C, withLeadingSlash as D, withBase as E, hasTrailingSlash as F, pascalCase as G, kebabCase as H, getRequestHeaders as I, listener as J, defineRenderHandler as a, buildAssetsURL as b, createError$1 as c, defineSitemapEventHandler as d, encodePath as e, destr as f, getQuery as g, getRouteRules as h, getResponseStatusText as i, joinURL as j, getResponseStatus as k, useNitroApp as l, defu as m, hasProtocol as n, parseQuery as o, publicAssetsURL as p, queryCollection as q, relative as r, parseURL as s, decodePath as t, useRuntimeConfig as u, isScriptProtocol as v, withQuery as w, withTrailingSlash as x, withoutTrailingSlash as y, sanitizeStatusCode as z };
+export { $fetch$1 as $, withoutTrailingSlash as A, sanitizeStatusCode as B, baseURL as C, titleCase as D, stringifyQuery as E, withBase as F, hasTrailingSlash as G, pascalCase as H, kebabCase as I, getRequestHeaders as J, listener as K, defineRenderHandler as a, buildAssetsURL as b, createError$1 as c, defineSitemapEventHandler as d, encodePath as e, destr as f, getQuery as g, getRouteRules as h, getResponseStatusText as i, joinURL as j, getResponseStatus as k, useNitroApp as l, defu as m, hasProtocol as n, parseQuery as o, publicAssetsURL as p, queryCollection as q, relative as r, parseURL as s, decodePath as t, useRuntimeConfig as u, vueExports as v, withLeadingSlash as w, isScriptProtocol as x, withQuery as y, withTrailingSlash as z };
 //# sourceMappingURL=nitro.mjs.map

@@ -5,11 +5,21 @@ import { G as GradientPanel_default } from './GradientPanel-CteABoXV.mjs';
 import { A as ArticleCard_default } from './ArticleCard-Dne63jEl.mjs';
 import { C as CTASection_default } from './CTASection-D_iyyglj.mjs';
 import { S as StatisticsSection_default, W as WhyChooseUsSection_default, u as usePrefersReducedMotion, E as EASE_OUT_GSAP, D as DUR } from './WhyChooseUsSection-sVtuR7bB.mjs';
-import { defineComponent, withAsyncContext, computed, unref, withCtx, createTextVNode, mergeProps, toDisplayString, ref, resolveDirective, openBlock, createBlock, createCommentVNode, useSSRContext } from 'vue';
-import { ssrRenderComponent, ssrInterpolate, ssrRenderAttrs, ssrRenderStyle, ssrRenderList, ssrRenderClass, ssrRenderAttr, ssrGetDirectiveProps } from 'vue/server-renderer';
+import { v as vueExports } from '../nitro/nitro.mjs';
+import { ssrRenderComponent, ssrInterpolate, ssrRenderAttrs, ssrRenderStyle, ssrRenderList, ssrRenderClass, ssrRenderAttr, ssrGetDirectiveProps } from '@vue/server-renderer';
 import 'nostics';
 import 'nostics/formatters/ansi';
-import '../nitro/nitro.mjs';
+import 'fnv1a-64';
+import 'object-identity';
+import '@vue/shared';
+import 'perfect-debounce';
+import 'unhead/plugins';
+import 'unhead/utils';
+import '../routes/renderer.mjs';
+import 'unhead/server';
+import 'unhead/legacy';
+import 'devalue';
+import './SectionTitle-BXJanOjs.mjs';
 import 'node:crypto';
 import 'node:http';
 import 'node:https';
@@ -17,28 +27,17 @@ import 'node:events';
 import 'node:buffer';
 import 'node:fs';
 import 'node:path';
+import '@vue/compiler-dom';
+import '@vue/runtime-dom';
 import 'consola';
 import 'minimatch';
 import 'node:fs/promises';
 import 'nuxtseo-shared/utils';
 import 'fast-xml-parser';
 import 'better-sqlite3';
-import 'fnv1a-64';
-import 'object-identity';
-import '@vue/shared';
-import 'vue-router';
-import 'perfect-debounce';
-import 'unhead/plugins';
-import 'unhead/utils';
-import '../routes/renderer.mjs';
-import 'unhead/server';
-import 'unhead/legacy';
-import 'vue-bundle-renderer/runtime';
-import 'devalue';
-import './SectionTitle-BXJanOjs.mjs';
 
 //#region components/home/HeroBlueprint.vue?vue&type=script&setup=true&lang.ts
-var HeroBlueprint_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComponent({
+var HeroBlueprint_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ vueExports.defineComponent({
 	__name: "HeroBlueprint",
 	__ssrInlineRender: true,
 	setup(__props) {
@@ -80,7 +79,7 @@ var HeroBlueprint_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ de
 			}
 		];
 		return (_ctx, _push, _parent, _attrs) => {
-			_push(`<div${ssrRenderAttrs(mergeProps({ class: "relative mx-auto w-full max-w-4xl" }, _attrs))}><svg viewBox="0 0 760 340" class="h-auto w-full" fill="none" role="img" aria-label="Diagram teknis belt conveyor: pulley, belt, roller, dan rangka penyangga"><g class="animate-rise motion-reduce:animate-none" style="${ssrRenderStyle({ animationDelay: `${RISE[0]}ms` })}"><path d="M40 286h680" stroke="rgb(var(--ink) / 0.28)" stroke-width="1.5"></path><path d="M40 292l14-6M80 292l14-6M120 292l14-6M160 292l14-6M200 292l14-6M240 292l14-6M280 292l14-6M320 292l14-6M360 292l14-6M400 292l14-6M440 292l14-6M480 292l14-6M520 292l14-6M560 292l14-6M600 292l14-6M640 292l14-6M680 292l14-6" stroke="rgb(var(--ink) / 0.18)" stroke-width="1"></path></g><g class="animate-rise motion-reduce:animate-none" style="${ssrRenderStyle({ animationDelay: `${RISE[1]}ms` })}" stroke="rgb(var(--ink) / 0.55)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M140 200v86M620 200v86"></path><path d="M250 210 224 286M250 210 276 286M250 250h-16M250 250h16"></path><path d="M510 210 484 286M510 210 536 286M510 250h-16M510 250h16"></path></g><g class="animate-rise motion-reduce:animate-none" style="${ssrRenderStyle({ animationDelay: `${RISE[4]}ms` })}" stroke="rgb(var(--ink) / 0.5)" stroke-width="2" stroke-linejoin="round"><rect x="232" y="112" width="46" height="30" rx="2" fill="rgb(var(--paper-soft))"></rect><rect x="452" y="108" width="52" height="34" rx="2" fill="rgb(var(--paper-soft))"></rect><path d="M245 112v30M491 108v34" stroke="rgb(var(--ink) / 0.2)" stroke-width="1.4"></path></g><g class="animate-rise motion-reduce:animate-none" style="${ssrRenderStyle({ animationDelay: `${RISE[2]}ms` })}"><rect x="106" y="142" width="548" height="68" rx="34" fill="rgb(var(--steel) / 0.04)" stroke="rgb(var(--ink) / 0.7)" stroke-width="2.4"></rect><path d="M140 148h480" stroke="rgb(var(--ink) / 0.28)" stroke-width="1.4"></path><path d="M150 148h460" stroke="rgb(var(--accent))" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="2 12" class="animate-belt-travel motion-reduce:animate-none"></path><circle cx="140" cy="176" r="22" fill="rgb(var(--paper-soft))" stroke="rgb(var(--ink) / 0.7)" stroke-width="2.4"></circle><circle cx="620" cy="176" r="22" fill="rgb(var(--paper-soft))" stroke="rgb(var(--ink) / 0.7)" stroke-width="2.4"></circle><circle cx="140" cy="176" r="4" fill="rgb(var(--ink) / 0.8)"></circle><circle cx="620" cy="176" r="4" fill="rgb(var(--ink) / 0.8)"></circle></g><g class="animate-rise motion-reduce:animate-none" style="${ssrRenderStyle({ animationDelay: `${RISE[3]}ms` })}"><!--[-->`);
+			_push(`<div${ssrRenderAttrs(vueExports.mergeProps({ class: "relative mx-auto w-full max-w-4xl" }, _attrs))}><svg viewBox="0 0 760 340" class="h-auto w-full" fill="none" role="img" aria-label="Diagram teknis belt conveyor: pulley, belt, roller, dan rangka penyangga"><g class="animate-rise motion-reduce:animate-none" style="${ssrRenderStyle({ animationDelay: `${RISE[0]}ms` })}"><path d="M40 286h680" stroke="rgb(var(--ink) / 0.28)" stroke-width="1.5"></path><path d="M40 292l14-6M80 292l14-6M120 292l14-6M160 292l14-6M200 292l14-6M240 292l14-6M280 292l14-6M320 292l14-6M360 292l14-6M400 292l14-6M440 292l14-6M480 292l14-6M520 292l14-6M560 292l14-6M600 292l14-6M640 292l14-6M680 292l14-6" stroke="rgb(var(--ink) / 0.18)" stroke-width="1"></path></g><g class="animate-rise motion-reduce:animate-none" style="${ssrRenderStyle({ animationDelay: `${RISE[1]}ms` })}" stroke="rgb(var(--ink) / 0.55)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M140 200v86M620 200v86"></path><path d="M250 210 224 286M250 210 276 286M250 250h-16M250 250h16"></path><path d="M510 210 484 286M510 210 536 286M510 250h-16M510 250h16"></path></g><g class="animate-rise motion-reduce:animate-none" style="${ssrRenderStyle({ animationDelay: `${RISE[4]}ms` })}" stroke="rgb(var(--ink) / 0.5)" stroke-width="2" stroke-linejoin="round"><rect x="232" y="112" width="46" height="30" rx="2" fill="rgb(var(--paper-soft))"></rect><rect x="452" y="108" width="52" height="34" rx="2" fill="rgb(var(--paper-soft))"></rect><path d="M245 112v30M491 108v34" stroke="rgb(var(--ink) / 0.2)" stroke-width="1.4"></path></g><g class="animate-rise motion-reduce:animate-none" style="${ssrRenderStyle({ animationDelay: `${RISE[2]}ms` })}"><rect x="106" y="142" width="548" height="68" rx="34" fill="rgb(var(--steel) / 0.04)" stroke="rgb(var(--ink) / 0.7)" stroke-width="2.4"></rect><path d="M140 148h480" stroke="rgb(var(--ink) / 0.28)" stroke-width="1.4"></path><path d="M150 148h460" stroke="rgb(var(--accent))" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="2 12" class="animate-belt-travel motion-reduce:animate-none"></path><circle cx="140" cy="176" r="22" fill="rgb(var(--paper-soft))" stroke="rgb(var(--ink) / 0.7)" stroke-width="2.4"></circle><circle cx="620" cy="176" r="22" fill="rgb(var(--paper-soft))" stroke="rgb(var(--ink) / 0.7)" stroke-width="2.4"></circle><circle cx="140" cy="176" r="4" fill="rgb(var(--ink) / 0.8)"></circle><circle cx="620" cy="176" r="4" fill="rgb(var(--ink) / 0.8)"></circle></g><g class="animate-rise motion-reduce:animate-none" style="${ssrRenderStyle({ animationDelay: `${RISE[3]}ms` })}"><!--[-->`);
 			ssrRenderList([
 				250,
 				340,
@@ -104,14 +103,14 @@ var HeroBlueprint_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ de
 //#region components/home/HeroBlueprint.vue
 var _sfc_setup$8 = HeroBlueprint_vue_vue_type_script_setup_true_lang_default.setup;
 HeroBlueprint_vue_vue_type_script_setup_true_lang_default.setup = (props, ctx) => {
-	const ssrContext = useSSRContext();
+	const ssrContext = vueExports.useSSRContext();
 	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/home/HeroBlueprint.vue");
 	return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
 };
 var HeroBlueprint_default = Object.assign(HeroBlueprint_vue_vue_type_script_setup_true_lang_default, { __name: "HeroBlueprint" });
 //#endregion
 //#region components/home/HeroSection.vue?vue&type=script&setup=true&lang.ts
-var HeroSection_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComponent({
+var HeroSection_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ vueExports.defineComponent({
 	__name: "HeroSection",
 	__ssrInlineRender: true,
 	props: {
@@ -125,7 +124,7 @@ var HeroSection_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defi
 	setup(__props) {
 		const props = __props;
 		const HIGHLIGHTS = ["Bisnis Anda", "Conveyor"];
-		const headlineParts = computed(() => {
+		const headlineParts = vueExports.computed(() => {
 			let parts = [{
 				text: props.headline,
 				hl: false
@@ -145,8 +144,8 @@ var HeroSection_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defi
 		return (_ctx, _push, _parent, _attrs) => {
 			const _component_Button = Button_default;
 			const _component_HeroBlueprint = HeroBlueprint_default;
-			_push(`<section${ssrRenderAttrs(mergeProps({ class: "relative bg-paper" }, _attrs))}><div class="pointer-events-none absolute inset-0 blueprint-grid opacity-60" aria-hidden="true"></div><div class="frame relative border-b border-line"><div class="flex flex-col items-center px-5 pb-10 pt-16 text-center md:px-8 md:pb-14 md:pt-24"><span class="inline-flex items-center gap-2 rounded-md border border-line bg-white px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-ink/70 shadow-sm"><span class="h-1.5 w-1.5 rounded-full bg-signal animate-pulse-glow"></span> Workshop &amp; tim teknisi <span class="text-signal">— siap</span></span><h1 class="display mt-8 max-w-3xl text-ink" style="${ssrRenderStyle({ "font-size": "clamp(2.4rem, 5.4vw, 4.25rem)" })}"><!--[-->`);
-			ssrRenderList(unref(headlineParts), (part, i) => {
+			_push(`<section${ssrRenderAttrs(vueExports.mergeProps({ class: "relative bg-paper" }, _attrs))}><div class="pointer-events-none absolute inset-0 blueprint-grid opacity-60" aria-hidden="true"></div><div class="frame relative border-b border-line"><div class="flex flex-col items-center px-5 pb-10 pt-16 text-center md:px-8 md:pb-14 md:pt-24"><span class="inline-flex items-center gap-2 rounded-md border border-line bg-white px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-ink/70 shadow-sm"><span class="h-1.5 w-1.5 rounded-full bg-signal animate-pulse-glow"></span> Workshop &amp; tim teknisi <span class="text-signal">— siap</span></span><h1 class="display mt-8 max-w-3xl text-ink" style="${ssrRenderStyle({ "font-size": "clamp(2.4rem, 5.4vw, 4.25rem)" })}"><!--[-->`);
+			ssrRenderList(vueExports.unref(headlineParts), (part, i) => {
 				_push(`<span class="${ssrRenderClass(part.hl ? "text-accent" : "")}">${ssrInterpolate(part.text)}</span>`);
 			});
 			_push(`<!--]--></h1>`);
@@ -157,9 +156,9 @@ var HeroSection_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defi
 				to: __props.primaryLink,
 				variant: "solid"
 			}, {
-				default: withCtx((_, _push, _parent, _scopeId) => {
+				default: vueExports.withCtx((_, _push, _parent, _scopeId) => {
 					if (_push) _push(`${ssrInterpolate(__props.primaryCTA)}`);
-					else return [createTextVNode(toDisplayString(__props.primaryCTA), 1)];
+					else return [vueExports.createTextVNode(vueExports.toDisplayString(__props.primaryCTA), 1)];
 				}),
 				_: 1
 			}, _parent));
@@ -167,9 +166,9 @@ var HeroSection_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defi
 				to: __props.secondaryLink,
 				variant: "white"
 			}, {
-				default: withCtx((_, _push, _parent, _scopeId) => {
+				default: vueExports.withCtx((_, _push, _parent, _scopeId) => {
 					if (_push) _push(`${ssrInterpolate(__props.secondaryCTA)}`);
-					else return [createTextVNode(toDisplayString(__props.secondaryCTA), 1)];
+					else return [vueExports.createTextVNode(vueExports.toDisplayString(__props.secondaryCTA), 1)];
 				}),
 				_: 1
 			}, _parent));
@@ -184,14 +183,14 @@ var HeroSection_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defi
 //#region components/home/HeroSection.vue
 var _sfc_setup$7 = HeroSection_vue_vue_type_script_setup_true_lang_default.setup;
 HeroSection_vue_vue_type_script_setup_true_lang_default.setup = (props, ctx) => {
-	const ssrContext = useSSRContext();
+	const ssrContext = vueExports.useSSRContext();
 	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/home/HeroSection.vue");
 	return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
 };
 var HeroSection_default = Object.assign(HeroSection_vue_vue_type_script_setup_true_lang_default, { __name: "HeroSection" });
 //#endregion
 //#region components/brand/ProductIcon.vue?vue&type=script&setup=true&lang.ts
-var ProductIcon_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComponent({
+var ProductIcon_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ vueExports.defineComponent({
 	__name: "ProductIcon",
 	__ssrInlineRender: true,
 	props: { name: { default: "generic" } },
@@ -239,9 +238,9 @@ var ProductIcon_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defi
 				]]
 			}
 		};
-		const icon = computed(() => ICONS[props.name] ?? ICONS.generic);
+		const icon = vueExports.computed(() => ICONS[props.name] ?? ICONS.generic);
 		return (_ctx, _push, _parent, _attrs) => {
-			_push(`<svg${ssrRenderAttrs(mergeProps({
+			_push(`<svg${ssrRenderAttrs(vueExports.mergeProps({
 				viewBox: "0 0 24 24",
 				fill: "none",
 				stroke: "currentColor",
@@ -250,15 +249,15 @@ var ProductIcon_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defi
 				"stroke-linejoin": "round",
 				"aria-hidden": "true"
 			}, _attrs))}><!--[-->`);
-			ssrRenderList(unref(icon).paths ?? [], (d, i) => {
+			ssrRenderList(vueExports.unref(icon).paths ?? [], (d, i) => {
 				_push(`<path${ssrRenderAttr("d", d)}></path>`);
 			});
 			_push(`<!--]--><!--[-->`);
-			ssrRenderList(unref(icon).rings ?? [], ([cx, cy, r], i) => {
+			ssrRenderList(vueExports.unref(icon).rings ?? [], ([cx, cy, r], i) => {
 				_push(`<circle${ssrRenderAttr("cx", cx)}${ssrRenderAttr("cy", cy)}${ssrRenderAttr("r", r)}></circle>`);
 			});
 			_push(`<!--]--><!--[-->`);
-			ssrRenderList(unref(icon).dots ?? [], ([cx, cy, r], i) => {
+			ssrRenderList(vueExports.unref(icon).dots ?? [], ([cx, cy, r], i) => {
 				_push(`<circle${ssrRenderAttr("cx", cx)}${ssrRenderAttr("cy", cy)}${ssrRenderAttr("r", r)} fill="currentColor" stroke="none"></circle>`);
 			});
 			_push(`<!--]--></svg>`);
@@ -269,20 +268,20 @@ var ProductIcon_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defi
 //#region components/brand/ProductIcon.vue
 var _sfc_setup$6 = ProductIcon_vue_vue_type_script_setup_true_lang_default.setup;
 ProductIcon_vue_vue_type_script_setup_true_lang_default.setup = (props, ctx) => {
-	const ssrContext = useSSRContext();
+	const ssrContext = vueExports.useSSRContext();
 	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/brand/ProductIcon.vue");
 	return _sfc_setup$6 ? _sfc_setup$6(props, ctx) : void 0;
 };
 var ProductIcon_default = Object.assign(ProductIcon_vue_vue_type_script_setup_true_lang_default, { __name: "ProductIcon" });
 //#endregion
 //#region components/brand/ProductDiagram.vue?vue&type=script&setup=true&lang.ts
-var ProductDiagram_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComponent({
+var ProductDiagram_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ vueExports.defineComponent({
 	__name: "ProductDiagram",
 	__ssrInlineRender: true,
 	props: { family: { default: "belt" } },
 	setup(__props) {
 		return (_ctx, _push, _parent, _attrs) => {
-			_push(`<svg${ssrRenderAttrs(mergeProps({
+			_push(`<svg${ssrRenderAttrs(vueExports.mergeProps({
 				viewBox: "0 0 400 300",
 				fill: "none",
 				stroke: "currentColor",
@@ -303,20 +302,20 @@ var ProductDiagram_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ d
 //#region components/brand/ProductDiagram.vue
 var _sfc_setup$5 = ProductDiagram_vue_vue_type_script_setup_true_lang_default.setup;
 ProductDiagram_vue_vue_type_script_setup_true_lang_default.setup = (props, ctx) => {
-	const ssrContext = useSSRContext();
+	const ssrContext = vueExports.useSSRContext();
 	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/brand/ProductDiagram.vue");
 	return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
 };
 var ProductDiagram_default = Object.assign(ProductDiagram_vue_vue_type_script_setup_true_lang_default, { __name: "ProductDiagram" });
 //#endregion
 //#region components/shared/SpecCard.vue?vue&type=script&setup=true&lang.ts
-var SpecCard_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComponent({
+var SpecCard_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ vueExports.defineComponent({
 	__name: "SpecCard",
 	__ssrInlineRender: true,
 	props: { lines: {} },
 	setup(__props) {
 		return (_ctx, _push, _parent, _attrs) => {
-			_push(`<div${ssrRenderAttrs(mergeProps({ class: "rounded-lg border border-line bg-white/95 p-5 text-[12.5px] leading-[2] tabular-nums shadow-xl shadow-ink/10 backdrop-blur-sm" }, _attrs))}><!--[-->`);
+			_push(`<div${ssrRenderAttrs(vueExports.mergeProps({ class: "rounded-lg border border-line bg-white/95 p-5 text-[12.5px] leading-[2] tabular-nums shadow-xl shadow-ink/10 backdrop-blur-sm" }, _attrs))}><!--[-->`);
 			ssrRenderList(__props.lines, (line, i) => {
 				_push(`<div class="flex items-baseline gap-2.5 overflow-hidden whitespace-nowrap"><span class="${ssrRenderClass([line.preClass ?? "text-muted", "w-3 shrink-0 text-center"])}">${ssrInterpolate(line.pre)}</span><span class="${ssrRenderClass(line.textClass ?? "text-ink/75")}">${ssrInterpolate(line.text)}</span></div>`);
 			});
@@ -328,7 +327,7 @@ var SpecCard_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineC
 //#region components/shared/SpecCard.vue
 var _sfc_setup$4 = SpecCard_vue_vue_type_script_setup_true_lang_default.setup;
 SpecCard_vue_vue_type_script_setup_true_lang_default.setup = (props, ctx) => {
-	const ssrContext = useSSRContext();
+	const ssrContext = vueExports.useSSRContext();
 	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/shared/SpecCard.vue");
 	return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
 };
@@ -339,7 +338,7 @@ var orange = "text-accent";
 var steel = "text-muted";
 var green = "text-signal";
 var dim = "text-ink/40";
-var ProductCategoriesSection_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComponent({
+var ProductCategoriesSection_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ vueExports.defineComponent({
 	__name: "ProductCategoriesSection",
 	__ssrInlineRender: true,
 	props: { items: {} },
@@ -626,7 +625,7 @@ var ProductCategoriesSection_vue_vue_type_script_setup_true_lang_default = /*@__
 			const slug = item.cat.toLowerCase().replace(/\s+/g, "-");
 			return item.group === "belt-conveyor" ? `/produk/belt-conveyor/${slug}` : `/produk/lainnya/${slug}`;
 		}
-		const rows = computed(() => props.items.map((item, i) => ({
+		const rows = vueExports.computed(() => props.items.map((item, i) => ({
 			...item,
 			i,
 			...metaOf(item.cat),
@@ -634,38 +633,38 @@ var ProductCategoriesSection_vue_vue_type_script_setup_true_lang_default = /*@__
 			icon: item.cat.toLowerCase().replace(/\s+/g, "-")
 		})));
 		const reduced = usePrefersReducedMotion();
-		const rowFrom = computed(() => reduced.value ? { duration: .001 } : {
+		const rowFrom = vueExports.computed(() => reduced.value ? { duration: .001 } : {
 			scale: .97,
 			opacity: 0,
 			duration: DUR.base,
 			ease: EASE_OUT_GSAP
 		});
-		const activeIdx = ref(0);
+		const activeIdx = vueExports.ref(0);
 		return (_ctx, _push, _parent, _attrs) => {
 			const _component_ProductIcon = ProductIcon_default;
 			const _component_Button = Button_default;
 			const _component_GradientPanel = GradientPanel_default;
 			const _component_ProductDiagram = ProductDiagram_default;
 			const _component_SpecCard = SpecCard_default;
-			const _directive_gsap = resolveDirective("gsap");
-			_push(`<section${ssrRenderAttrs(mergeProps({ class: "bg-paper text-ink" }, _attrs))}><div class="frame"><div class="blueprint-grid border-b border-line px-6 py-3 md:px-10"><span class="eyebrow text-accent">Katalog</span></div><div class="border-b border-line px-6 py-16 md:px-10 md:py-24"><h2 class="display text-4xl md:text-6xl">Katalog Produk</h2><p class="mt-6 max-w-md leading-relaxed text-muted"> Belt conveyor dan komponen material handling untuk lini produksi yang kritis — dipilih dan diuji untuk kebutuhan industri Indonesia. </p></div><div class="grid lg:grid-cols-[230px_1fr]"><aside class="hidden border-r border-line lg:block"><nav class="sticky top-24 flex flex-col gap-1 p-6"><!--[-->`);
-			ssrRenderList(unref(rows), (row) => {
-				_push(`<a${ssrRenderAttr("href", `#produk-${row.i}`)} class="${ssrRenderClass([unref(activeIdx) === row.i ? "text-ink" : "text-muted hover:text-ink", "flex items-center gap-2.5 rounded-md px-2 py-2 text-sm font-medium transition-colors"])}">`);
+			const _directive_gsap = vueExports.resolveDirective("gsap");
+			_push(`<section${ssrRenderAttrs(vueExports.mergeProps({ class: "bg-paper text-ink" }, _attrs))}><div class="frame"><div class="blueprint-grid border-b border-line px-6 py-3 md:px-10"><span class="eyebrow text-accent">Katalog</span></div><div class="border-b border-line px-6 py-16 md:px-10 md:py-24"><h2 class="display text-4xl md:text-6xl">Katalog Produk</h2><p class="mt-6 max-w-md leading-relaxed text-muted"> Belt conveyor dan komponen material handling untuk lini produksi yang kritis — dipilih dan diuji untuk kebutuhan industri Indonesia. </p></div><div class="grid lg:grid-cols-[230px_1fr]"><aside class="hidden border-r border-line lg:block"><nav class="sticky top-24 flex flex-col gap-1 p-6"><!--[-->`);
+			ssrRenderList(vueExports.unref(rows), (row) => {
+				_push(`<a${ssrRenderAttr("href", `#produk-${row.i}`)} class="${ssrRenderClass([vueExports.unref(activeIdx) === row.i ? "text-ink" : "text-muted hover:text-ink", "flex items-center gap-2.5 rounded-md px-2 py-2 text-sm font-medium transition-colors"])}">`);
 				_push(ssrRenderComponent(_component_ProductIcon, {
 					name: row.icon,
-					class: ["h-3.5 w-3.5 shrink-0", unref(activeIdx) === row.i ? "text-accent" : "text-ink/30"]
+					class: ["h-3.5 w-3.5 shrink-0", vueExports.unref(activeIdx) === row.i ? "text-accent" : "text-ink/30"]
 				}, null, _parent));
 				_push(` ${ssrInterpolate(row.cat)}</a>`);
 			});
 			_push(`<!--]--></nav></aside><div><!--[-->`);
-			ssrRenderList(unref(rows), (row) => {
-				_push(`<article${ssrRenderAttrs(mergeProps({
+			ssrRenderList(vueExports.unref(rows), (row) => {
+				_push(`<article${ssrRenderAttrs(vueExports.mergeProps({
 					id: `produk-${row.i}`,
 					key: row.cat,
 					"data-idx": row.i,
 					"data-produk-row": "",
 					class: "grid border-b border-line last:border-b-0 md:grid-cols-2"
-				}, ssrGetDirectiveProps(_ctx, _directive_gsap, unref(rowFrom), void 0, {
+				}, ssrGetDirectiveProps(_ctx, _directive_gsap, vueExports.unref(rowFrom), void 0, {
 					whenVisible: true,
 					once: true,
 					from: true
@@ -674,9 +673,9 @@ var ProductCategoriesSection_vue_vue_type_script_setup_true_lang_default = /*@__
 					to: row.href,
 					variant: "white"
 				}, {
-					default: withCtx((_, _push, _parent, _scopeId) => {
+					default: vueExports.withCtx((_, _push, _parent, _scopeId) => {
 						if (_push) _push(`Lihat ${ssrInterpolate(row.cat)}`);
-						else return [createTextVNode("Lihat " + toDisplayString(row.cat), 1)];
+						else return [vueExports.createTextVNode("Lihat " + vueExports.toDisplayString(row.cat), 1)];
 					}),
 					_: 2
 				}, _parent));
@@ -687,17 +686,17 @@ var ProductCategoriesSection_vue_vue_type_script_setup_true_lang_default = /*@__
 					grain: false,
 					class: "absolute inset-0 border-0"
 				}, {
-					default: withCtx((_, _push, _parent, _scopeId) => {
+					default: vueExports.withCtx((_, _push, _parent, _scopeId) => {
 						if (_push) if (row.family) _push(ssrRenderComponent(_component_ProductDiagram, {
 							family: row.family,
 							class: "absolute inset-0 h-full w-full p-6 text-ink/25"
 						}, null, _parent, _scopeId));
 						else _push(`<!---->`);
-						else return [row.family ? (openBlock(), createBlock(_component_ProductDiagram, {
+						else return [row.family ? (vueExports.openBlock(), vueExports.createBlock(_component_ProductDiagram, {
 							key: 0,
 							family: row.family,
 							class: "absolute inset-0 h-full w-full p-6 text-ink/25"
-						}, null, 8, ["family"])) : createCommentVNode("", true)];
+						}, null, 8, ["family"])) : vueExports.createCommentVNode("", true)];
 					}),
 					_: 2
 				}, _parent));
@@ -713,20 +712,20 @@ var ProductCategoriesSection_vue_vue_type_script_setup_true_lang_default = /*@__
 //#region components/home/ProductCategoriesSection.vue
 var _sfc_setup$3 = ProductCategoriesSection_vue_vue_type_script_setup_true_lang_default.setup;
 ProductCategoriesSection_vue_vue_type_script_setup_true_lang_default.setup = (props, ctx) => {
-	const ssrContext = useSSRContext();
+	const ssrContext = vueExports.useSSRContext();
 	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/home/ProductCategoriesSection.vue");
 	return _sfc_setup$3 ? _sfc_setup$3(props, ctx) : void 0;
 };
 var ProductCategoriesSection_default = Object.assign(ProductCategoriesSection_vue_vue_type_script_setup_true_lang_default, { __name: "ProductCategoriesSection" });
 //#endregion
 //#region components/home/IndustriesSection.vue?vue&type=script&setup=true&lang.ts
-var IndustriesSection_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComponent({
+var IndustriesSection_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ vueExports.defineComponent({
 	__name: "IndustriesSection",
 	__ssrInlineRender: true,
 	props: { industries: {} },
 	setup(__props) {
 		return (_ctx, _push, _parent, _attrs) => {
-			_push(`<section${ssrRenderAttrs(mergeProps({ class: "bg-paper" }, _attrs))}><div class="frame border-b border-line"><div class="grid sm:grid-cols-2 lg:grid-cols-5"><div class="flex items-center border-b border-line px-6 py-6 lg:border-b-0"><p class="text-sm leading-snug text-muted"> Melayani sektor industri utama di Indonesia. </p></div><!--[-->`);
+			_push(`<section${ssrRenderAttrs(vueExports.mergeProps({ class: "bg-paper" }, _attrs))}><div class="frame border-b border-line"><div class="grid sm:grid-cols-2 lg:grid-cols-5"><div class="flex items-center border-b border-line px-6 py-6 lg:border-b-0"><p class="text-sm leading-snug text-muted"> Melayani sektor industri utama di Indonesia. </p></div><!--[-->`);
 			ssrRenderList(__props.industries, (industry, i) => {
 				_push(`<div class="flex min-h-[86px] items-center justify-center border-b border-line px-4 py-6 text-center sm:border-l lg:border-b-0"${ssrRenderAttr("title", industry.description)}><span class="text-[15px] font-semibold tracking-tight text-ink/70 transition-colors hover:text-ink">${ssrInterpolate(industry.name)}</span></div>`);
 			});
@@ -738,31 +737,31 @@ var IndustriesSection_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*
 //#region components/home/IndustriesSection.vue
 var _sfc_setup$2 = IndustriesSection_vue_vue_type_script_setup_true_lang_default.setup;
 IndustriesSection_vue_vue_type_script_setup_true_lang_default.setup = (props, ctx) => {
-	const ssrContext = useSSRContext();
+	const ssrContext = vueExports.useSSRContext();
 	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/home/IndustriesSection.vue");
 	return _sfc_setup$2 ? _sfc_setup$2(props, ctx) : void 0;
 };
 var IndustriesSection_default = Object.assign(IndustriesSection_vue_vue_type_script_setup_true_lang_default, { __name: "IndustriesSection" });
 //#endregion
 //#region components/home/LatestArticlesSection.vue?vue&type=script&setup=true&lang.ts
-var LatestArticlesSection_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComponent({
+var LatestArticlesSection_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ vueExports.defineComponent({
 	__name: "LatestArticlesSection",
 	__ssrInlineRender: true,
 	props: { articles: {} },
 	setup(__props) {
-		ref(null);
-		const activeDot = ref(0);
+		vueExports.ref(null);
+		const activeDot = vueExports.ref(0);
 		return (_ctx, _push, _parent, _attrs) => {
 			const _component_Button = Button_default;
 			const _component_ArticleCard = ArticleCard_default;
-			_push(`<section${ssrRenderAttrs(mergeProps({ class: "bg-paper" }, _attrs))}><div class="frame border-b border-line"><div class="grid lg:grid-cols-[360px_1fr]"><div class="flex flex-col border-b border-line px-6 py-12 md:px-10 lg:border-b-0 lg:border-r lg:py-16"><h2 class="display text-3xl text-ink md:text-4xl">Artikel &amp; update terbaru</h2><div class="mt-8">`);
+			_push(`<section${ssrRenderAttrs(vueExports.mergeProps({ class: "bg-paper" }, _attrs))}><div class="frame border-b border-line"><div class="grid lg:grid-cols-[360px_1fr]"><div class="flex flex-col border-b border-line px-6 py-12 md:px-10 lg:border-b-0 lg:border-r lg:py-16"><h2 class="display text-3xl text-ink md:text-4xl">Artikel &amp; update terbaru</h2><div class="mt-8">`);
 			_push(ssrRenderComponent(_component_Button, {
 				to: "/artikel",
 				variant: "white"
 			}, {
-				default: withCtx((_, _push, _parent, _scopeId) => {
+				default: vueExports.withCtx((_, _push, _parent, _scopeId) => {
 					if (_push) _push(`Semua Artikel`);
-					else return [createTextVNode("Semua Artikel")];
+					else return [vueExports.createTextVNode("Semua Artikel")];
 				}),
 				_: 1
 			}, _parent));
@@ -771,7 +770,7 @@ var LatestArticlesSection_vue_vue_type_script_setup_true_lang_default = /*@__PUR
 				_push(`<div class="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 [scrollbar-width:thin]"><!--[-->`);
 				ssrRenderList(__props.articles, (article) => {
 					_push(`<div class="w-[280px] shrink-0 snap-start md:w-[300px]">`);
-					_push(ssrRenderComponent(_component_ArticleCard, mergeProps({ ref_for: true }, article), null, _parent));
+					_push(ssrRenderComponent(_component_ArticleCard, vueExports.mergeProps({ ref_for: true }, article), null, _parent));
 					_push(`</div>`);
 				});
 				_push(`<!--]--></div>`);
@@ -779,7 +778,7 @@ var LatestArticlesSection_vue_vue_type_script_setup_true_lang_default = /*@__PUR
 			if (__props.articles.length > 1) {
 				_push(`<div class="mt-4 flex justify-center gap-1.5"><!--[-->`);
 				ssrRenderList(__props.articles, (a, i) => {
-					_push(`<span class="${ssrRenderClass([i === unref(activeDot) ? "bg-ink/60" : "bg-ink/15", "h-1.5 w-1.5 rounded-full transition-colors"])}"></span>`);
+					_push(`<span class="${ssrRenderClass([i === vueExports.unref(activeDot) ? "bg-ink/60" : "bg-ink/15", "h-1.5 w-1.5 rounded-full transition-colors"])}"></span>`);
 				});
 				_push(`<!--]--></div>`);
 			} else _push(`<!---->`);
@@ -791,21 +790,21 @@ var LatestArticlesSection_vue_vue_type_script_setup_true_lang_default = /*@__PUR
 //#region components/home/LatestArticlesSection.vue
 var _sfc_setup$1 = LatestArticlesSection_vue_vue_type_script_setup_true_lang_default.setup;
 LatestArticlesSection_vue_vue_type_script_setup_true_lang_default.setup = (props, ctx) => {
-	const ssrContext = useSSRContext();
+	const ssrContext = vueExports.useSSRContext();
 	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/home/LatestArticlesSection.vue");
 	return _sfc_setup$1 ? _sfc_setup$1(props, ctx) : void 0;
 };
 var LatestArticlesSection_default = Object.assign(LatestArticlesSection_vue_vue_type_script_setup_true_lang_default, { __name: "LatestArticlesSection" });
 //#endregion
 //#region pages/index.vue?vue&type=script&setup=true&lang.ts
-var index_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComponent({
+var index_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ vueExports.defineComponent({
 	__name: "index",
 	__ssrInlineRender: true,
 	async setup(__props) {
 		let __temp, __restore;
-		const { data: hp } = ([__temp, __restore] = withAsyncContext(() => useAsyncData("homepage-config", () => queryCollection("homepageConfig").first())), __temp = await __temp, __restore(), __temp);
-		const hpData = computed(() => hp.value ?? {});
-		const heroProps = computed(() => ({
+		const { data: hp } = ([__temp, __restore] = vueExports.withAsyncContext(() => useAsyncData("homepage-config", () => queryCollection("homepageConfig").first())), __temp = await __temp, __restore(), __temp);
+		const hpData = vueExports.computed(() => hp.value ?? {});
+		const heroProps = vueExports.computed(() => ({
 			headline: hpData.value?.hero?.headline ?? "Solusi Belt & Roller Conveyor untuk Bisnis Anda",
 			subheadline: hpData.value?.hero?.subheadline ?? "",
 			primaryCTA: hpData.value?.hero?.primaryCTA ?? "Lihat Produk",
@@ -813,8 +812,8 @@ var index_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComp
 			secondaryCTA: hpData.value?.hero?.secondaryCTA,
 			secondaryLink: hpData.value?.hero?.secondaryLink
 		}));
-		const whyChooseUsItems = computed(() => hpData.value?.whyChooseUs?.items ?? []);
-		const stats = computed(() => {
+		const whyChooseUsItems = vueExports.computed(() => hpData.value?.whyChooseUs?.items ?? []);
+		const stats = vueExports.computed(() => {
 			const s = hpData.value?.statistics;
 			if (!s) return [];
 			return [
@@ -836,17 +835,17 @@ var index_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComp
 				}
 			].filter((item) => !item.value.startsWith("undefined"));
 		});
-		const ctaProps = computed(() => ({
+		const ctaProps = vueExports.computed(() => ({
 			headline: hpData.value?.cta?.headline ?? "Butuh Solusi Conveyor?",
 			description: hpData.value?.cta?.description ?? "Konsultasikan kebutuhan industri Anda dengan tim kami.",
 			buttonText: hpData.value?.cta?.buttonText ?? "Hubungi Kami",
 			buttonLink: hpData.value?.cta?.buttonLink ?? "/kontak"
 		}));
-		const mission = computed(() => hpData.value?.company?.description ?? "BBS Conveyor adalah supplier conveyor terpercaya di Indonesia yang menyediakan belt conveyor, roller, dan komponen industri berkualitas tinggi.");
-		const { data: products } = ([__temp, __restore] = withAsyncContext(() => useAsyncData("homepage-products", () => queryCollection("products").all())), __temp = await __temp, __restore(), __temp);
-		const { data: industries } = ([__temp, __restore] = withAsyncContext(() => useAsyncData("homepage-industries", () => queryCollection("industries").all())), __temp = await __temp, __restore(), __temp);
-		const { data: articles } = ([__temp, __restore] = withAsyncContext(() => useAsyncData("homepage-articles", () => queryCollection("blog").all())), __temp = await __temp, __restore(), __temp);
-		const catItems = computed(() => {
+		const mission = vueExports.computed(() => hpData.value?.company?.description ?? "BBS Conveyor adalah supplier conveyor terpercaya di Indonesia yang menyediakan belt conveyor, roller, dan komponen industri berkualitas tinggi.");
+		const { data: products } = ([__temp, __restore] = vueExports.withAsyncContext(() => useAsyncData("homepage-products", () => queryCollection("products").all())), __temp = await __temp, __restore(), __temp);
+		const { data: industries } = ([__temp, __restore] = vueExports.withAsyncContext(() => useAsyncData("homepage-industries", () => queryCollection("industries").all())), __temp = await __temp, __restore(), __temp);
+		const { data: articles } = ([__temp, __restore] = vueExports.withAsyncContext(() => useAsyncData("homepage-articles", () => queryCollection("blog").all())), __temp = await __temp, __restore(), __temp);
+		const catItems = vueExports.computed(() => {
 			const list = Array.isArray(products.value) ? products.value : [];
 			const map = /* @__PURE__ */ new Map();
 			for (const p of list) {
@@ -860,12 +859,12 @@ var index_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComp
 			}
 			return [...map.values()];
 		});
-		const industryItems = computed(() => (Array.isArray(industries.value) ? industries.value : []).map((i) => ({
+		const industryItems = vueExports.computed(() => (Array.isArray(industries.value) ? industries.value : []).map((i) => ({
 			name: i.title,
 			description: i.excerpt,
 			slug: i.slug
 		})));
-		const latestArticles = computed(() => (Array.isArray(articles.value) ? [...articles.value].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt)).slice(0, 6) : []).map((a) => ({
+		const latestArticles = vueExports.computed(() => (Array.isArray(articles.value) ? [...articles.value].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt)).slice(0, 6) : []).map((a) => ({
 			slug: a.slug,
 			title: a.title,
 			excerpt: a.excerpt,
@@ -890,26 +889,26 @@ var index_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComp
 			const _component_LatestArticlesSection = LatestArticlesSection_default;
 			const _component_CTASection = CTASection_default;
 			_push(`<!--[-->`);
-			_push(ssrRenderComponent(_component_HeroSection, unref(heroProps), null, _parent));
-			_push(ssrRenderComponent(_component_ProductCategoriesSection, { items: unref(catItems) }, null, _parent));
-			if (unref(stats).length) _push(ssrRenderComponent(_component_StatisticsSection, { items: unref(stats) }, null, _parent));
+			_push(ssrRenderComponent(_component_HeroSection, vueExports.unref(heroProps), null, _parent));
+			_push(ssrRenderComponent(_component_ProductCategoriesSection, { items: vueExports.unref(catItems) }, null, _parent));
+			if (vueExports.unref(stats).length) _push(ssrRenderComponent(_component_StatisticsSection, { items: vueExports.unref(stats) }, null, _parent));
 			else _push(`<!---->`);
-			_push(ssrRenderComponent(_component_WhyChooseUsSection, { items: unref(whyChooseUsItems) }, null, _parent));
-			_push(`<section class="bg-paper"><div class="frame border-b border-line"><div class="bg-paper-soft px-6 py-20 text-center md:py-28"><p class="display mx-auto max-w-3xl text-2xl leading-snug text-ink md:text-[2.4rem]">${ssrInterpolate(unref(mission))}</p><div class="mt-10 flex justify-center">`);
+			_push(ssrRenderComponent(_component_WhyChooseUsSection, { items: vueExports.unref(whyChooseUsItems) }, null, _parent));
+			_push(`<section class="bg-paper"><div class="frame border-b border-line"><div class="bg-paper-soft px-6 py-20 text-center md:py-28"><p class="display mx-auto max-w-3xl text-2xl leading-snug text-ink md:text-[2.4rem]">${ssrInterpolate(vueExports.unref(mission))}</p><div class="mt-10 flex justify-center">`);
 			_push(ssrRenderComponent(_component_Button, {
 				to: "/tentang-kami",
 				variant: "white"
 			}, {
-				default: withCtx((_, _push, _parent, _scopeId) => {
+				default: vueExports.withCtx((_, _push, _parent, _scopeId) => {
 					if (_push) _push(`Selengkapnya`);
-					else return [createTextVNode("Selengkapnya")];
+					else return [vueExports.createTextVNode("Selengkapnya")];
 				}),
 				_: 1
 			}, _parent));
 			_push(`</div></div></div></section>`);
-			_push(ssrRenderComponent(_component_IndustriesSection, { industries: unref(industryItems) }, null, _parent));
-			_push(ssrRenderComponent(_component_LatestArticlesSection, { articles: unref(latestArticles) }, null, _parent));
-			_push(ssrRenderComponent(_component_CTASection, unref(ctaProps), null, _parent));
+			_push(ssrRenderComponent(_component_IndustriesSection, { industries: vueExports.unref(industryItems) }, null, _parent));
+			_push(ssrRenderComponent(_component_LatestArticlesSection, { articles: vueExports.unref(latestArticles) }, null, _parent));
+			_push(ssrRenderComponent(_component_CTASection, vueExports.unref(ctaProps), null, _parent));
 			_push(`<!--]-->`);
 		};
 	}
@@ -918,7 +917,7 @@ var index_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComp
 //#region pages/index.vue
 var _sfc_setup = index_vue_vue_type_script_setup_true_lang_default.setup;
 index_vue_vue_type_script_setup_true_lang_default.setup = (props, ctx) => {
-	const ssrContext = useSSRContext();
+	const ssrContext = vueExports.useSSRContext();
 	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("pages/index.vue");
 	return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };

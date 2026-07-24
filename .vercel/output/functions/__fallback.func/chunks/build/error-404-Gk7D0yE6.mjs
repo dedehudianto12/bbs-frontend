@@ -1,10 +1,19 @@
 import { c as useHead$1, N as NuxtLink } from '../virtual/entry.mjs';
 import { _ as _plugin_vue_export_helper_default } from './_plugin-vue_export-helper-BOaGB7Aw.mjs';
-import { useSSRContext, mergeProps, withCtx, createTextVNode, toDisplayString } from 'vue';
-import { ssrRenderAttrs, ssrInterpolate, ssrRenderComponent } from 'vue/server-renderer';
+import { v as vueExports } from '../nitro/nitro.mjs';
+import { ssrRenderAttrs, ssrInterpolate, ssrRenderComponent } from '@vue/server-renderer';
 import 'nostics';
 import 'nostics/formatters/ansi';
-import '../nitro/nitro.mjs';
+import 'fnv1a-64';
+import 'object-identity';
+import '@vue/shared';
+import 'perfect-debounce';
+import 'unhead/plugins';
+import 'unhead/utils';
+import '../routes/renderer.mjs';
+import 'unhead/server';
+import 'unhead/legacy';
+import 'devalue';
 import 'node:crypto';
 import 'node:http';
 import 'node:https';
@@ -12,24 +21,14 @@ import 'node:events';
 import 'node:buffer';
 import 'node:fs';
 import 'node:path';
+import '@vue/compiler-dom';
+import '@vue/runtime-dom';
 import 'consola';
 import 'minimatch';
 import 'node:fs/promises';
 import 'nuxtseo-shared/utils';
 import 'fast-xml-parser';
 import 'better-sqlite3';
-import 'fnv1a-64';
-import 'object-identity';
-import '@vue/shared';
-import 'vue-router';
-import 'perfect-debounce';
-import 'unhead/plugins';
-import 'unhead/utils';
-import '../routes/renderer.mjs';
-import 'unhead/server';
-import 'unhead/legacy';
-import 'vue-bundle-renderer/runtime';
-import 'devalue';
 
 //#region node_modules/nuxt/dist/app/components/error-404.vue
 var _sfc_main = {
@@ -66,14 +65,14 @@ var _sfc_main = {
 		});
 		return (_ctx, _push, _parent, _attrs) => {
 			const _component_NuxtLink = NuxtLink;
-			_push(`<div${ssrRenderAttrs(mergeProps({ class: "antialiased bg-white dark:bg-[#020420] dark:text-white font-sans grid min-h-screen overflow-hidden place-content-center text-[#020420] tracking-wide" }, _attrs))} data-v-35817061><div class="max-w-520px text-center" data-v-35817061><h1 class="font-semibold leading-none mb-4 sm:text-[110px] tabular-nums text-[80px]" data-v-35817061>${ssrInterpolate(__props.status)}</h1><h2 class="font-semibold mb-2 sm:text-3xl text-2xl" data-v-35817061>${ssrInterpolate(__props.statusText)}</h2><p class="mb-4 px-2 text-[#64748B] text-md" data-v-35817061>${ssrInterpolate(__props.description)}</p><div class="flex items-center justify-center w-full" data-v-35817061>`);
+			_push(`<div${ssrRenderAttrs(vueExports.mergeProps({ class: "antialiased bg-white dark:bg-[#020420] dark:text-white font-sans grid min-h-screen overflow-hidden place-content-center text-[#020420] tracking-wide" }, _attrs))} data-v-35817061><div class="max-w-520px text-center" data-v-35817061><h1 class="font-semibold leading-none mb-4 sm:text-[110px] tabular-nums text-[80px]" data-v-35817061>${ssrInterpolate(__props.status)}</h1><h2 class="font-semibold mb-2 sm:text-3xl text-2xl" data-v-35817061>${ssrInterpolate(__props.statusText)}</h2><p class="mb-4 px-2 text-[#64748B] text-md" data-v-35817061>${ssrInterpolate(__props.description)}</p><div class="flex items-center justify-center w-full" data-v-35817061>`);
 			_push(ssrRenderComponent(_component_NuxtLink, {
 				to: "/",
 				class: "font-medium hover:text-[#00DC82] text-sm underline underline-offset-3"
 			}, {
-				default: withCtx((_, _push, _parent, _scopeId) => {
+				default: vueExports.withCtx((_, _push, _parent, _scopeId) => {
 					if (_push) _push(`${ssrInterpolate(__props.backHome)}`);
-					else return [createTextVNode(toDisplayString(__props.backHome), 1)];
+					else return [vueExports.createTextVNode(vueExports.toDisplayString(__props.backHome), 1)];
 				}),
 				_: 1
 			}, _parent));
@@ -83,7 +82,7 @@ var _sfc_main = {
 };
 var _sfc_setup = _sfc_main.setup;
 _sfc_main.setup = (props, ctx) => {
-	const ssrContext = useSSRContext();
+	const ssrContext = vueExports.useSSRContext();
 	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("node_modules/nuxt/dist/app/components/error-404.vue");
 	return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };

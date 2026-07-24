@@ -2,11 +2,21 @@ import { c as useHead$1 } from '../virtual/entry.mjs';
 import { G as GradientPanel_default } from './GradientPanel-CteABoXV.mjs';
 import { P as PageHero_default } from './PageHero-DA3ar5hD.mjs';
 import { C as CTASection_default } from './CTASection-D_iyyglj.mjs';
-import { defineComponent, withCtx, createVNode, toDisplayString, useSSRContext } from 'vue';
-import { ssrRenderAttrs, ssrRenderComponent, ssrRenderList, ssrInterpolate } from 'vue/server-renderer';
+import { v as vueExports } from '../nitro/nitro.mjs';
+import { ssrRenderAttrs, ssrRenderComponent, ssrRenderList, ssrInterpolate } from '@vue/server-renderer';
 import 'nostics';
 import 'nostics/formatters/ansi';
-import '../nitro/nitro.mjs';
+import 'fnv1a-64';
+import 'object-identity';
+import '@vue/shared';
+import 'perfect-debounce';
+import 'unhead/plugins';
+import 'unhead/utils';
+import '../routes/renderer.mjs';
+import 'unhead/server';
+import 'unhead/legacy';
+import 'devalue';
+import './Button-fRm7tXm0.mjs';
 import 'node:crypto';
 import 'node:http';
 import 'node:https';
@@ -14,28 +24,17 @@ import 'node:events';
 import 'node:buffer';
 import 'node:fs';
 import 'node:path';
+import '@vue/compiler-dom';
+import '@vue/runtime-dom';
 import 'consola';
 import 'minimatch';
 import 'node:fs/promises';
 import 'nuxtseo-shared/utils';
 import 'fast-xml-parser';
 import 'better-sqlite3';
-import 'fnv1a-64';
-import 'object-identity';
-import '@vue/shared';
-import 'vue-router';
-import 'perfect-debounce';
-import 'unhead/plugins';
-import 'unhead/utils';
-import '../routes/renderer.mjs';
-import 'unhead/server';
-import 'unhead/legacy';
-import 'vue-bundle-renderer/runtime';
-import 'devalue';
-import './Button-fRm7tXm0.mjs';
 
 //#region pages/galeri.vue?vue&type=script&setup=true&lang.ts
-var galeri_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComponent({
+var galeri_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ vueExports.defineComponent({
 	__name: "galeri",
 	__ssrInlineRender: true,
 	setup(__props) {
@@ -71,9 +70,9 @@ var galeri_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCom
 					index: i * 2 + 1,
 					class: "aspect-[4/3] w-full transition-transform duration-300 group-hover:-translate-y-1"
 				}, {
-					default: withCtx((_, _push, _parent, _scopeId) => {
+					default: vueExports.withCtx((_, _push, _parent, _scopeId) => {
 						if (_push) _push(`<div class="absolute inset-0 flex items-end p-5"${_scopeId}><span class="text-xs font-semibold uppercase tracking-[0.14em] text-ink/55"${_scopeId}>Proyek ${ssrInterpolate(String(i + 1).padStart(2, "0"))}</span></div>`);
-						else return [createVNode("div", { class: "absolute inset-0 flex items-end p-5" }, [createVNode("span", { class: "text-xs font-semibold uppercase tracking-[0.14em] text-ink/55" }, "Proyek " + toDisplayString(String(i + 1).padStart(2, "0")), 1)])];
+						else return [vueExports.createVNode("div", { class: "absolute inset-0 flex items-end p-5" }, [vueExports.createVNode("span", { class: "text-xs font-semibold uppercase tracking-[0.14em] text-ink/55" }, "Proyek " + vueExports.toDisplayString(String(i + 1).padStart(2, "0")), 1)])];
 					}),
 					_: 2
 				}, _parent));
@@ -94,7 +93,7 @@ var galeri_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCom
 //#region pages/galeri.vue
 var _sfc_setup = galeri_vue_vue_type_script_setup_true_lang_default.setup;
 galeri_vue_vue_type_script_setup_true_lang_default.setup = (props, ctx) => {
-	const ssrContext = useSSRContext();
+	const ssrContext = vueExports.useSSRContext();
 	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("pages/galeri.vue");
 	return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };
