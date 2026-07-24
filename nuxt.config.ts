@@ -7,7 +7,13 @@ export default defineNuxtConfig({
   srcDir: ".",
   devtools: { enabled: true },
 
-  modules: ["@nuxtjs/tailwindcss", "@nuxt/content", "@nuxtjs/seo", "v-gsap-nuxt", "nuxt-studio"],
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "@nuxt/content",
+    "@nuxtjs/seo",
+    "v-gsap-nuxt",
+    "nuxt-studio",
+  ],
 
   // ── Nuxt Studio (CMS / visual editor for @nuxt/content) ──
   studio: {
@@ -108,7 +114,9 @@ export default defineNuxtConfig({
     preset: "vercel",
     // ponytail: inline vue — Vercel strips prebuilt node_modules, causing
     // ERR_MODULE_NOT_FOUND at runtime. Remove if Vercel fixes this.
-    externals: { inline: ["vue", "vue-router", "vue-bundle-renderer"] },
+    externals: {
+      inline: ["vue", "vue-router", "vue-bundle-renderer", /^@vue\//],
+    },
     prerender: {
       routes: [
         "/",
