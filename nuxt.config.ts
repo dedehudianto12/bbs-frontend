@@ -115,7 +115,7 @@ export default defineNuxtConfig({
     // ponytail: inline vue — Vercel strips prebuilt node_modules, causing
     // ERR_MODULE_NOT_FOUND at runtime. Remove if Vercel fixes this.
     externals: {
-      inline: ["vue", "vue-router", "vue-bundle-renderer", /^@vue\//],
+      inline: ["vue", "vue-router", "vue-bundle-renderer", "@vue/compiler-dom"],
     },
     prerender: {
       routes: [
