@@ -1,41 +1,56 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
+  compatibilityDate: "2025-07-15",
   // Nuxt 4 defaults srcDir to `app/`; keep the existing flat root layout
   // (pages/, components/, layouts/, assets/, app.vue all live at the root)
   // so the `~`/`@` aliases resolve to the project root as they did on Nuxt 3.
-  srcDir: '.',
+  srcDir: ".",
   devtools: { enabled: true },
 
-  modules: ['@nuxtjs/tailwindcss', '@nuxt/content', '@nuxtjs/seo', 'v-gsap-nuxt'],
+  modules: ["@nuxtjs/tailwindcss", "@nuxt/content", "@nuxtjs/seo", "v-gsap-nuxt", "nuxt-studio"],
 
-  css: ['~/assets/css/main.css'],
+  // ── Nuxt Studio (CMS / visual editor for @nuxt/content) ──
+  studio: {
+    route: "/_studio",
+    repository: {
+      provider: "github",
+      owner: process.env.STUDIO_REPO_OWNER || "dedehudianto12",
+      repo: process.env.STUDIO_REPO_NAME || "bbs-frontend",
+      branch: process.env.STUDIO_REPO_BRANCH || "main",
+      private: true,
+    },
+  },
+
+  css: ["~/assets/css/main.css"],
 
   app: {
     head: {
       link: [
-        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        { rel: "preconnect", href: "https://fonts.googleapis.com" },
         {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap',
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossorigin: "",
+        },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap",
         },
       ],
     },
   },
 
   components: {
-    dirs: [
-      { path: '~/components', pathPrefix: false },
-    ],
+    dirs: [{ path: "~/components", pathPrefix: false }],
   },
 
   // ── Site identity (digunakan oleh semua sub-module SEO) ──
   site: {
-    url: 'https://bbsconveyor.com',
-    name: 'BBS Conveyor',
-    description: 'CV Bintang Berjaya Satu — Solusi Belt & Roller Conveyor Industri',
-    defaultLocale: 'id',
+    url: "https://bbsconveyor.com",
+    name: "BBS Conveyor",
+    description:
+      "CV Bintang Berjaya Satu — Solusi Belt & Roller Conveyor Industri",
+    defaultLocale: "id",
   },
 
   // ── OG Image auto-generate ──
@@ -46,9 +61,7 @@ export default defineNuxtConfig({
   // ── Sitemap ──
   sitemap: {
     autoLastmod: true,
-    sources: [
-      '/__sitemap__/urls',
-    ],
+    sources: ["/__sitemap__/urls"],
     credits: false,
   },
 
@@ -56,33 +69,30 @@ export default defineNuxtConfig({
   robots: {
     enabled: true,
     credits: false,
-    groups: [
-      { userAgent: '*', allow: ['/'] },
-    ],
+    groups: [{ userAgent: "*", allow: ["/"] }],
   },
 
   // ── Schema.org JSON-LD ──
   schemaOrg: {
     identity: {
-      type: 'Organization',
-      name: 'CV Bintang Berjaya Satu',
-      alternateName: 'BBS Conveyor',
-      description: 'Supplier belt conveyor, roller, dan komponen industri terpercaya di Indonesia.',
-      url: 'https://bbsconveyor.com',
-      logo: '/logo.png',
-      sameAs: [
-        'https://wa.me/6281234567890',
-      ],
+      type: "Organization",
+      name: "CV Bintang Berjaya Satu",
+      alternateName: "BBS Conveyor",
+      description:
+        "Supplier belt conveyor, roller, dan komponen industri terpercaya di Indonesia.",
+      url: "https://bbsconveyor.com",
+      logo: "/logo.png",
+      sameAs: ["https://wa.me/6281234567890"],
       contactPoint: {
-        contactType: 'Sales',
-        telephone: '+6281234567890',
-        email: 'info@bbsconveyor.com',
+        contactType: "Sales",
+        telephone: "+6281234567890",
+        email: "info@bbsconveyor.com",
       },
       address: {
-        addressLocality: 'Jakarta Timur',
-        addressRegion: 'DKI Jakarta',
-        addressCountry: 'ID',
-        streetAddress: 'Jl. Industri Raya No. 123, Kawasan Industri Pulogadung',
+        addressLocality: "Jakarta Timur",
+        addressRegion: "DKI Jakarta",
+        addressCountry: "ID",
+        streetAddress: "Jl. Industri Raya No. 123, Kawasan Industri Pulogadung",
       },
     },
   },
@@ -97,15 +107,25 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       routes: [
-        '/',
-        '/produk/belt-conveyor',
-        '/produk/lainnya',
-        '/jasa',
-        '/artikel',
-        '/tentang-kami',
-        '/kontak',
-        '/galeri',
+        "/",
+        "/produk/belt-conveyor",
+        "/produk/lainnya",
+        "/jasa",
+        "/artikel",
+        "/tentang-kami",
+        "/kontak",
+        "/galeri",
       ],
     },
   },
-})
+
+  runtimeConfig: {
+    cloudinarySecret: process.env.CLOUDINARY_API_SECRET,
+
+    public: {
+      cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
+      cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+      cloudinaryUploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET,
+    },
+  },
+});
