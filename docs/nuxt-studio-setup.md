@@ -34,13 +34,13 @@ All repository values fall back to env vars so nothing is hardcoded in productio
 
 ## Environment Variables
 
-| Variable | Required | Description |
-|---|---|---|
-| `STUDIO_GITHUB_CLIENT_ID` | ✅ Production | GitHub OAuth App Client ID |
-| `STUDIO_GITHUB_CLIENT_SECRET` | ✅ Production | GitHub OAuth App Client Secret |
-| `STUDIO_REPO_OWNER` | No | Override repo owner (default: `dedehudianto12`) |
-| `STUDIO_REPO_NAME` | No | Override repo name (default: `bbs-frontend`) |
-| `STUDIO_REPO_BRANCH` | No | Override branch (default: `main`) |
+| Variable                      | Required      | Description                                     |
+| ----------------------------- | ------------- | ----------------------------------------------- |
+| `STUDIO_GITHUB_CLIENT_ID`     | ✅ Production | GitHub OAuth App Client ID                      |
+| `STUDIO_GITHUB_CLIENT_SECRET` | ✅ Production | GitHub OAuth App Client Secret                  |
+| `STUDIO_REPO_OWNER`           | No            | Override repo owner (default: `dedehudianto12`) |
+| `STUDIO_REPO_NAME`            | No            | Override repo name (default: `bbs-frontend`)    |
+| `STUDIO_REPO_BRANCH`          | No            | Override branch (default: `main`)               |
 
 ### Creating the GitHub OAuth App
 
@@ -81,17 +81,17 @@ Run `npm run dev` — a floating edit button appears bottom-left. File changes s
 
 All collections in `content.config.ts` use Zod schemas. Studio auto-generates form fields from these schemas. The current collections:
 
-| Collection | Source | Type |
-|---|---|---|
-| `products` | `products/*.md` | page |
-| `services` | `services/*.md` | page |
-| `industries` | `industries/*.md` | page |
-| `blog` | `blog/*.md` | page |
-| `gallery` | `gallery/*.md` | page |
-| `pages` | `pages/*.md` | page |
-| `homepage` | `homepage/*.md` | page |
-| `homepageConfig` | `config/homepage.yml` | data |
-| `navigation` | `config/navigation.yml` | data |
+| Collection       | Source                  | Type |
+| ---------------- | ----------------------- | ---- |
+| `products`       | `products/*.md`         | page |
+| `services`       | `services/*.md`         | page |
+| `industries`     | `industries/*.md`       | page |
+| `blog`           | `blog/*.md`             | page |
+| `gallery`        | `gallery/*.md`          | page |
+| `pages`          | `pages/*.md`            | page |
+| `homepage`       | `homepage/*.md`         | page |
+| `homepageConfig` | `config/homepage.yml`   | data |
+| `navigation`     | `config/navigation.yml` | data |
 
 ## Cloudinary (Future)
 
@@ -107,8 +107,8 @@ Recommended blog frontmatter:
 ---
 title: string
 description: string
-cover: string          # Cloudinary URL
-publishedAt: string    # ISO date
+cover: string # Cloudinary URL
+publishedAt: string # ISO date
 category: string
 tags: string[]
 ---

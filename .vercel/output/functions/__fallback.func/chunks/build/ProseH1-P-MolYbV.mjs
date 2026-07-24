@@ -1,0 +1,64 @@
+import { d as useRuntimeConfig } from '../virtual/entry.mjs';
+import { computed, mergeProps, unref, useSSRContext } from 'vue';
+import { ssrRenderAttrs, ssrRenderAttr, ssrRenderSlot } from 'vue/server-renderer';
+import 'nostics';
+import 'nostics/formatters/ansi';
+import '../nitro/nitro.mjs';
+import 'node:crypto';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'consola';
+import 'minimatch';
+import 'node:fs/promises';
+import 'nuxtseo-shared/utils';
+import 'fast-xml-parser';
+import 'better-sqlite3';
+import 'fnv1a-64';
+import 'object-identity';
+import '@vue/shared';
+import 'vue-router';
+import 'perfect-debounce';
+import 'unhead/plugins';
+import 'unhead/utils';
+import '../routes/renderer.mjs';
+import 'unhead/server';
+import 'unhead/legacy';
+import 'vue-bundle-renderer/runtime';
+import 'devalue';
+
+//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseH1.vue
+var _sfc_main = {
+	__name: "ProseH1",
+	__ssrInlineRender: true,
+	props: { id: {
+		type: String,
+		required: false
+	} },
+	setup(__props) {
+		const props = __props;
+		const { headings } = useRuntimeConfig().public.mdc;
+		const generate = computed(() => props.id && (typeof headings?.anchorLinks === "boolean" && headings?.anchorLinks === true || typeof headings?.anchorLinks === "object" && headings?.anchorLinks?.h1));
+		return (_ctx, _push, _parent, _attrs) => {
+			_push(`<h1${ssrRenderAttrs(mergeProps({ id: props.id }, _attrs))}>`);
+			if (unref(generate)) {
+				_push(`<a${ssrRenderAttr("href", `#${props.id}`)}>`);
+				ssrRenderSlot(_ctx.$slots, "default", {}, null, _push, _parent);
+				_push(`</a>`);
+			} else ssrRenderSlot(_ctx.$slots, "default", {}, null, _push, _parent);
+			_push(`</h1>`);
+		};
+	}
+};
+var _sfc_setup = _sfc_main.setup;
+_sfc_main.setup = (props, ctx) => {
+	const ssrContext = useSSRContext();
+	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseH1.vue");
+	return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
+};
+
+export { _sfc_main as default };
+//# sourceMappingURL=ProseH1-P-MolYbV.mjs.map

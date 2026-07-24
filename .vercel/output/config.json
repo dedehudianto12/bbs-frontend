@@ -1,0 +1,245 @@
+{
+  "version": 3,
+  "overrides": {
+    "jasa/index.html": {
+      "path": "jasa"
+    },
+    "artikel/index.html": {
+      "path": "artikel"
+    },
+    "kontak/index.html": {
+      "path": "kontak"
+    },
+    "tentang-kami/index.html": {
+      "path": "tentang-kami"
+    },
+    "galeri/index.html": {
+      "path": "galeri"
+    },
+    "index.html": {
+      "path": ""
+    },
+    "produk/belt-conveyor/index.html": {
+      "path": "produk/belt-conveyor"
+    },
+    "produk/lainnya/index.html": {
+      "path": "produk/lainnya"
+    }
+  },
+  "routes": [
+    {
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      },
+      "src": "/_nuxt/builds/meta/(.*)"
+    },
+    {
+      "headers": {
+        "cache-control": "public, max-age=1, immutable"
+      },
+      "src": "/_nuxt/builds/(.*)"
+    },
+    {
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      },
+      "src": "/_studio-app/1.7.0/(.*)"
+    },
+    {
+      "headers": {
+        "X-Robots-Tag": "noindex"
+      },
+      "src": "/_nuxt"
+    },
+    {
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable",
+        "X-Robots-Tag": "noindex"
+      },
+      "src": "/_nuxt/(.*)"
+    },
+    {
+      "src": "/_nuxt/builds/meta(.*)",
+      "headers": {
+        "cache-control": "public,max-age=31536000,immutable"
+      },
+      "continue": true
+    },
+    {
+      "src": "/_nuxt/builds(.*)",
+      "headers": {
+        "cache-control": "public,max-age=31536000,immutable"
+      },
+      "continue": true
+    },
+    {
+      "src": "/_nuxt(.*)",
+      "headers": {
+        "cache-control": "public,max-age=31536000,immutable"
+      },
+      "continue": true
+    },
+    {
+      "src": "/_studio-app/1.7.0(.*)",
+      "headers": {
+        "cache-control": "public,max-age=31536000,immutable"
+      },
+      "continue": true
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "(?<__isr_route>/__nuxt_error)",
+      "dest": "/__fallback"
+    },
+    {
+      "src": "(?<__isr_route>/__nuxt_content/(?:.*))",
+      "dest": "/__fallback"
+    },
+    {
+      "src": "/sw.js",
+      "dest": "/sw.js"
+    },
+    {
+      "src": "/sitemap.xml",
+      "dest": "/sitemap.xml"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/robots.txt"
+    },
+    {
+      "src": "/api/component-meta.json",
+      "dest": "/api/component-meta.json"
+    },
+    {
+      "src": "/api/component-meta",
+      "dest": "/api/component-meta"
+    },
+    {
+      "src": "/_studio",
+      "dest": "/_studio"
+    },
+    {
+      "src": "/__sitemap__/urls",
+      "dest": "/__sitemap__/urls"
+    },
+    {
+      "src": "/__sitemap__/style.xsl",
+      "dest": "/__sitemap__/style.xsl"
+    },
+    {
+      "src": "/__sitemap__/nuxt-content-urls.json",
+      "dest": "/__sitemap__/nuxt-content-urls.json"
+    },
+    {
+      "src": "/__nuxt_studio/meta",
+      "dest": "/__nuxt_studio/meta"
+    },
+    {
+      "src": "/__nuxt_studio/auth/sso",
+      "dest": "/__nuxt_studio/auth/sso"
+    },
+    {
+      "src": "/__nuxt_studio/auth/session",
+      "dest": "/__nuxt_studio/auth/session"
+    },
+    {
+      "src": "/__nuxt_studio/auth/google",
+      "dest": "/__nuxt_studio/auth/google"
+    },
+    {
+      "src": "/__nuxt_studio/auth/gitlab",
+      "dest": "/__nuxt_studio/auth/gitlab"
+    },
+    {
+      "src": "/__nuxt_studio/auth/github",
+      "dest": "/__nuxt_studio/auth/github"
+    },
+    {
+      "src": "/__nuxt_error",
+      "dest": "/__nuxt_error"
+    },
+    {
+      "src": "/__nuxt_content/services/query",
+      "dest": "/__nuxt_content/services/query"
+    },
+    {
+      "src": "/__nuxt_content/products/query",
+      "dest": "/__nuxt_content/products/query"
+    },
+    {
+      "src": "/__nuxt_content/pages/query",
+      "dest": "/__nuxt_content/pages/query"
+    },
+    {
+      "src": "/__nuxt_content/navigation/query",
+      "dest": "/__nuxt_content/navigation/query"
+    },
+    {
+      "src": "/__nuxt_content/info/sql_dump.txt",
+      "dest": "/__nuxt_content/info/sql_dump.txt"
+    },
+    {
+      "src": "/__nuxt_content/info/query",
+      "dest": "/__nuxt_content/info/query"
+    },
+    {
+      "src": "/__nuxt_content/industries/query",
+      "dest": "/__nuxt_content/industries/query"
+    },
+    {
+      "src": "/__nuxt_content/homepageConfig/query",
+      "dest": "/__nuxt_content/homepageConfig/query"
+    },
+    {
+      "src": "/__nuxt_content/homepage/query",
+      "dest": "/__nuxt_content/homepage/query"
+    },
+    {
+      "src": "/__nuxt_content/gallery/query",
+      "dest": "/__nuxt_content/gallery/query"
+    },
+    {
+      "src": "/__nuxt_content/blog/query",
+      "dest": "/__nuxt_content/blog/query"
+    },
+    {
+      "src": "/produk/lainnya/(?<kategori>[^/]+)",
+      "dest": "/produk/lainnya/[kategori]"
+    },
+    {
+      "src": "/produk/belt-conveyor/(?<kategori>[^/]+)",
+      "dest": "/produk/belt-conveyor/[kategori]"
+    },
+    {
+      "src": "/produk/(?<slug>[^/]+)",
+      "dest": "/produk/[slug]"
+    },
+    {
+      "src": "/jasa/(?<slug>[^/]+)",
+      "dest": "/jasa/[slug]"
+    },
+    {
+      "src": "/artikel/(?<slug>[^/]+)",
+      "dest": "/artikel/[slug]"
+    },
+    {
+      "src": "/api/component-meta/(?<component>[^/]+)?",
+      "dest": "/api/component-meta/[component-]"
+    },
+    {
+      "src": "/__nuxt_studio/ipx/(?:.*)",
+      "dest": "/__nuxt_studio/ipx/[...]"
+    },
+    {
+      "src": "/__nuxt_island/(?:.*)",
+      "dest": "/__nuxt_island/[...]"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/__fallback"
+    }
+  ]
+}

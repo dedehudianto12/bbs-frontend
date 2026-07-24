@@ -105,6 +105,7 @@ export default defineNuxtConfig({
 
   // Static generation friendly
   nitro: {
+    preset: "vercel",
     prerender: {
       routes: [
         "/",
