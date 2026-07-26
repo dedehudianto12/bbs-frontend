@@ -77,7 +77,7 @@ useSeoMeta({
   <div v-else class="container-tech py-24 md:py-32 text-center">
     <h1 class="display text-3xl text-ink md:text-4xl">Artikel Tidak Ditemukan</h1>
     <div class="mt-8 flex justify-center">
-      <Button to="/artikel" variant="ghost" arrow>Kembali ke Artikel</Button>
+      <NuxtLink to="/artikel" class="inline-flex items-center gap-2 rounded-md px-6 py-2.5 text-sm font-semibold text-[rgb(var(--ink))] transition-colors hover:bg-[rgb(var(--paper-soft))]">Kembali ke Artikel <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></NuxtLink>
     </div>
   </div>
 </template>

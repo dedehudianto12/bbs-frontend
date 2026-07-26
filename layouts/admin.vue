@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { admin, logout } = useAuth()
 const route = useRoute()
-const displayName = ref('')
+const displayName = computed(() => admin.value?.name ?? '')
 
 const navItems = [
   { label: 'Dashboard', to: '/admin' },
@@ -18,42 +18,43 @@ function isActive(to: string) {
   return route.path.startsWith(to)
 }
 
-onMounted(() => { displayName.value = admin.value?.name ?? '' })
+
 </script>
 
 <template>
-  <div style="display:flex;min-height:100vh;font-family:'Inter',system-ui,sans-serif">
-    <!-- Sidebar — brand steel dark -->
-    <aside style="width:220px;flex-shrink:0;background:rgb(var(--steel));color:#fff;display:flex;flex-direction:column">
-      <div style="padding:20px 20px 16px;border-bottom:1px solid rgb(var(--steel-soft))">
-        <NuxtLink to="/admin" style="font-size:15px;font-weight:700;color:#fff;text-decoration:none;letter-spacing:-0.01em">
-          BBS<span style="color:rgb(var(--accent))">.</span> Admin
+  <div class="flex min-h-screen font-sans">
+    <!-- Sidebar -->
+    <aside class="flex w-[220px] shrink-0 flex-col bg-steel text-white">
+      <div class="border-b border-steel-soft px-5 pb-4 pt-5">
+        <NuxtLink to="/admin" class="text-[15px] font-bold text-white no-underline tracking-[-0.01em]">
+          BBS<span class="text-accent">.</span> Admin
         </NuxtLink>
       </div>
-      <nav style="flex:1;padding:12px 12px">
+      <nav class="flex-1 p-3">
         <NuxtLink
           v-for="item in navItems"
           :key="item.to"
           :to="item.to"
-          :style="{
-            display:'block',padding:'9px 14px',fontSize:'13px',borderRadius:'6px',marginBottom:'1px',textDecoration:'none',
-            color:isActive(item.to)?'#fff':'rgba(255,255,255,0.6)',fontWeight:isActive(item.to)?'600':'400',
-            background:isActive(item.to)?'rgb(var(--steel-soft))':'transparent'
-          }"
           :exact="item.to === '/admin'"
+          class="mb-px block rounded-md px-3.5 py-2 text-[13px] no-underline"
+          :class="isActive(item.to)
+            ? 'bg-steel-soft font-semibold text-white'
+            : 'bg-transparent font-normal text-white/60'"
         >
           {{ item.label }}
         </NuxtLink>
       </nav>
-      <div style="padding:14px 20px;border-top:1px solid rgb(var(--steel-soft))">
-        <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:6px">{{ displayName }}</div>
-        <button style="font-size:12px;color:rgb(var(--accent));background:none;border:none;cursor:pointer;padding:0" @click="logout()">Logout</button>
+      <div class="border-t border-steel-soft px-5 py-3.5">
+        <ClientOnly>
+          <div class="mb-1.5 text-xs text-white/40">{{ displayName }}</div>
+          <button class="cursor-pointer border-none bg-none p-0 text-xs text-accent" @click="logout()">Logout</button>
+        </ClientOnly>
       </div>
     </aside>
 
     <!-- Main -->
-    <main style="flex:1;background:rgb(var(--paper));overflow:auto">
-      <div style="padding:28px 32px">
+    <main class="flex-1 overflow-auto bg-paper">
+      <div class="px-8 py-7">
         <slot />
       </div>
     </main>

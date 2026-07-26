@@ -56,16 +56,16 @@ const headlineParts = computed(() => {
         </p>
 
         <div class="mt-8 flex flex-col items-center gap-3 sm:flex-row">
-          <Button :to="primaryLink" variant="solid">
+          <NuxtLink :to="primaryLink" class="inline-flex items-center gap-2 rounded-md bg-[rgb(var(--accent))] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[rgb(var(--accent-glow))]">
             {{ primaryCTA }}
-          </Button>
-          <Button
+          </NuxtLink>
+          <NuxtLink
             v-if="secondaryCTA && secondaryLink"
             :to="secondaryLink"
-            variant="white"
+            class="inline-flex items-center gap-2 rounded-md border border-[rgb(var(--line))] bg-white px-6 py-2.5 text-sm font-semibold text-[rgb(var(--ink))] transition-colors hover:bg-[rgb(var(--paper))]"
           >
             {{ secondaryCTA }}
-          </Button>
+          </NuxtLink>
         </div>
 
         <!-- product-forward technical blueprint -->

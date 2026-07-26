@@ -25,12 +25,13 @@ defineProps<{
             {{ description }}
           </p>
           <div class="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button :to="buttonLink" variant="solid" arrow>
+            <NuxtLink :to="buttonLink" class="inline-flex items-center gap-2 rounded-md bg-[rgb(var(--accent))] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[rgb(var(--accent-glow))]">
               {{ buttonText }}
-            </Button>
-            <Button href="https://wa.me/6281234567890" external variant="white">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </NuxtLink>
+            <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-md border border-[rgb(var(--line))] bg-white px-6 py-2.5 text-sm font-semibold text-[rgb(var(--ink))] transition-colors hover:bg-[rgb(var(--paper))]">
               WhatsApp
-            </Button>
+            </a>
           </div>
         </div>
       </div>

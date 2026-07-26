@@ -32,7 +32,7 @@ function onScroll() {
         <div class="flex flex-col border-b border-line px-6 py-12 md:px-10 lg:border-b-0 lg:border-r lg:py-16">
           <h2 class="display text-3xl text-ink md:text-4xl">Artikel &amp; update terbaru</h2>
           <div class="mt-8">
-            <Button to="/artikel" variant="white">Semua Artikel</Button>
+            <NuxtLink to="/artikel" class="inline-flex items-center gap-2 rounded-md border border-[rgb(var(--line))] bg-white px-6 py-2.5 text-sm font-semibold text-[rgb(var(--ink))] transition-colors hover:bg-[rgb(var(--paper))]">Semua Artikel</NuxtLink>
           </div>
 
           <!-- decorative work-order docket -->

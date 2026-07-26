@@ -104,7 +104,7 @@ useSeoMeta({
           {{ mission }}
         </p>
         <div class="mt-10 flex justify-center">
-          <Button to="/tentang-kami" variant="white">Selengkapnya</Button>
+          <NuxtLink to="/tentang-kami" class="inline-flex items-center gap-2 rounded-md border border-[rgb(var(--line))] bg-white px-6 py-2.5 text-sm font-semibold text-[rgb(var(--ink))] transition-colors hover:bg-[rgb(var(--paper))]">Selengkapnya</NuxtLink>
         </div>
       </div>
     </div>

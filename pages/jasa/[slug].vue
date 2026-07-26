@@ -35,16 +35,14 @@ useSeoMeta({
     <div class="prose-tech mt-10 max-w-none" v-html="service.fullDescription" />
 
     <div class="mt-12 border-t border-line pt-8">
-      <Button to="/kontak" variant="accent" arrow>
-        Konsultasi Jasa Ini
-      </Button>
+      <NuxtLink to="/kontak" class="inline-flex items-center gap-2 rounded-md bg-[rgb(var(--accent))] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[rgb(var(--accent-glow))]">Konsultasi Jasa Ini <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></NuxtLink>
     </div>
   </div>
 
   <div v-else class="container-tech py-24 md:py-32 text-center">
     <h1 class="display text-3xl text-ink md:text-4xl">Jasa Tidak Ditemukan</h1>
     <div class="mt-8 flex justify-center">
-      <Button to="/jasa" variant="ghost" arrow>Kembali ke Jasa</Button>
+      <NuxtLink to="/jasa" class="inline-flex items-center gap-2 rounded-md px-6 py-2.5 text-sm font-semibold text-[rgb(var(--ink))] transition-colors hover:bg-[rgb(var(--paper-soft))]">Kembali ke Jasa <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></NuxtLink>
     </div>
   </div>
 </template>

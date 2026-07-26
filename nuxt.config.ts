@@ -103,6 +103,10 @@ export default defineNuxtConfig({
     externals: {
       inline: ["vue", "vue-router", "vue-bundle-renderer", "@vue/compiler-dom"],
     },
+    // ponytail: proxy /api → backend in dev (no CORS), production uses NUXT_PUBLIC_API_BASE
+    devProxy: {
+      '/api': { target: 'http://localhost:8080/api', changeOrigin: true },
+    },
     prerender: {
       routes: [
         "/",
@@ -121,7 +125,7 @@ export default defineNuxtConfig({
     cloudinarySecret: process.env.CLOUDINARY_API_SECRET,
 
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || "http://localhost:8080/api",
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || "/api",
       cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
       cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
       cloudinaryUploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET,

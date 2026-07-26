@@ -8,47 +8,43 @@ onMounted(async () => { await check(); if (admin.value) await navigateTo('/admin
 async function handleLogin() {
   error.value = ''; submitting.value = true
   try { await login(email.value, password.value); await navigateTo('/admin') }
-  catch (e: any) { error.value = e?.data?.error || 'Login gagal' }
+  catch (e: any) { error.value = e?.data?.error || e?.message || 'Tidak dapat terhubung ke server. Pastikan backend berjalan.' }
   finally { submitting.value = false }
 }
 </script>
 
 <template>
-  <div style="display:flex;min-height:100vh;align-items:center;justify-content:center;background:rgb(var(--paper));padding:16px;font-family:'Inter',system-ui,sans-serif">
-    <div style="width:100%;max-width:380px">
+  <div class="flex min-h-screen items-center justify-center bg-paper p-4 font-sans">
+    <div class="w-full max-w-[380px]">
       <!-- Brand mark -->
-      <div style="text-align:center;margin-bottom:40px">
-        <div style="font-size:28px;font-weight:800;color:rgb(var(--ink));letter-spacing:-0.02em;margin-bottom:4px">
-          BBS<span style="color:rgb(var(--accent))">.</span>
+      <div class="mb-10 text-center">
+        <div class="mb-1 text-[28px] font-extrabold tracking-[-0.02em] text-ink">
+          BBS<span class="text-accent">.</span>
         </div>
-        <div style="font-size:13px;color:rgb(var(--muted))">Admin Dashboard</div>
+        <div class="text-[13px] text-muted">Admin Dashboard</div>
       </div>
 
-      <div style="background:#fff;border:1px solid rgb(var(--line));border-radius:10px;padding:32px">
-        <form @submit.prevent="handleLogin" style="display:flex;flex-direction:column;gap:20px">
-          <div v-if="error" style="background:#fef2f2;color:#dc2626;padding:10px 14px;border-radius:6px;font-size:13px">
+      <div class="rounded-[10px] border border-line bg-white p-8">
+        <form class="flex flex-col gap-5" @submit.prevent="handleLogin">
+          <div v-if="error" class="rounded-md border border-red-200 bg-red-50 px-3.5 py-2.5 text-[13px] text-red-600">
             {{ error }}
           </div>
 
-          <label style="display:block">
-            <span style="font-size:12px;font-weight:600;color:rgb(var(--ink));text-transform:uppercase;letter-spacing:0.08em">Email</span>
+          <label class="block">
+            <span class="text-xs font-semibold uppercase tracking-[0.08em] text-ink">Email</span>
             <input v-model="email" type="email" required
-              style="display:block;width:100%;margin-top:6px;padding:10px 14px;border:1px solid rgb(var(--line));border-radius:6px;font-size:14px;font-family:inherit;box-sizing:border-box;outline:none;transition:border-color .15s"
-              placeholder="admin@bbs.com"
-              onfocus="this.style.borderColor='rgb(var(--accent))'"
-              onblur="this.style.borderColor='rgb(var(--line))'" />
+              class="mt-1.5 block w-full rounded-md border border-line px-3.5 py-2.5 text-sm font-sans outline-none transition-colors duration-150 focus:border-accent box-border"
+              placeholder="admin@bbs.com" />
           </label>
 
-          <label style="display:block">
-            <span style="font-size:12px;font-weight:600;color:rgb(var(--ink));text-transform:uppercase;letter-spacing:0.08em">Password</span>
+          <label class="block">
+            <span class="text-xs font-semibold uppercase tracking-[0.08em] text-ink">Password</span>
             <input v-model="password" type="password" required
-              style="display:block;width:100%;margin-top:6px;padding:10px 14px;border:1px solid rgb(var(--line));border-radius:6px;font-size:14px;font-family:inherit;box-sizing:border-box;outline:none" />
+              class="mt-1.5 block w-full rounded-md border border-line px-3.5 py-2.5 text-sm font-sans outline-none box-border" />
           </label>
 
           <button type="submit" :disabled="submitting"
-            style="width:100%;padding:12px;background:rgb(var(--accent));color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;letter-spacing:0.01em;transition:background .15s;margin-top:4px"
-            onmouseover="this.style.background='rgb(var(--accent-glow))'"
-            onmouseout="this.style.background='rgb(var(--accent))'">
+            class="mt-1 w-full cursor-pointer rounded-md border-none bg-accent px-0 py-3 text-sm font-semibold tracking-[0.01em] text-white transition-colors duration-150 hover:bg-accent-glow">
             {{ submitting ? 'Masuk...' : 'Masuk' }}
           </button>
         </form>

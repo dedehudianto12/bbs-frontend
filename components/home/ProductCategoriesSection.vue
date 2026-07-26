@@ -249,7 +249,7 @@ onBeforeUnmount(() => observer?.disconnect())
               <h3 class="display mt-4 max-w-xs text-2xl text-ink md:text-[1.9rem]">{{ row.title }}</h3>
               <p class="mt-4 max-w-sm text-[15px] leading-relaxed text-muted">{{ row.desc }}</p>
               <div class="mt-8">
-                <Button :to="row.href" variant="white">Lihat {{ row.cat }}</Button>
+                <NuxtLink :to="row.href" class="inline-flex items-center gap-2 rounded-md border border-[rgb(var(--line))] bg-white px-6 py-2.5 text-sm font-semibold text-[rgb(var(--ink))] transition-colors hover:bg-[rgb(var(--paper))]">Lihat {{ row.cat }}</NuxtLink>
               </div>
               <div class="mt-10 flex items-center gap-2 text-sm text-muted">
                 <svg class="h-4 w-4 text-ink/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
