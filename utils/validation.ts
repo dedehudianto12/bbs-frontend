@@ -27,7 +27,7 @@ export const serviceSchema = z.object({
 })
 
 export const gallerySchema = z.object({
-  image: z.string().min(1, 'URL gambar wajib diisi'),
+  image: z.string().nullable().default(null),
   caption: z.string().min(1, 'Caption wajib diisi'),
   location: z.string().nullable().default(null),
 })

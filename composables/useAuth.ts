@@ -19,10 +19,11 @@ export function useAuth() {
         baseURL: useRuntimeConfig().public.apiBase as string,
         headers: authHeaders(),
         credentials: 'include',
-        signal: AbortSignal.timeout(8000),
+        signal: AbortSignal.timeout(5000),
       })
       admin.value = res.data
     } catch {
+      token.value = null
       admin.value = null
     } finally {
       loading.value = false

@@ -6,7 +6,7 @@ const isEdit = computed(() => route.params.id !== 'baru')
 const form = reactive({ name:'',slug:'',shortDescription:'',fullDescription:'' })
 const saving = ref(false); const error = ref(''); const fieldErrors = ref<Record<string,string>>({})
 if(isEdit.value){const{data:res}=await useAsyncData(`admin-jasa-${route.params.id}`,()=>get<any>(`/admin/jasa/${route.params.id}`),{server:false});if(res.value?.data){const s=res.value.data;Object.assign(form,{name:s.name,slug:s.slug,shortDescription:s.shortDescription,fullDescription:s.fullDescription??''})}}
-async function save(){saving.value=true;error.value='';fieldErrors.value={};try{const data=serviceSchema.parse(form);if(isEdit.value)await put(`/admin/jasa/${route.params.id}`,{...data,images:[]});else await post('/admin/jasa',{...data,images:[]});router.push('/admin/jasa')}catch(e:any){if(e?.issues){for(const i of e.issues)fieldErrors.value[i.path[0]as string]=i.message;error.value='Mohon perbaiki error di bawah.'}else error.value=e?.data?.error||'Gagal menyimpan.'}finally{saving.value=false}}
+async function save(){saving.value=true;error.value='';fieldErrors.value={};try{const data=serviceSchema.parse(form);if(isEdit.value)await put(`/admin/jasa/${route.params.id}`,{...data,images:[]});else await post('/admin/jasa',{...data,images:[]});router.push('/services')}catch(e:any){if(e?.issues){for(const i of e.issues)fieldErrors.value[i.path[0]as string]=i.message;error.value='Mohon perbaiki error di bawah.'}else error.value=e?.data?.error||'Gagal menyimpan.'}finally{saving.value=false}}
 function generateSlug(){form.slug=form.name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')}
 </script>
 <template>

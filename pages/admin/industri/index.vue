@@ -2,6 +2,7 @@
 definePageMeta({ layout: 'admin', middleware: 'auth' })
 import { industrySchema } from '~/utils/validation'
 const { get, del, post, put } = useAdminApi()
+const { imageFile, imagePreview, existingUrl, onFileChange, reset } = useImageUpload()
 
 const search = ref(''); const sort = ref('desc'); const page = ref(1); const limit = 10
 const params = computed(() => { const p = new URLSearchParams({ page: String(page.value), limit: String(limit), sort: sort.value }); if (search.value) p.set('search', search.value); return p.toString() })
@@ -13,11 +14,23 @@ function toggleSort() { sort.value = sort.value === 'desc' ? 'asc' : 'desc'; pag
 async function handleDelete(id: string, name: string) { if (!confirm(`Hapus "${name}"?`)) return; await del(`/admin/industri/${id}`); refresh() }
 
 const modalOpen = ref(false); const modalTitle = ref(''); const editId = ref<string|null>(null)
-const form = reactive({ name:'',description:'',image:'',productSlugs:'' })
+const form = reactive({ name:'',description:'',productSlugs:'' })
 const saving = ref(false); const error = ref(''); const fieldErrors = ref<Record<string,string>>({})
-function openCreate(){modalTitle.value='Industri Baru';editId.value=null;Object.assign(form,{name:'',description:'',image:'',productSlugs:''});fieldErrors.value={};error.value='';modalOpen.value=true}
-async function openEdit(id:string){const r=await get<any>(`/admin/industri/${id}`);if(r?.data){const i=r.data;editId.value=id;modalTitle.value='Edit Industri';Object.assign(form,{name:i.name,description:i.description,image:i.image??'',productSlugs:(i.productSlugs??[]).join(', ')});fieldErrors.value={};error.value='';modalOpen.value=true}}
-async function save(){saving.value=true;error.value='';fieldErrors.value={};try{const data=industrySchema.parse({...form,image:form.image||null});const body={...data,productSlugs:data.productSlugs.split(',').map((s:string)=>s.trim()).filter(Boolean)};if(editId.value)await put(`/admin/industri/${editId.value}`,body);else await post('/admin/industri',body);modalOpen.value=false;refresh()}catch(e:any){if(e?.issues){for(const i of e.issues)fieldErrors.value[i.path[0]as string]=i.message;error.value='Mohon perbaiki error di bawah.'}else error.value=e?.data?.error||'Gagal menyimpan.'}finally{saving.value=false}}
+
+function openCreate(){modalTitle.value='Industri Baru';editId.value=null;Object.assign(form,{name:'',description:'',productSlugs:''});reset();fieldErrors.value={};error.value='';modalOpen.value=true}
+async function openEdit(id:string){const r=await get<any>(`/admin/industri/${id}`);if(r?.data){const i=r.data;editId.value=id;modalTitle.value='Edit Industri';Object.assign(form,{name:i.name,description:i.description,productSlugs:(i.productSlugs??[]).join(', ')});reset(i.image??'');fieldErrors.value={};error.value='';modalOpen.value=true}}
+async function save(){
+  saving.value=true;error.value='';fieldErrors.value={}
+  try{
+    industrySchema.parse({...form,image:existingUrl.value||null})
+    const fd = new FormData()
+    fd.append('name',form.name);fd.append('description',form.description)
+    fd.append('productSlugs',form.productSlugs)
+    if(imageFile.value) fd.append('file',imageFile.value)
+    if(editId.value)await put(`/admin/industri/${editId.value}`,fd);else await post('/admin/industri',fd)
+    modalOpen.value=false;refresh()
+  }catch(e:any){if(e?.issues){for(const i of e.issues)fieldErrors.value[i.path[0]as string]=i.message;error.value='Mohon perbaiki error di bawah.'}else error.value=e?.data?.error||'Gagal menyimpan.'}finally{saving.value=false}
+}
 </script>
 
 <template>
@@ -26,8 +39,8 @@ async function save(){saving.value=true;error.value='';fieldErrors.value={};try{
 
     <div class="mb-4 flex gap-2.5"><input v-model="search" placeholder="Cari nama..." @keyup.enter="page=1" class="flex-1 rounded-md border border-line bg-white px-3.5 py-2.5 text-[13px] font-sans outline-none" /><button @click="toggleSort" class="cursor-pointer whitespace-nowrap rounded-md border border-line bg-white px-3.5 py-2.5 text-[13px] font-sans text-muted">{{ sort==='desc'?'↓ Terbaru':'↑ Terlama' }}</button></div>
 
-    <div class="overflow-x-auto rounded-lg border border-line bg-white"><table class="w-full border-collapse text-[13px]"><thead><tr class="border-b border-line bg-paper-soft"><th class="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Nama</th><th class="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Deskripsi</th><th class="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Aksi</th></tr></thead>
-    <tbody><tr v-for="i in items" :key="i.id" class="border-b border-line"><td class="px-4 py-3.5 font-semibold text-ink">{{ i.name }}</td><td class="max-w-[200px] overflow-hidden truncate px-4 py-3.5 text-muted">{{ i.description }}</td><td class="px-4 py-3.5"><button @click="openEdit(i.id)" title="Edit" class="mr-2 cursor-pointer rounded border-none bg-transparent p-1 text-muted"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button title="Hapus" class="cursor-pointer rounded border-none bg-transparent p-1 text-muted" @click="handleDelete(i.id,i.name)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button></td></tr>
+    <div class="overflow-x-auto rounded-lg border border-line bg-white"><table class="table-admin"><thead><tr><th>Nama</th><th>Deskripsi</th><th>Aksi</th></tr></thead>
+    <tbody><tr v-for="i in items" :key="i.id"><td class="font-semibold text-ink">{{ i.name }}</td><td class="max-w-[200px] overflow-hidden truncate px-4 py-3.5 text-muted">{{ i.description }}</td><td><button @click="openEdit(i.id)" title="Edit" class="mr-2 cursor-pointer rounded border-none bg-transparent p-1 text-muted"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button title="Hapus" class="cursor-pointer rounded border-none bg-transparent p-1 text-muted" @click="handleDelete(i.id,i.name)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button></td></tr>
     <tr v-if="!items.length"><td colspan="3" class="px-4 py-[60px] text-center text-muted">Belum ada industri.</td></tr></tbody></table></div>
 
     <div v-if="totalPages>1" class="mt-5 flex items-center justify-center gap-2.5"><button :disabled="page<=1" @click="goTo(page-1)" class="cursor-pointer rounded-md border border-line bg-white px-4 py-2 text-xs font-sans text-muted">Prev</button><span class="text-xs text-muted">{{ page }} / {{ totalPages }} ({{ total }})</span><button :disabled="page>=totalPages" @click="goTo(page+1)" class="cursor-pointer rounded-md border border-line bg-white px-4 py-2 text-xs font-sans text-muted">Next</button></div>
@@ -37,7 +50,7 @@ async function save(){saving.value=true;error.value='';fieldErrors.value={};try{
       <form class="flex flex-col gap-[18px]" @submit.prevent="save">
         <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Nama</span><input v-model="form.name" class="mt-1.5 block w-full rounded-md border border-line px-3.5 py-2.5 text-sm font-sans outline-none box-border" /><span v-if="fieldErrors.name" class="mt-1 block text-[11px] text-red-600">{{ fieldErrors.name }}</span></label>
         <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Deskripsi</span><textarea v-model="form.description" rows="3" class="mt-1.5 block w-full resize-y rounded-md border border-line px-3.5 py-2.5 text-sm font-sans outline-none box-border" /></label>
-        <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Gambar</span><ImageUpload v-model="form.image" folder="industri" class="mt-1.5 block" /></label>
+        <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Gambar</span><input type="file" accept="image/jpeg,image/png,image/webp,image/gif" @change="onFileChange" class="mt-1.5 block w-full text-sm text-muted file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-accent file:px-3.5 file:py-2 file:text-[13px] file:font-semibold file:text-white" /><img v-if="imagePreview" :src="imagePreview" class="mt-2 h-[120px] rounded border border-line object-cover" /></label>
         <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Product Slugs (pisahkan koma)</span><input v-model="form.productSlugs" class="mt-1.5 block w-full rounded-md border border-line px-3.5 py-2.5 text-sm font-sans outline-none box-border" /></label>
         <button type="submit" :disabled="saving" class="mt-2 cursor-pointer rounded-md border-none bg-accent px-6 py-3 text-sm font-semibold tracking-[0.01em] text-white">{{ saving?'Menyimpan...':'Simpan' }}</button>
       </form>

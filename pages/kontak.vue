@@ -57,16 +57,10 @@ useSeoMeta({
           </div>
         </div>
 
-        <!-- Map placeholder -->
-        <GradientPanel :index="3" class="aspect-[4/3] w-full">
-          <div class="absolute inset-0 flex flex-col items-center justify-center gap-3 text-ink/45">
-            <svg class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-              <circle cx="12" cy="10" r="3" />
-            </svg>
-            <span class="text-xs font-semibold uppercase tracking-[0.14em]">Jakarta Timur</span>
-          </div>
-        </GradientPanel>
+        <!-- Map -->
+        <ClientOnly>
+          <MapLocation :lat="-6.195" :lng="106.895" label="CV Bintang Berjaya Satu — Kawasan Industri Pulogadung" />
+        </ClientOnly>
       </div>
     </div>
   </div>

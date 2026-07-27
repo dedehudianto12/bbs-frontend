@@ -1,8 +1,7 @@
 <script setup lang="ts">
 const model = defineModel<string>({ default: '' })
 const props = defineProps<{ folder?: string }>()
-const config = useRuntimeConfig()
-const apiBase = config.public.apiBase as string
+const token = useState<string | null>('admin-token', () => null)
 
 const uploading = ref(false)
 const uploadError = ref('')
@@ -25,9 +24,9 @@ async function handleFile(e: Event) {
   const timer = setTimeout(() => controller.abort(), 30_000)
 
   try {
-    const res = await fetch(`${apiBase}/upload/image`, {
+    const res = await fetch('/api/upload/image', {
       method: 'POST',
-      credentials: 'include',
+      headers: token.value ? { Authorization: `Bearer ${token.value}` } : {},
       body: fd,
       signal: controller.signal,
     })
@@ -47,33 +46,25 @@ async function handleFile(e: Event) {
 
 <template>
   <div>
-    <div style="display:flex;gap:10px;align-items:start">
+    <div class="flex items-start gap-2.5">
       <input
         v-model="model"
         type="text"
         placeholder="https://..."
-        style="display:block;flex:1;padding:10px 14px;border:1px solid rgb(var(--line));border-radius:6px;font-size:14px;font-family:inherit;box-sizing:border-box;outline:none"
+        class="block flex-1 rounded-md border border-line px-3.5 py-2.5 text-sm font-sans outline-none box-border"
       />
       <label
-        :style="{
-          display:'inline-flex',alignItems:'center',gap:6,padding:'10px 16px',
-          background: uploading?'rgb(var(--muted))':'rgb(var(--accent))',
-          color:'#fff',borderRadius:6,fontSize:13,fontWeight:600,cursor: uploading?'not-allowed':'pointer',
-          whiteSpace:'nowrap',fontFamily:'inherit',opacity: uploading?0.7:1
-        }"
+        class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-4 py-2.5 text-[13px] font-semibold text-white font-sans"
+        :class="uploading ? 'cursor-not-allowed bg-muted opacity-70' : 'cursor-pointer bg-accent'"
       >
-        <span v-if="uploading" style="display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite"></span>
+        <span v-if="uploading" class="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
         {{ uploading ? 'Upload...' : 'Upload' }}
         <input ref="fileInput" type="file" accept="image/jpeg,image/png,image/webp,image/gif" hidden @change="handleFile" :disabled="uploading" />
       </label>
     </div>
-    <div v-if="uploadError" style="font-size:11px;color:#dc2626;margin-top:6px">{{ uploadError }}</div>
-    <div v-if="model" style="border:1px solid rgb(var(--line));border-radius:6px;padding:8px;margin-top:8px">
-      <img :src="model" style="height:120px;border-radius:4px;object-fit:cover" />
+    <div v-if="uploadError" class="mt-1.5 text-[11px] text-red-600">{{ uploadError }}</div>
+    <div v-if="model" class="mt-2 rounded-md border border-line p-2">
+      <img :src="model" class="h-[120px] rounded object-cover" />
     </div>
   </div>
 </template>
-
-<style scoped>
-@keyframes spin { to { transform: rotate(360deg) } }
-</style>

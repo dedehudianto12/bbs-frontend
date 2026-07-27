@@ -3,7 +3,7 @@ definePageMeta({ layout: false })
 const { login, admin, check } = useAuth()
 const email = ref(''); const password = ref(''); const error = ref(''); const submitting = ref(false)
 
-onMounted(async () => { await check(); if (admin.value) await navigateTo('/admin') })
+onMounted(() => { check().then(() => { if (admin.value) navigateTo('/admin') }) })
 
 async function handleLogin() {
   error.value = ''; submitting.value = true

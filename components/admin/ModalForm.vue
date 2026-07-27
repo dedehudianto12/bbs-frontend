@@ -1,20 +1,29 @@
 <script setup lang="ts">
+import { X } from '@lucide/vue'
+
 defineProps<{ open: boolean; title: string }>()
 defineEmits<{ close: [] }>()
 </script>
 
 <template>
   <Teleport to="body">
-    <div v-if="open" style="position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center">
+    <div v-if="open" class="fixed inset-0 z-50 flex items-center justify-center">
       <!-- Backdrop -->
-      <div style="position:absolute;inset:0;background:rgba(28,30,34,0.5);backdrop-filter:blur(2px)" @click="$emit('close')" />
+      <div class="absolute inset-0 bg-ink/40 backdrop-blur-sm" @click="$emit('close')" />
       <!-- Panel -->
-      <div style="position:relative;background:#fff;border:1px solid rgb(var(--line));border-radius:12px;width:100%;max-width:700px;max-height:85vh;overflow-y:auto;margin:16px;box-shadow:0 20px 60px rgba(0,0,0,0.15)">
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid rgb(var(--line));position:sticky;top:0;background:#fff;z-index:2">
-          <h2 style="font-size:18px;font-weight:700;color:rgb(var(--ink));margin:0;letter-spacing:-0.01em">{{ title }}</h2>
-          <button @click="$emit('close')" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:1px solid rgb(var(--line));border-radius:6px;background:#fff;cursor:pointer;font-size:18px;color:rgb(var(--muted));line-height:1">&times;</button>
+      <div class="relative mx-4 w-full max-w-[680px] max-h-[85vh] overflow-y-auto rounded-xl border border-line bg-white shadow-2xl">
+        <!-- Header -->
+        <div class="sticky top-0 z-10 flex items-center justify-between border-b border-line bg-white px-6 py-4">
+          <h2 class="m-0 text-[17px] font-bold tracking-[-0.01em] text-ink">{{ title }}</h2>
+          <button
+            @click="$emit('close')"
+            class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-line bg-white text-muted transition-colors hover:bg-paper-soft hover:text-ink"
+          >
+            <X :size="15" :stroke-width="2" />
+          </button>
         </div>
-        <div style="padding:24px">
+        <!-- Body -->
+        <div class="px-6 py-6">
           <slot />
         </div>
       </div>

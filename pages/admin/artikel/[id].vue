@@ -2,11 +2,25 @@
 definePageMeta({ layout: 'admin', middleware: 'auth' })
 import { articleSchema } from '~/utils/validation'
 const route = useRoute(); const router = useRouter(); const { get, post, put } = useAdminApi()
+const { imageFile, imagePreview, existingUrl, onFileChange, reset } = useImageUpload()
 const isEdit = computed(() => route.params.id !== 'baru')
-const form = reactive({ title:'',excerpt:'',content:'',tag:'',image:'',author:'',publishedAt:new Date().toISOString().slice(0,10) })
+const form = reactive({ title:'',excerpt:'',content:'',tag:'',author:'',publishedAt:new Date().toISOString().slice(0,10) })
 const saving = ref(false); const error = ref(''); const fieldErrors = ref<Record<string,string>>({})
-if(isEdit.value){const{data:res}=await useAsyncData(`admin-artikel-${route.params.id}`,()=>get<any>(`/admin/artikel/${route.params.id}`),{server:false});if(res.value?.data){const a=res.value.data;Object.assign(form,{title:a.title,excerpt:a.excerpt,content:a.content??'',tag:a.tag??'',image:a.image??'',author:a.author,publishedAt:a.publishedAt})}}
-async function save(){saving.value=true;error.value='';fieldErrors.value={};try{const data=articleSchema.parse({...form,image:form.image||null});if(isEdit.value)await put(`/admin/artikel/${route.params.id}`,data);else await post('/admin/artikel',data);router.push('/admin/artikel')}catch(e:any){if(e?.issues){for(const i of e.issues)fieldErrors.value[i.path[0]as string]=i.message;error.value='Mohon perbaiki error di bawah.'}else error.value=e?.data?.error||'Gagal menyimpan.'}finally{saving.value=false}}
+
+if(isEdit.value){const{data:res}=await useAsyncData(`admin-artikel-${route.params.id}`,()=>get<any>(`/admin/artikel/${route.params.id}`),{server:false});if(res.value?.data){const a=res.value.data;Object.assign(form,{title:a.title,excerpt:a.excerpt,content:a.content??'',tag:a.tag??'',author:a.author,publishedAt:a.publishedAt});reset(a.image??'')}}
+
+async function save(){
+  saving.value=true;error.value='';fieldErrors.value={}
+  try{
+    articleSchema.parse({...form,image:existingUrl.value||null})
+    const fd = new FormData()
+    fd.append('title',form.title);fd.append('excerpt',form.excerpt);fd.append('content',form.content)
+    fd.append('tag',form.tag);fd.append('author',form.author);fd.append('publishedAt',form.publishedAt)
+    if(imageFile.value) fd.append('file',imageFile.value)
+    if(isEdit.value)await put(`/admin/artikel/${route.params.id}`,fd);else await post('/admin/artikel',fd)
+    router.push('/admin/artikel')
+  }catch(e:any){if(e?.issues){for(const i of e.issues)fieldErrors.value[i.path[0]as string]=i.message;error.value='Mohon perbaiki error di bawah.'}else error.value=e?.data?.error||'Gagal menyimpan.'}finally{saving.value=false}
+}
 </script>
 
 <template>
@@ -33,7 +47,7 @@ async function save(){saving.value=true;error.value='';fieldErrors.value={};try{
 
         <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Konten</span><TiptapEditor v-model="form.content" /></label>
 
-        <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Gambar</span><ImageUpload v-model="form.image" folder="artikel" class="mt-1.5 block" /></label>
+        <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Gambar</span><input type="file" accept="image/jpeg,image/png,image/webp,image/gif" @change="onFileChange" class="mt-1.5 block w-full text-sm text-muted file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-accent file:px-3.5 file:py-2 file:text-[13px] file:font-semibold file:text-white" /><img v-if="imagePreview" :src="imagePreview" class="mt-2 h-[120px] rounded border border-line object-cover" /></label>
 
         <button type="submit" :disabled="saving" class="mt-2 cursor-pointer rounded-md border-none bg-accent px-6 py-3 text-sm font-semibold tracking-[0.01em] text-white">{{ saving?'Menyimpan...':'Simpan' }}</button>
       </form>

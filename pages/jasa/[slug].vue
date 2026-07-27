@@ -3,8 +3,8 @@ const route = useRoute()
 const slug = route.params.slug as string
 const { get } = useApi()
 
-const { data: serviceRes } = await useAsyncData(`jasa-${slug}`, () =>
-  get<any>(`/jasa/${slug}`).catch(() => ({ data: null, error: 'not found' }))
+const { data: serviceRes, error: serviceErr } = await useAsyncData(`jasa-${slug}`, () =>
+  get<any>(`/jasa/${slug}`)
 )
 
 const service = computed(() => serviceRes.value?.data ?? null)
@@ -16,7 +16,15 @@ useSeoMeta({
 </script>
 
 <template>
-  <div v-if="service" class="mx-auto max-w-4xl px-5 py-12 md:px-8 md:py-16">
+  <div v-if="serviceErr" class="container-tech py-24 md:py-32 text-center">
+    <h1 class="display text-3xl text-ink md:text-4xl">Gagal Memuat</h1>
+    <p class="mt-4 text-muted">Tidak dapat menghubungi server.</p>
+    <div class="mt-8 flex justify-center">
+      <button @click="() => refreshNuxtData(`jasa-${slug}`)" class="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 text-sm font-semibold text-white cursor-pointer border-none">Coba Lagi</button>
+    </div>
+  </div>
+
+  <div v-else-if="service" class="mx-auto max-w-4xl px-5 py-12 md:px-8 md:py-16">
     <Breadcrumb
       class="mb-8"
       :items="[

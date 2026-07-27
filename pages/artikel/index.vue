@@ -2,7 +2,7 @@
 const { get } = useApi()
 const tag = ref('')
 
-const { data: articleRes } = await useAsyncData('artikel-listing', () =>
+const { data: articleRes, error: articleErr } = await useAsyncData('artikel-listing', () =>
   get<any[]>('/artikel')
 )
 
@@ -54,7 +54,15 @@ useSeoMeta({
       description="Tips, panduan, dan informasi seputar belt conveyor dan komponen industri."
     />
 
-    <div class="container-tech py-16 md:py-24">
+    <div v-if="articleErr" class="container-tech py-16 md:py-24">
+      <div class="rounded-xl border border-red-200 bg-red-50 px-6 py-10 text-center">
+        <p class="text-sm font-semibold text-red-700">Gagal memuat artikel.</p>
+        <p class="mt-1 text-[13px] text-red-600">Tidak dapat menghubungi server.</p>
+        <button @click="() => refreshNuxtData('artikel-listing')" class="mt-4 cursor-pointer rounded-md bg-accent px-5 py-2 text-[13px] font-semibold text-white border-none">Coba Lagi</button>
+      </div>
+    </div>
+
+    <div v-else class="container-tech py-16 md:py-24">
       <!-- Featured Article -->
       <div v-if="featuredArticle && !tag" class="mb-16">
         <p class="eyebrow mb-5 text-accent">

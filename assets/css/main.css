@@ -199,4 +199,24 @@
   .prose-tech td {
     @apply border-b border-line py-2 tabular-nums text-ink/75;
   }
+
+  /* ── Admin table — clean rows, hover highlight ── */
+  .table-admin {
+    @apply w-full border-collapse text-[13px];
+  }
+  .table-admin thead tr {
+    @apply border-b border-line bg-paper-soft;
+  }
+  .table-admin thead th {
+    @apply px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-muted;
+  }
+  .table-admin tbody tr {
+    @apply border-b border-line transition-colors duration-100;
+  }
+  .table-admin tbody tr:hover {
+    @apply bg-accent/[0.04];
+  }
+  .table-admin tbody td {
+    @apply px-4 py-3.5;
+  }
 }

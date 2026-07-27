@@ -6,6 +6,9 @@ import Placeholder from '@tiptap/extension-placeholder'
 const props = defineProps<{ modelValue: string }>()
 const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 
+// ponytail: guard against self-triggered setContent → onUpdate loop
+let externalUpdate = false
+
 const editor = useEditor({
   content: props.modelValue,
   extensions: [
@@ -13,6 +16,7 @@ const editor = useEditor({
     Placeholder.configure({ placeholder: 'Tulis konten artikel...' }),
   ],
   onUpdate: ({ editor }) => {
+    if (externalUpdate) return
     emit('update:modelValue', editor.getHTML())
   },
   editorProps: {
@@ -24,7 +28,9 @@ const editor = useEditor({
 
 watch(() => props.modelValue, (val) => {
   if (editor.value && val !== editor.value.getHTML()) {
+    externalUpdate = true
     editor.value.commands.setContent(val, false)
+    externalUpdate = false
   }
 })
 

@@ -2,11 +2,36 @@
 definePageMeta({ layout: 'admin', middleware: 'auth' })
 import { productSchema } from '~/utils/validation'
 const route = useRoute(); const router = useRouter(); const { get, post, put } = useAdminApi()
+const { imageFile, imagePreview, existingUrl, onFileChange, reset } = useImageUpload()
 const isEdit = computed(() => route.params.id !== 'baru')
-const form = reactive({ name:'',slug:'',group:'belt-conveyor',kategori:'',category:'',description:'',detail:'',image:'',specs:'{}' })
+const form = reactive({ name:'',slug:'',group:'belt-conveyor',kategori:'',category:'',description:'',detail:'',specs:'{}' })
 const saving = ref(false); const error = ref(''); const fieldErrors = ref<Record<string,string>>({})
-if(isEdit.value){const{data:res}=await useAsyncData(`admin-produk-${route.params.id}`,()=>get<any>(`/admin/produk/${route.params.id}`),{server:false});if(res.value?.data){const p=res.value.data;Object.assign(form,{name:p.name,slug:p.slug,group:p.group,kategori:p.kategori,category:p.category,description:p.description,detail:p.detail??'',image:p.image??'',specs:typeof p.specs==='string'?p.specs:JSON.stringify(p.specs,null,2)})}}
-async function save(){saving.value=true;error.value='';fieldErrors.value={};try{const data=productSchema.parse({...form,image:form.image||null});if(isEdit.value)await put(`/admin/produk/${route.params.id}`,data);else await post('/admin/produk',data);router.push('/admin/produk')}catch(e:any){if(e?.issues){for(const i of e.issues)fieldErrors.value[i.path[0]as string]=i.message;error.value='Mohon perbaiki error di bawah.'}else error.value=e?.data?.error||'Gagal menyimpan.'}finally{saving.value=false}}
+
+if(isEdit.value){const{data:res}=await useAsyncData(`admin-produk-${route.params.id}`,()=>get<any>(`/admin/produk/${route.params.id}`),{server:false});if(res.value?.data){const p=res.value.data;Object.assign(form,{name:p.name,slug:p.slug,group:p.group,kategori:p.kategori,category:p.category,description:p.description,detail:p.detail??'',specs:typeof p.specs==='string'?p.specs:JSON.stringify(p.specs,null,2)});reset(p.image??'')}}
+
+async function save(){
+  saving.value=true;error.value='';fieldErrors.value={}
+  try{
+    // validate text fields only (image is File, not string)
+    productSchema.parse({...form, image: existingUrl.value || null})
+    const fd = new FormData()
+    fd.append('name', form.name)
+    if(form.group) fd.append('group', form.group)
+    if(form.kategori) fd.append('kategori', form.kategori)
+    if(form.category) fd.append('category', form.category)
+    if(form.description) fd.append('description', form.description)
+    if(form.detail) fd.append('detail', form.detail)
+    fd.append('specs', form.specs)
+    if(imageFile.value) fd.append('file', imageFile.value)
+    if(isEdit.value) await put(`/admin/produk/${route.params.id}`, fd)
+    else await post('/admin/produk', fd)
+    router.push('/products')
+  }catch(e:any){
+    if(e?.issues){for(const i of e.issues)fieldErrors.value[i.path[0]as string]=i.message;error.value='Mohon perbaiki error di bawah.'}
+    else error.value=e?.data?.error||'Gagal menyimpan.'
+  }finally{saving.value=false}
+}
+
 function generateSlug(){form.slug=form.name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')}
 </script>
 
@@ -62,7 +87,8 @@ function generateSlug(){form.slug=form.name.toLowerCase().replace(/[^a-z0-9]+/g,
 
         <label class="block">
           <span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Gambar</span>
-          <ImageUpload v-model="form.image" folder="produk" class="mt-1.5 block" />
+          <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" @change="onFileChange" class="mt-1.5 block w-full text-sm text-muted file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-accent file:px-3.5 file:py-2 file:text-[13px] file:font-semibold file:text-white" />
+          <img v-if="imagePreview" :src="imagePreview" class="mt-2 h-[120px] rounded border border-line object-cover" />
         </label>
 
         <label class="block">

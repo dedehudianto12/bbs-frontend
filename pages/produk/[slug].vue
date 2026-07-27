@@ -3,8 +3,8 @@ const route = useRoute()
 const slug = route.params.slug as string
 const { get } = useApi()
 
-const { data: productRes } = await useAsyncData(`product-${slug}`, () =>
-  get<any>(`/produk/${slug}`).catch(() => ({ data: null, error: 'not found' }))
+const { data: productRes, error: productErr } = await useAsyncData(`product-${slug}`, () =>
+  get<any>(`/produk/${slug}`)
 )
 
 const product = computed(() => productRes.value?.data ?? null)
@@ -71,7 +71,15 @@ useSeoMeta({
 </script>
 
 <template>
-  <article v-if="product" class="container-tech py-12 md:py-16">
+  <div v-if="productErr" class="container-tech py-24 md:py-32 text-center">
+    <h1 class="display text-3xl text-ink md:text-4xl">Gagal Memuat</h1>
+    <p class="mt-4 text-muted">Tidak dapat menghubungi server.</p>
+    <div class="mt-8 flex justify-center">
+      <button @click="() => refreshNuxtData(`product-${slug}`)" class="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 text-sm font-semibold text-white cursor-pointer border-none">Coba Lagi</button>
+    </div>
+  </div>
+
+  <article v-else-if="product" class="container-tech py-12 md:py-16">
     <Breadcrumb :items="breadcrumbItems" class="mb-10" />
 
     <div class="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-14">

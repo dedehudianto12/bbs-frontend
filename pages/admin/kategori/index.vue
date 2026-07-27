@@ -30,17 +30,17 @@ async function handleDelete(slug:string,label:string){if(!confirm(`Hapus "${labe
     </div>
 
     <div class="overflow-x-auto rounded-lg border border-line bg-white">
-      <table class="w-full border-collapse text-[13px]">
-        <thead><tr class="border-b border-line bg-paper-soft"><th class="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Slug</th><th class="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Label</th><th class="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Group</th><th class="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Aksi</th></tr></thead>
+      <table class="table-admin">
+        <thead><tr><th>Slug</th><th>Label</th><th>Group</th><th>Aksi</th></tr></thead>
         <tbody>
-          <tr v-for="c in items" :key="c.slug" class="border-b border-line">
-            <td class="px-4 py-3.5 font-mono text-xs text-muted">{{ c.slug }}</td>
-            <td class="px-4 py-3.5">
+          <tr v-for="c in items" :key="c.slug">
+            <td class="font-mono text-xs text-muted">{{ c.slug }}</td>
+            <td>
               <input v-if="editing===c.slug" v-model="editLabel" @keyup.enter="saveLabel(c.slug)" @keyup.escape="cancelEdit()" class="w-full rounded border border-line px-2.5 py-1.5 text-[13px] font-sans outline-none box-border" />
               <span v-else class="font-semibold text-ink">{{ c.label }}</span>
             </td>
-            <td class="px-4 py-3.5 text-muted">{{ c.group }}</td>
-            <td class="px-4 py-3.5">
+            <td class="text-muted">{{ c.group }}</td>
+            <td>
               <template v-if="editing===c.slug">
                 <button :disabled="saving" @click="saveLabel(c.slug)" class="mr-2.5 cursor-pointer border-none bg-transparent text-xs font-semibold text-accent">Simpan</button>
                 <button @click="cancelEdit()" class="cursor-pointer border-none bg-transparent text-xs text-muted">Batal</button>
