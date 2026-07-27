@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { contactInfo } from '~/data/contact'
+
 interface NavChild { label: string; href: string }
 interface NavItem { label: string; href: string; children?: NavChild[] }
 
@@ -52,7 +54,7 @@ watch(() => route.path, () => { isOpen.value = false })
       <!-- Desktop right side -->
       <div class="ml-auto hidden items-center gap-3 lg:flex">
         <a
-          href="https://wa.me/6281234567890"
+          :href="`https://wa.me/${contactInfo.waSales1}`"
           target="_blank"
           rel="noopener noreferrer"
           class="grid h-8 w-8 place-items-center rounded-lg text-ink/50 transition-colors hover:bg-ink/5 hover:text-ink"

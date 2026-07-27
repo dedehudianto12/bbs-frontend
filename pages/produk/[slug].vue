@@ -9,6 +9,18 @@ const { data: productRes, error: productErr } = await useAsyncData(`product-${sl
 
 const product = computed(() => productRes.value?.data ?? null)
 
+const specEntries = computed<[string, string][]>(() => {
+  const s = product.value?.specs
+  if (!s) return []
+  try {
+    const obj = typeof s === 'string' ? JSON.parse(s) : s
+    if (typeof obj !== 'object' || !obj) return []
+    return Object.entries(obj)
+  } catch {
+    return []
+  }
+})
+
 const categoryLink = computed(() => {
   if (!product.value) return '/produk/belt-conveyor'
   return product.value.group === 'belt-conveyor'
@@ -17,7 +29,8 @@ const categoryLink = computed(() => {
 })
 
 // ponytail: hardcoded WA fallback — move to site-settings collection
-const waSales1 = '6281234567890'
+import { contactInfo } from '~/data/contact'
+const waSales1 = contactInfo.waSales1
 
 const waMessage = computed(() => {
   if (!product.value) return ''
@@ -46,6 +59,7 @@ const relatedProducts = computed(() => {
       title: p.name,
       category: p.category,
       description: p.description,
+      image: p.image ?? null,
     }))
 })
 
@@ -122,6 +136,19 @@ useSeoMeta({
     <div v-if="product.detail" class="mt-20 border-t border-line pt-12">
       <h2 class="display text-2xl text-ink md:text-3xl">Detail Produk</h2>
       <div class="prose-tech mt-6 max-w-3xl" v-html="product.detail" />
+    </div>
+
+    <!-- Specs table -->
+    <div v-if="specEntries.length" class="mt-16 border-t border-line pt-12">
+      <h2 class="display text-2xl text-ink md:text-3xl">Spesifikasi Teknis</h2>
+      <table class="mt-6 w-full max-w-xl text-sm">
+        <tbody>
+          <tr v-for="([key, val], i) in specEntries" :key="i" class="border-b border-line/40 last:border-b-0">
+            <td class="py-3 pr-8 font-semibold text-ink/60 whitespace-nowrap align-top w-40">{{ key }}</td>
+            <td class="py-3 text-ink">{{ val }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- Related products -->

@@ -10,6 +10,7 @@ const serviceList = computed(() =>
     slug: s.slug,
     title: s.name,
     description: s.shortDescription,
+    image: s.image ?? null,
   }))
 )
 

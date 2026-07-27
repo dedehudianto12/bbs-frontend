@@ -11,7 +11,7 @@ defineProps<{
   <div class="rounded-lg border border-line bg-white/95 p-5 text-[12.5px] leading-[2] tabular-nums shadow-xl shadow-ink/10 backdrop-blur-sm">
     <div
       v-for="(line, i) in lines"
-      :key="i"
+      :key="`${line.pre}-${line.text}-${i}`"
       class="flex items-baseline gap-2.5 overflow-hidden whitespace-nowrap"
     >
       <span class="w-3 shrink-0 text-center" :class="line.preClass ?? 'text-muted'">{{ line.pre }}</span>

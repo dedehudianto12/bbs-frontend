@@ -92,8 +92,8 @@ function generateSlug(){form.slug=form.name.toLowerCase().replace(/[^a-z0-9]+/g,
         </label>
 
         <label class="block">
-          <span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Spesifikasi (JSON)</span>
-          <textarea v-model="form.specs" rows="3" class="mt-1.5 block w-full resize-y rounded-md border border-line px-3.5 py-2.5 font-mono text-sm outline-none box-border" />
+          <span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Spesifikasi Teknis</span>
+          <SpecsEditor v-model="form.specs" class="mt-1.5" />
         </label>
 
         <button type="submit" :disabled="saving" class="mt-2 cursor-pointer rounded-md border-none bg-accent px-6 py-3 text-sm font-semibold tracking-[0.01em] text-white">

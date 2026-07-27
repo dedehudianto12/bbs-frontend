@@ -9,7 +9,6 @@ const props = defineProps<{
   author?: string
 }>()
 
-// deterministic gradient theme per article
 const themeIndex = computed(() => {
   let h = 0
   for (const ch of props.slug) h = (h * 31 + ch.charCodeAt(0)) >>> 0
@@ -23,7 +22,7 @@ const themeIndex = computed(() => {
     class="group block overflow-hidden rounded-xl border border-line bg-white transition-all duration-200 hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-md hover:shadow-ink/5"
   >
     <div class="p-2 pb-0">
-      <GradientPanel :index="themeIndex" rounded="rounded-lg" class="aspect-[16/9]" />
+      <ImageOrSkeleton :src="image" :alt="title" aspect="aspect-[16/9]" rounded="rounded-lg" :fallback-index="themeIndex" />
     </div>
     <div class="p-4">
       <p class="flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted">

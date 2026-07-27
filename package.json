@@ -10,9 +10,9 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@lucide/vue": "^1.26.0",
+    "@lucide/vue": "^1.27.0",
     "@nuxtjs/seo": "^5.3.6",
-    "@takumi-rs/core": "^2.4.1",
+    "@takumi-rs/core": "^2.5.0",
     "@tiptap/extension-placeholder": "^3.29.0",
     "@tiptap/starter-kit": "^3.29.0",
     "@tiptap/vue-3": "^3.29.0",

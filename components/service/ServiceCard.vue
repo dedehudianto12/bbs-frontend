@@ -3,6 +3,7 @@ const props = defineProps<{
   slug: string
   title: string
   description?: string | null
+  image?: string | null
 }>()
 
 const themeIndex = computed(() => {
@@ -18,7 +19,7 @@ const themeIndex = computed(() => {
     class="group block overflow-hidden rounded-xl border border-line bg-white transition-all duration-200 hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-md hover:shadow-ink/5"
   >
     <div class="p-2 pb-0">
-      <GradientPanel :index="themeIndex" rounded="rounded-lg" class="aspect-[4/3]" />
+      <ImageOrSkeleton :src="image" :alt="title" aspect="aspect-[4/3]" rounded="rounded-lg" :fallback-index="themeIndex" />
     </div>
     <div class="p-4">
       <p class="flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted">

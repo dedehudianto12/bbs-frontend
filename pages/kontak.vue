@@ -1,10 +1,11 @@
 <script setup lang="ts">
-// ponytail: hardcoded contact info — content/pages/kontak.md exists for editable version
-const waSales1 = '6281234567890'
-const waSales2 = '6281234567891'
-const email = 'info@bbsconveyor.com'
-const alamat = 'Jl. Industri Raya No. 123\nKawasan Industri Pulogadung\nJakarta Timur 13930'
-const jamOperasional = 'Senin – Jumat, 08:00 – 17:00 WIB\nSabtu by appointment'
+import { contactInfo } from '~/data/contact'
+
+const waSales1 = contactInfo.waSales1
+const waSales2 = contactInfo.waSales2
+const email = contactInfo.email
+const alamat = contactInfo.alamat
+const jamOperasional = contactInfo.jamOperasional
 
 const alamatLines = alamat.split('\n').filter(Boolean)
 const jamLines = jamOperasional.split('\n').filter(Boolean)

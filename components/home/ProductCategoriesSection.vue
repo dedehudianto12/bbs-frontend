@@ -3,7 +3,7 @@
 // category: kicker / heading / copy / button / count, with a blueprint art
 // panel + datasheet-style spec card on the right.
 const props = defineProps<{
-  items: { cat: string; group: string; count: number }[]
+  items: { cat: string; group: string; count: number; specs?: Record<string, string> }[]
 }>()
 
 interface Meta {
@@ -156,11 +156,30 @@ function hrefOf(item: { cat: string; group: string }): string {
     : `/produk/lainnya/${slug}`
 }
 
+// Merge hardcoded META specs with backend specs (if any) for the SpecCard.
+function mergedSpecs(item: (typeof props.items)[number]) {
+  const meta = metaOf(item.cat)
+  const backend = item.specs
+  if (!backend || !Object.keys(backend).length) return meta.specs
+
+  // append backend specs after a visual separator
+  return [
+    ...meta.specs,
+    { pre: '', text: '───────', textClass: 'text-line' },
+    ...Object.entries(backend).map(([k, v]) => ({
+      pre: '◇',
+      preClass: steel,
+      text: `${k}: ${v}`,
+    })),
+  ]
+}
+
 const rows = computed(() =>
   props.items.map((item, i) => ({
     ...item,
     i,
     ...metaOf(item.cat),
+    specs: mergedSpecs(item),
     href: hrefOf(item),
     icon: item.cat.toLowerCase().replace(/\s+/g, '-'),
   }))

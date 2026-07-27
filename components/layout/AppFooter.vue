@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { contactInfo } from '~/data/contact'
+
 defineProps<{
   footerColumns: { title: string; links: { label: string; href: string }[] }[]
 }>()
@@ -6,8 +8,8 @@ defineProps<{
 const year = new Date().getFullYear()
 
 const socials = [
-  { label: 'WhatsApp', href: 'https://wa.me/6281234567890', icon: 'wa' },
-  { label: 'Email', href: 'mailto:info@bbsconveyor.com', icon: 'mail' },
+  { label: 'WhatsApp', href: `https://wa.me/${contactInfo.waSales1}`, icon: 'wa' },
+  { label: 'Email', href: `mailto:${contactInfo.email}`, icon: 'mail' },
   { label: 'Lokasi', href: '/kontak', icon: 'pin' },
 ]
 

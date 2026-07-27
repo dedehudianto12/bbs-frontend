@@ -25,6 +25,7 @@ const relatedArticles = computed(() => {
       title: a.title,
       excerpt: a.excerpt,
       tag: a.tag ?? '',
+      image: a.image ?? null,
       publishedAt: a.publishedAt,
       author: a.author ?? '',
     }))

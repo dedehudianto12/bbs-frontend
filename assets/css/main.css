@@ -200,6 +200,53 @@
     @apply border-b border-line py-2 tabular-nums text-ink/75;
   }
 
+  /* ── Tiptap editor — mirrors prose-tech so the admin sees WYSIWYG ── */
+  .prose-mirror-editor h2 {
+    @apply font-display text-xl font-semibold text-ink tracking-tight mt-6 mb-3;
+  }
+  .prose-mirror-editor h3 {
+    @apply font-display text-lg font-semibold text-ink tracking-tight mt-5 mb-2;
+  }
+  .prose-mirror-editor h4 {
+    @apply font-sans text-base font-semibold text-ink mt-4 mb-1.5;
+  }
+  .prose-mirror-editor p {
+    @apply my-1;
+  }
+  .prose-mirror-editor a {
+    @apply text-accent underline decoration-accent/30 underline-offset-4 cursor-pointer;
+  }
+  .prose-mirror-editor strong {
+    @apply font-semibold text-ink;
+  }
+  .prose-mirror-editor ul {
+    @apply list-disc pl-6 my-1;
+  }
+  .prose-mirror-editor ol {
+    @apply list-decimal pl-6 my-1;
+  }
+  .prose-mirror-editor li {
+    @apply my-0.5;
+  }
+  .prose-mirror-editor li::marker {
+    color: rgb(var(--accent));
+  }
+  .prose-mirror-editor blockquote {
+    @apply border-l-[3px] border-accent/40 pl-4 my-3 italic text-muted;
+  }
+  .prose-mirror-editor hr {
+    @apply my-5 border-line;
+  }
+  .prose-mirror-editor code {
+    @apply rounded bg-paper-soft px-1.5 py-0.5 text-[13px] font-mono text-ink/80;
+  }
+  .prose-mirror-editor pre {
+    @apply my-3 rounded-lg bg-paper-soft p-4 overflow-x-auto;
+  }
+  .prose-mirror-editor pre code {
+    @apply bg-transparent p-0 text-[13px];
+  }
+
   /* ── Admin table — clean rows, hover highlight ── */
   .table-admin {
     @apply w-full border-collapse text-[13px];

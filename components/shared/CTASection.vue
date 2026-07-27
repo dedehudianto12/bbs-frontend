@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { contactInfo } from '~/data/contact'
+
 defineProps<{
   headline: string
   description: string
@@ -29,7 +31,7 @@ defineProps<{
               {{ buttonText }}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </NuxtLink>
-            <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-md border border-[rgb(var(--line))] bg-white px-6 py-2.5 text-sm font-semibold text-[rgb(var(--ink))] transition-colors hover:bg-[rgb(var(--paper))]">
+            <a :href="`https://wa.me/${contactInfo.waSales1}`" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-md border border-[rgb(var(--line))] bg-white px-6 py-2.5 text-sm font-semibold text-[rgb(var(--ink))] transition-colors hover:bg-[rgb(var(--paper))]">
               WhatsApp
             </a>
           </div>
