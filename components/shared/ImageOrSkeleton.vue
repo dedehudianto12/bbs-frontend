@@ -5,17 +5,22 @@ defineProps<{
   alt?: string
   aspect?: string
   rounded?: string
+  fit?: string
   fallbackIndex?: number
 }>()
 </script>
 
 <template>
-  <img
+  <div
     v-if="src"
-    :src="src"
-    :alt="alt ?? ''"
-    :class="[aspect ?? 'aspect-[4/3]', rounded ?? 'rounded-lg', 'w-full object-cover']"
-  />
+    :class="[aspect ?? 'aspect-[4/3]', rounded ?? 'rounded-lg', 'relative overflow-hidden bg-paper-soft w-full']"
+  >
+    <img
+      :src="src"
+      :alt="alt ?? ''"
+      :class="['absolute inset-0 w-full h-full', fit ?? 'object-contain']"
+    />
+  </div>
   <GradientPanel
     v-else
     :index="fallbackIndex ?? 0"

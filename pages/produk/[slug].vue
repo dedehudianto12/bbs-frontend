@@ -97,8 +97,18 @@ useSeoMeta({
     <Breadcrumb :items="breadcrumbItems" class="mb-10" />
 
     <div class="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-14">
-      <!-- Left: visual -->
-      <GradientPanel :index="heroTheme" class="aspect-[4/3] w-full">
+      <!-- Left: visual (sticky on desktop) -->
+      <div
+        v-if="product.image"
+        class="aspect-[4/3] w-full rounded-lg overflow-hidden bg-paper-soft md:sticky md:top-24"
+      >
+        <img
+          :src="product.image"
+          :alt="product.name"
+          class="absolute inset-0 w-full h-full object-contain"
+        />
+      </div>
+      <GradientPanel v-else :index="heroTheme" class="aspect-[4/3] w-full md:sticky md:top-24">
         <div class="absolute inset-0 flex flex-col justify-between p-7">
           <span class="text-xs font-semibold uppercase tracking-[0.16em] text-ink/55">BBS Conveyor</span>
           <span class="font-display text-3xl leading-tight text-ink">{{ product.name }}</span>
@@ -106,14 +116,14 @@ useSeoMeta({
       </GradientPanel>
 
       <!-- Right: info -->
-      <div class="flex flex-col justify-center">
+      <div class="flex flex-col">
         <span class="inline-block w-fit rounded-full bg-accent/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-accent">
           {{ product.category }}
         </span>
         <h1 class="display mt-4 text-3xl text-ink md:text-4xl">
           {{ product.name }}
         </h1>
-        <p class="mt-5 leading-relaxed text-muted">{{ product.description }}</p>
+        <p v-if="product.description && !product.detail" class="mt-5 leading-relaxed text-muted">{{ product.description }}</p>
 
         <div class="mt-8 flex flex-wrap gap-3">
           <a
@@ -129,26 +139,26 @@ useSeoMeta({
             Lihat Produk Lain
           </NuxtLink>
         </div>
+
+        <!-- Specs table -->
+        <div v-if="specEntries.length" class="mt-8 border-t border-line pt-6">
+          <h2 class="display text-lg text-ink">Spesifikasi Teknis</h2>
+          <table class="mt-4 w-full text-sm">
+            <tbody>
+              <tr v-for="([key, val], i) in specEntries" :key="i" class="border-b border-line/40 last:border-b-0">
+                <td class="py-2 pr-4 font-semibold text-ink/60 whitespace-nowrap align-top w-32">{{ key }}</td>
+                <td class="py-2 text-ink">{{ val }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Detail Produk -->
+        <div v-if="product.detail" class="mt-8 border-t border-line pt-6">
+          <h2 class="display text-lg text-ink">Detail Produk</h2>
+          <div class="prose-tech mt-4" v-html="product.detail" />
+        </div>
       </div>
-    </div>
-
-    <!-- Body content -->
-    <div v-if="product.detail" class="mt-20 border-t border-line pt-12">
-      <h2 class="display text-2xl text-ink md:text-3xl">Detail Produk</h2>
-      <div class="prose-tech mt-6 max-w-3xl" v-html="product.detail" />
-    </div>
-
-    <!-- Specs table -->
-    <div v-if="specEntries.length" class="mt-16 border-t border-line pt-12">
-      <h2 class="display text-2xl text-ink md:text-3xl">Spesifikasi Teknis</h2>
-      <table class="mt-6 w-full max-w-xl text-sm">
-        <tbody>
-          <tr v-for="([key, val], i) in specEntries" :key="i" class="border-b border-line/40 last:border-b-0">
-            <td class="py-3 pr-8 font-semibold text-ink/60 whitespace-nowrap align-top w-40">{{ key }}</td>
-            <td class="py-3 text-ink">{{ val }}</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
 
     <!-- Related products -->
