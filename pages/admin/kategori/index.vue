@@ -6,10 +6,12 @@ const items = computed(() => res.value?.data ?? [])
 const editing = ref<string|null>(null); const editLabel = ref(''); const saving = ref(false)
 function startEdit(slug:string,label:string){editing.value=slug;editLabel.value=label}
 function cancelEdit(){editing.value=null;editLabel.value=''}
-async function saveLabel(slug:string){saving.value=true;try{await put(`/admin/kategori/${slug}`,{label:editLabel.value});editing.value=null;refresh()}catch{}finally{saving.value=false}}
+const { open: confirm } = useConfirm()
+const toast = useToast()
+async function saveLabel(slug:string){saving.value=true;try{await put(`/admin/kategori/${slug}`,{label:editLabel.value});editing.value=null;refresh();toast.success('Label kategori berhasil diperbarui')}catch{toast.error('Gagal memperbarui label')}finally{saving.value=false}}
 const showCreate = ref(false); const newCat = reactive({slug:'',label:'',group:'belt-conveyor'}); const createError = ref('')
-async function createCategory(){createError.value='';try{await post('/admin/kategori',{...newCat});showCreate=false;newCat.slug='';newCat.label='';newCat.group='belt-conveyor';refresh()}catch(e:any){createError.value=e?.data?.error||'Gagal membuat.'}}
-async function handleDelete(slug:string,label:string){if(!confirm(`Hapus "${label}"?`))return;await del(`/admin/kategori/${slug}`);refresh()}
+async function createCategory(){createError.value='';try{await post('/admin/kategori',{...newCat});showCreate.value=false;newCat.slug='';newCat.label='';newCat.group='belt-conveyor';refresh();toast.success(`Kategori "${newCat.label}" berhasil ditambahkan`)}catch(e:any){createError.value=e?.data?.error||'Gagal membuat.'}}
+async function handleDelete(slug:string,label:string){if(!await confirm({title:`Hapus "${label}"?`,message:'Kategori yang dihapus tidak dapat dikembalikan.'}))return;try{await del(`/admin/kategori/${slug}`);toast.success(`"${label}" berhasil dihapus`);refresh()}catch{toast.error('Gagal menghapus kategori')}}
 </script>
 
 <template>

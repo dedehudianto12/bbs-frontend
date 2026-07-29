@@ -6,18 +6,21 @@ const { get, del, post, put } = useAdminApi()
 const search = ref(''); const sort = ref('desc'); const page = ref(1); const limit = 10
 const params = computed(() => { const p = new URLSearchParams({ page: String(page.value), limit: String(limit), sort: sort.value }); if (search.value) p.set('search', search.value); return p.toString() })
 const { data: res, refresh } = await useAsyncData('admin-jasa', () => get<any>(`/admin/jasa?${params.value}`), { server: false })
+if (import.meta.client && !res.value) await refresh()
 watch([search, sort, page], () => refresh(), { immediate: true })
 const items = computed(() => res.value?.data?.items ?? []); const total = computed(() => res.value?.data?.total ?? 0); const totalPages = computed(() => Math.ceil(total.value / limit))
 function goTo(p: number) { page.value = Math.max(1, Math.min(p, totalPages.value)) }
 function toggleSort() { sort.value = sort.value === 'desc' ? 'asc' : 'desc'; page.value = 1 }
-async function handleDelete(id: string, name: string) { if (!confirm(`Hapus "${name}"?`)) return; await del(`/admin/jasa/${id}`); refresh() }
+const { open: confirm } = useConfirm()
+const toast = useToast()
+async function handleDelete(id: string, name: string) { if (!await confirm({ title: `Hapus "${name}"?`, message: 'Jasa yang dihapus tidak dapat dikembalikan.' })) return; try { await del(`/admin/jasa/${id}`); toast.success(`"${name}" berhasil dihapus`); refresh() } catch { toast.error('Gagal menghapus jasa') } }
 
 const modalOpen = ref(false); const modalTitle = ref(''); const editId = ref<string|null>(null)
 const form = reactive({ name:'',shortDescription:'',fullDescription:'' })
 const saving = ref(false); const error = ref(''); const fieldErrors = ref<Record<string,string>>({})
 function openCreate(){modalTitle.value='Jasa Baru';editId.value=null;Object.assign(form,{name:'',shortDescription:'',fullDescription:''});fieldErrors.value={};error.value='';modalOpen.value=true}
 async function openEdit(id:string){const r=await get<any>(`/admin/jasa/${id}`);if(r?.data){const s=r.data;editId.value=id;modalTitle.value='Edit Jasa';Object.assign(form,{name:s.name,shortDescription:s.shortDescription,fullDescription:s.fullDescription??''});fieldErrors.value={};error.value='';modalOpen.value=true}}
-async function save(){saving.value=true;error.value='';fieldErrors.value={};try{const data=serviceSchema.parse(form);if(editId.value)await put(`/admin/jasa/${editId.value}`,{...data,images:[]});else await post('/admin/jasa',{...data,images:[]});modalOpen.value=false;refresh()}catch(e:any){if(e?.issues){for(const i of e.issues)fieldErrors.value[i.path[0]as string]=i.message;error.value='Mohon perbaiki error di bawah.'}else error.value=e?.data?.error||'Gagal menyimpan.'}finally{saving.value=false}}
+async function save(){saving.value=true;error.value='';fieldErrors.value={};try{const data=serviceSchema.parse(form);if(editId.value)await put(`/admin/jasa/${editId.value}`,{...data,images:[]});else await post('/admin/jasa',{...data,images:[]});modalOpen.value=false;refresh();toast.success(editId.value?'Jasa berhasil diperbarui':'Jasa berhasil ditambahkan')}catch(e:any){if(e?.issues){for(const i of e.issues)fieldErrors.value[i.path[0]as string]=i.message;error.value='Mohon perbaiki error di bawah.'}else error.value=e?.data?.error||'Gagal menyimpan.'}finally{saving.value=false}}
 </script>
 
 <template>
@@ -32,14 +35,40 @@ async function save(){saving.value=true;error.value='';fieldErrors.value={};try{
 
     <div v-if="totalPages>1" class="mt-5 flex items-center justify-center gap-2.5"><button :disabled="page<=1" @click="goTo(page-1)" class="cursor-pointer rounded-md border border-line bg-white px-4 py-2 text-xs font-sans text-muted">Prev</button><span class="text-xs text-muted">{{ page }} / {{ totalPages }} ({{ total }})</span><button :disabled="page>=totalPages" @click="goTo(page+1)" class="cursor-pointer rounded-md border border-line bg-white px-4 py-2 text-xs font-sans text-muted">Next</button></div>
 
-    <ModalForm :open="modalOpen" :title="modalTitle" @close="modalOpen=false">
+    <ModalForm :open="modalOpen" :title="modalTitle" wide @close="modalOpen=false">
       <div v-if="error" class="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-[13px] text-red-600">{{ error }}</div>
-      <form class="flex flex-col gap-[18px]" @submit.prevent="save">
-        <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Nama</span><input v-model="form.name" class="mt-1.5 block w-full rounded-md border border-line px-3.5 py-2.5 text-sm font-sans outline-none box-border" /><span v-if="fieldErrors.name" class="mt-1 block text-[11px] text-red-600">{{ fieldErrors.name }}</span></label>
-        <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Deskripsi Singkat</span><textarea v-model="form.shortDescription" rows="2" class="mt-1.5 block w-full resize-y rounded-md border border-line px-3.5 py-2.5 text-sm font-sans outline-none box-border" /></label>
-        <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Deskripsi Lengkap</span><TiptapEditor v-model="form.fullDescription" /></label>
-        <button type="submit" :disabled="saving" class="mt-2 cursor-pointer rounded-md border-none bg-accent px-6 py-3 text-sm font-semibold tracking-[0.01em] text-white">{{ saving?'Menyimpan...':'Simpan' }}</button>
-      </form>
+      <div class="grid gap-6 lg:grid-cols-2">
+        <!-- Left: Form -->
+        <div class="min-w-0">
+          <form class="flex flex-col gap-[18px]" @submit.prevent="save">
+            <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Nama</span><input v-model="form.name" class="mt-1.5 block w-full rounded-md border border-line px-3.5 py-2.5 text-sm font-sans outline-none box-border" /><span v-if="fieldErrors.name" class="mt-1 block text-[11px] text-red-600">{{ fieldErrors.name }}</span></label>
+            <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Deskripsi Singkat</span><textarea v-model="form.shortDescription" rows="2" class="mt-1.5 block w-full resize-y rounded-md border border-line px-3.5 py-2.5 text-sm font-sans outline-none box-border" /></label>
+            <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Deskripsi Lengkap</span><TiptapEditor v-model="form.fullDescription" /></label>
+            <button type="submit" :disabled="saving" class="mt-2 cursor-pointer rounded-md border-none bg-accent px-6 py-3 text-sm font-semibold tracking-[0.01em] text-white">{{ saving?'Menyimpan...':'Simpan' }}</button>
+          </form>
+        </div>
+
+        <!-- Right: Preview -->
+        <div class="hidden min-w-0 lg:block">
+          <div class="rounded-[10px] border border-line bg-white">
+            <div class="border-b border-line px-4 py-2.5">
+              <p class="text-[10px] font-semibold uppercase tracking-[0.12em] text-muted/60">Pratinjau Jasa</p>
+            </div>
+            <div class="p-5">
+              <h3 class="text-base font-bold leading-snug text-ink" :class="{ 'text-muted/40': !form.name }">
+                {{ form.name || 'Nama jasa...' }}
+              </h3>
+              <p v-if="form.shortDescription" class="mt-2 text-[13px] leading-relaxed text-muted">{{ form.shortDescription }}</p>
+              <div v-if="form.fullDescription" class="prose-tech mt-4">
+                <div v-html="form.fullDescription" />
+              </div>
+              <p v-if="!form.name && !form.shortDescription && !form.fullDescription" class="text-[13px] italic text-muted/30">
+                Isi form untuk melihat pratinjau...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </ModalForm>
   </div>
 </template>

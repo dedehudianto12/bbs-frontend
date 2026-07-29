@@ -2,6 +2,7 @@
 definePageMeta({ layout: 'admin', middleware: 'auth' })
 import { gallerySchema } from '~/utils/validation'
 const route = useRoute(); const router = useRouter(); const { get, post, put } = useAdminApi()
+const toast = useToast()
 const { imageFile, imagePreview, existingUrl, onFileChange, reset } = useImageUpload()
 const isEdit = computed(() => route.params.id !== 'baru')
 const form = reactive({ caption:'',location:'' })
@@ -17,6 +18,7 @@ async function save(){
     fd.append('caption',form.caption);fd.append('location',form.location)
     if(imageFile.value) fd.append('file',imageFile.value)
     if(isEdit.value)await put(`/admin/galeri/${route.params.id}`,fd);else await post('/admin/galeri',fd)
+    toast.success(isEdit.value ? 'Galeri berhasil diperbarui' : 'Galeri berhasil ditambahkan')
     router.push('/admin/galeri')
   }catch(e:any){if(e?.issues){for(const i of e.issues)fieldErrors.value[i.path[0]as string]=i.message;error.value='Mohon perbaiki error di bawah.'}else error.value=e?.data?.error||'Gagal menyimpan.'}finally{saving.value=false}
 }

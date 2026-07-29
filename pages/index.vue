@@ -146,6 +146,15 @@ useSeoMeta({
   <template v-else>
     <ProductCategoriesSection v-if="catItems.length" :items="catItems" />
     <StatisticsSection v-if="stats.length" :items="stats" />
+
+    <LeadTimeBanner
+      v-if="hpData.leadTime"
+      :days="hpData.leadTime.days"
+      :headline="hpData.leadTime.headline"
+      :description="hpData.leadTime.description"
+      :steps="hpData.leadTime.steps"
+    />
+
     <WhyChooseUsSection :items="whyChooseUsItems" />
 
     <!-- Mission band (cream cell) -->

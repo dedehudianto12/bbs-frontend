@@ -11,4 +11,5 @@ import { headerNav, navCta, footerColumns } from '~/data/navigation'
   />
   <slot />
   <AppFooter :footer-columns="footerColumns" />
+  <WhatsAppFloat />
 </template>

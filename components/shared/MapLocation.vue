@@ -26,7 +26,7 @@ onMounted(async () => {
   }).addTo(map)
 
   const icon = L.divIcon({
-    html: `<div style="width:28px;height:28px;background:#E4571B;border:3px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.2)"></div>`,
+    html: `<div style="width:28px;height:28px;background:#d6b045;border:3px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.2)"></div>`,
     iconSize: [28, 28],
     iconAnchor: [14, 14],
   })
@@ -42,7 +42,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="relative overflow-hidden rounded-xl border border-line">
+  <div class="relative z-0 overflow-hidden rounded-xl border border-line">
     <div ref="mapContainer" class="aspect-[4/3] w-full" />
   </div>
 </template>

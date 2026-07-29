@@ -7,11 +7,14 @@ const { imageFile, imagePreview, existingUrl, onFileChange, reset } = useImageUp
 const search = ref(''); const sort = ref('desc'); const page = ref(1); const limit = 10
 const params = computed(() => { const p = new URLSearchParams({ page: String(page.value), limit: String(limit), sort: sort.value }); if (search.value) p.set('search', search.value); return p.toString() })
 const { data: res, refresh } = await useAsyncData('admin-industri', () => get<any>(`/admin/industri?${params.value}`), { server: false })
+if (import.meta.client && !res.value) await refresh()
 watch([search, sort, page], () => refresh(), { immediate: true })
 const items = computed(() => res.value?.data?.items ?? []); const total = computed(() => res.value?.data?.total ?? 0); const totalPages = computed(() => Math.ceil(total.value / limit))
 function goTo(p: number) { page.value = Math.max(1, Math.min(p, totalPages.value)) }
 function toggleSort() { sort.value = sort.value === 'desc' ? 'asc' : 'desc'; page.value = 1 }
-async function handleDelete(id: string, name: string) { if (!confirm(`Hapus "${name}"?`)) return; await del(`/admin/industri/${id}`); refresh() }
+const { open: confirm } = useConfirm()
+const toast = useToast()
+async function handleDelete(id: string, name: string) { if (!await confirm({ title: `Hapus "${name}"?`, message: 'Industri yang dihapus tidak dapat dikembalikan.' })) return; try { await del(`/admin/industri/${id}`); toast.success(`"${name}" berhasil dihapus`); refresh() } catch { toast.error('Gagal menghapus industri') } }
 
 const modalOpen = ref(false); const modalTitle = ref(''); const editId = ref<string|null>(null)
 const form = reactive({ name:'',description:'',productSlugs:'' })
@@ -29,6 +32,7 @@ async function save(){
     if(imageFile.value) fd.append('file',imageFile.value)
     if(editId.value)await put(`/admin/industri/${editId.value}`,fd);else await post('/admin/industri',fd)
     modalOpen.value=false;refresh()
+    toast.success(editId.value ? 'Industri berhasil diperbarui' : 'Industri berhasil ditambahkan')
   }catch(e:any){if(e?.issues){for(const i of e.issues)fieldErrors.value[i.path[0]as string]=i.message;error.value='Mohon perbaiki error di bawah.'}else error.value=e?.data?.error||'Gagal menyimpan.'}finally{saving.value=false}
 }
 </script>

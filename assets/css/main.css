@@ -25,8 +25,8 @@
   --steel-soft: 69 72 78;    /* #45484E raised surfaces on the steel anchor */
 
   /* Accent — safety orange, deliberate + sparing */
-  --accent: 228 87 27;       /* #E4571B safety orange */
-  --accent-glow: 242 107 50; /* #F26B32 lighter hover */
+  --accent: 214 176 69;        /* #d6b045 logo gold */
+  --accent-glow: 230 196 97;   /* #e6c461 lighter gold hover */
 
   /* Operational signal — machine-status green, status dots only */
   --signal: 46 150 92;       /* #2E965C */

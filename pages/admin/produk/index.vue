@@ -15,13 +15,20 @@ watch([search, filterGroup, sort, page], () => refresh(), { immediate: true })
 const items = computed(() => res.value?.data?.items ?? []); const total = computed(() => res.value?.data?.total ?? 0); const totalPages = computed(() => Math.ceil(total.value / limit))
 function goTo(p: number) { page.value = Math.max(1, Math.min(p, totalPages.value)) }
 function toggleSort() { sort.value = sort.value === 'desc' ? 'asc' : 'desc'; page.value = 1 }
-async function handleDelete(id: string, name: string) { if (!confirm(`Hapus "${name}"?`)) return; await del(`/admin/produk/${id}`); refresh() }
+const { open: confirm } = useConfirm()
+const toast = useToast()
+async function handleDelete(id: string, name: string) { if (!await confirm({ title: `Hapus "${name}"?`, message: 'Produk yang dihapus tidak dapat dikembalikan.' })) return; try { await del(`/admin/produk/${id}`); toast.success(`"${name}" berhasil dihapus`); refresh() } catch { toast.error('Gagal menghapus produk') } }
 
 const modalOpen = ref(false); const modalTitle = ref(''); const editId = ref<string|null>(null)
 const form = reactive({ name:'',group:'belt-conveyor',kategori:'',description:'',detail:'',specs:'{}' })
 const saving = ref(false); const error = ref(''); const fieldErrors = ref<Record<string,string>>({})
 
 const categoryOptions = computed(() => allCategories.value.filter(c => c.group === form.group))
+
+const specsPreview = computed<Record<string, string>>(() => {
+  try { const obj = JSON.parse(form.specs); if (obj && typeof obj === 'object' && !Array.isArray(obj)) return obj } catch {}
+  return {}
+})
 
 function openCreate(){modalTitle.value='Produk Baru';editId.value=null;Object.assign(form,{name:'',group:'belt-conveyor',kategori:'',description:'',detail:'',specs:'{}'});reset();fieldErrors.value={};error.value='';modalOpen.value=true}
 async function openEdit(id: string){const r=await get<any>(`/admin/produk/${id}`);if(r?.data){const p=r.data;editId.value=id;modalTitle.value='Edit Produk';Object.assign(form,{name:p.name,group:p.group,kategori:p.kategori,description:p.description,detail:p.detail??'',specs:typeof p.specs==='string'?p.specs:JSON.stringify(p.specs,null,2)});reset(p.image??'');fieldErrors.value={};error.value='';modalOpen.value=true}}
@@ -41,7 +48,8 @@ async function save(){
     if(imageFile.value) fd.append('file', imageFile.value)
     if(editId.value)await put(`/admin/produk/${editId.value}`,fd);else await post('/admin/produk',fd)
     modalOpen.value=false;refresh()
-  }catch(e:any){if(e?.issues){for(const i of e.issues)fieldErrors.value[i.path[0]as string]=i.message;error.value='Mohon perbaiki error di bawah.'}else{error.value=e?.data?.error||e?.message||'Gagal menyimpan.';console.error('Save error:',e)}}finally{saving.value=false}
+    toast.success(editId.value ? 'Produk berhasil diperbarui' : 'Produk berhasil ditambahkan')
+  }catch(e:any){if(e?.issues){for(const i of e.issues)fieldErrors.value[i.path[0]as string]=i.message;error.value='Mohon perbaiki error di bawah.'}else{error.value=e?.data?.error||e?.message||'Gagal menyimpan.'}}finally{saving.value=false}
 }
 </script>
 
@@ -87,9 +95,12 @@ async function save(){
     </div>
 
     <!-- Modal -->
-    <ModalForm :open="modalOpen" :title="modalTitle" @close="modalOpen=false">
+    <ModalForm :open="modalOpen" :title="modalTitle" wide @close="modalOpen=false">
       <div v-if="error" class="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-[13px] text-red-600">{{ error }}</div>
-      <form class="flex flex-col gap-[18px]" @submit.prevent="save">
+      <div class="grid gap-6 lg:grid-cols-2">
+        <!-- Left: Form -->
+        <div class="min-w-0">
+          <form class="flex flex-col gap-[18px]" @submit.prevent="save">
         <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Nama</span><input v-model="form.name" class="mt-1.5 block w-full rounded-md border border-line px-3.5 py-2.5 text-sm font-sans outline-none box-border" /><span v-if="fieldErrors.name" class="mt-1 block text-[11px] text-red-600">{{ fieldErrors.name }}</span></label>
         <div class="grid grid-cols-2 gap-3.5">
           <label class="block">
@@ -114,6 +125,50 @@ async function save(){
         <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Spesifikasi Teknis</span><SpecsEditor v-model="form.specs" class="mt-1.5" /></label>
         <button type="submit" :disabled="saving" class="mt-2 cursor-pointer rounded-md border-none bg-accent px-6 py-3 text-sm font-semibold tracking-[0.01em] text-white">{{ saving?'Menyimpan...':'Simpan' }}</button>
       </form>
+        </div>
+
+        <!-- Right: Preview -->
+        <div class="hidden min-w-0 lg:block">
+          <div class="rounded-[10px] border border-line bg-white">
+            <div class="border-b border-line px-4 py-2.5">
+              <p class="text-[10px] font-semibold uppercase tracking-[0.12em] text-muted/60">Pratinjau Produk</p>
+            </div>
+            <div class="p-5">
+              <!-- Product image -->
+              <div v-if="imagePreview || existingUrl" class="mb-4 overflow-hidden rounded-lg border border-line">
+                <img :src="imagePreview || existingUrl" class="aspect-[2/1] w-full object-cover" alt="" />
+              </div>
+
+              <!-- Name -->
+              <h3 class="text-base font-bold leading-snug text-ink" :class="{ 'text-muted/40': !form.name }">
+                {{ form.name || 'Nama produk...' }}
+              </h3>
+
+              <!-- Description -->
+              <p v-if="form.description" class="mt-2 text-[13px] leading-relaxed text-muted">{{ form.description }}</p>
+
+              <!-- Specs table -->
+              <div v-if="Object.keys(specsPreview).length" class="mt-4">
+                <div class="overflow-hidden rounded-lg border border-line">
+                  <table class="w-full text-[12px]">
+                    <tbody>
+                      <tr v-for="(value, key) in specsPreview" :key="key" class="border-b border-line last:border-b-0">
+                        <td class="w-[40%] bg-paper-soft px-3 py-2 font-medium text-ink">{{ key }}</td>
+                        <td class="px-3 py-2 text-muted">{{ value }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Detail content -->
+              <div v-if="form.detail" class="prose-tech mt-4">
+                <div v-html="form.detail" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </ModalForm>
   </div>
 </template>

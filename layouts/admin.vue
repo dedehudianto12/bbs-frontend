@@ -86,5 +86,8 @@ function isActive(to: string) {
         <slot />
       </div>
     </main>
+
+    <ToastContainer />
+    <ConfirmDialog />
   </div>
 </template>

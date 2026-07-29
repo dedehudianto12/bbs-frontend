@@ -23,12 +23,12 @@ withDefaults(defineProps<{
            cleanly); static under prefers-reduced-motion -->
       <rect
         x="2.5" y="8" width="19" height="8" rx="4"
-        stroke="rgb(228 87 27)" stroke-width="1.6" stroke-dasharray="2 5.85"
+        stroke="rgb(var(--accent))" stroke-width="1.6" stroke-dasharray="2 5.85"
         opacity="0.9" class="animate-belt-travel motion-reduce:animate-none"
       />
       <!-- rollers -->
-      <circle cx="7.5" cy="12" r="1.6" fill="rgb(228 87 27)" />
-      <circle cx="16.5" cy="12" r="1.6" fill="rgb(228 87 27)" />
+      <circle cx="7.5" cy="12" r="1.6" fill="rgb(var(--accent))" />
+      <circle cx="16.5" cy="12" r="1.6" fill="rgb(var(--accent))" />
       <!-- motion ticks -->
       <path d="M10.6 12h2.8" stroke="#fff" stroke-width="1.3" stroke-linecap="round" />
     </svg>

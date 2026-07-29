@@ -9,6 +9,7 @@ const { get } = useAdminApi()
 const { data: statsRes } = await useAsyncData('admin-stats', () =>
   get<Record<string, number>>('/admin/stats'), { server: false }
 )
+if (import.meta.client && !statsRes.value) await refreshNuxtData('admin-stats')
 
 const raw = computed(() => ({
   products: statsRes.value?.data?.products ?? 0,
@@ -41,15 +42,22 @@ const quickActions = [
 const { data: recentProduk } = await useAsyncData('recent-produk', () =>
   get<any>(`/admin/produk?limit=3&sort=desc`), { server: false }
 )
+if (import.meta.client && !recentProduk.value) await refreshNuxtData('recent-produk')
+
 const { data: recentArtikel } = await useAsyncData('recent-artikel', () =>
   get<any>(`/admin/artikel?limit=3&sort=desc`), { server: false }
 )
+if (import.meta.client && !recentArtikel.value) await refreshNuxtData('recent-artikel')
+
 const { data: recentJasa } = await useAsyncData('recent-jasa', () =>
   get<any>(`/admin/jasa?limit=3&sort=desc`), { server: false }
 )
+if (import.meta.client && !recentJasa.value) await refreshNuxtData('recent-jasa')
+
 const { data: recentGaleri } = await useAsyncData('recent-galeri', () =>
   get<any>(`/admin/galeri?limit=3&sort=desc`), { server: false }
 )
+if (import.meta.client && !recentGaleri.value) await refreshNuxtData('recent-galeri')
 
 interface Activity { type: string; title: string; time: string; to: string }
 

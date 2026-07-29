@@ -2,6 +2,7 @@
 definePageMeta({ layout: 'admin', middleware: 'auth' })
 import { industrySchema } from '~/utils/validation'
 const route = useRoute(); const router = useRouter(); const { get, post, put } = useAdminApi()
+const toast = useToast()
 const { imageFile, imagePreview, existingUrl, onFileChange, reset } = useImageUpload()
 const isEdit = computed(() => route.params.id !== 'baru')
 const form = reactive({ name:'',slug:'',description:'',productSlugs:'' })
@@ -18,6 +19,7 @@ async function save(){
     fd.append('productSlugs',form.productSlugs)
     if(imageFile.value) fd.append('file',imageFile.value)
     if(isEdit.value)await put(`/admin/industri/${route.params.id}`,fd);else await post('/admin/industri',fd)
+    toast.success(isEdit.value ? 'Industri berhasil diperbarui' : 'Industri berhasil ditambahkan')
     router.push('/admin/industri')
   }catch(e:any){if(e?.issues){for(const i of e.issues)fieldErrors.value[i.path[0]as string]=i.message;error.value='Mohon perbaiki error di bawah.'}else error.value=e?.data?.error||'Gagal menyimpan.'}finally{saving.value=false}
 }

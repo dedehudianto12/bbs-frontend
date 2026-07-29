@@ -62,7 +62,8 @@ const sparkFillFrom = computed(() =>
 </script>
 
 <template>
-  <section class="bg-paper">
+  <section class="relative bg-paper">
+    <div class="pointer-events-none absolute inset-0 blueprint-grid opacity-60" aria-hidden="true" />
     <div class="frame border-b border-line">
       <!-- heading cell -->
       <div class="border-b border-line px-6 py-14 md:px-10 md:py-16">
@@ -86,8 +87,8 @@ const sparkFillFrom = computed(() =>
           <svg class="mt-6 h-40 w-full flex-1 md:h-auto" viewBox="0 0 400 150" preserveAspectRatio="none" aria-hidden="true">
             <defs>
               <linearGradient id="stat-fill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="rgb(228 87 27)" stop-opacity="0.22" />
-                <stop offset="1" stop-color="rgb(228 87 27)" stop-opacity="0" />
+                <stop offset="0" stop-color="rgb(var(--accent))" stop-opacity="0.22" />
+                <stop offset="1" stop-color="rgb(var(--accent))" stop-opacity="0" />
               </linearGradient>
             </defs>
             <path
@@ -99,7 +100,7 @@ const sparkFillFrom = computed(() =>
               v-gsap.whenVisible.once.from="sparkFrom"
               d="M0 138 L40 132 L80 134 L120 122 L160 126 L200 104 L240 110 L280 78 L320 84 L360 40 L400 14"
               fill="none"
-              stroke="rgb(228 87 27)"
+              stroke="rgb(var(--accent))"
               stroke-width="1.8"
               stroke-linejoin="round"
               stroke-linecap="round"

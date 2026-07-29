@@ -7,11 +7,14 @@ const { imageFile, imagePreview, existingUrl, onFileChange, reset } = useImageUp
 const search = ref(''); const sort = ref('desc'); const page = ref(1); const limit = 10
 const params = computed(() => { const p = new URLSearchParams({ page: String(page.value), limit: String(limit), sort: sort.value }); if (search.value) p.set('search', search.value); return p.toString() })
 const { data: res, refresh } = await useAsyncData('admin-galeri', () => get<any>(`/admin/galeri?${params.value}`), { server: false })
+if (import.meta.client && !res.value) await refresh()
 watch([search, sort, page], () => refresh(), { immediate: true })
 const items = computed(() => res.value?.data?.items ?? []); const total = computed(() => res.value?.data?.total ?? 0); const totalPages = computed(() => Math.ceil(total.value / limit))
 function goTo(p: number) { page.value = Math.max(1, Math.min(p, totalPages.value)) }
 function toggleSort() { sort.value = sort.value === 'desc' ? 'asc' : 'desc'; page.value = 1 }
-async function handleDelete(id: string, caption: string) { if (!confirm(`Hapus "${caption}"?`)) return; await del(`/admin/galeri/${id}`); refresh() }
+const { open: confirm } = useConfirm()
+const toast = useToast()
+async function handleDelete(id: string, caption: string) { if (!await confirm({ title: `Hapus "${caption}"?`, message: 'Galeri yang dihapus tidak dapat dikembalikan.' })) return; try { await del(`/admin/galeri/${id}`); toast.success(`"${caption}" berhasil dihapus`); refresh() } catch { toast.error('Gagal menghapus galeri') } }
 
 const modalOpen = ref(false); const modalTitle = ref(''); const editId = ref<string|null>(null)
 const form = reactive({ caption:'',location:'' })
@@ -28,6 +31,7 @@ async function save(){
     if(imageFile.value) fd.append('file',imageFile.value)
     if(editId.value)await put(`/admin/galeri/${editId.value}`,fd);else await post('/admin/galeri',fd)
     modalOpen.value=false;refresh()
+    toast.success(editId.value ? 'Galeri berhasil diperbarui' : 'Galeri berhasil ditambahkan')
   }catch(e:any){if(e?.issues){for(const i of e.issues)fieldErrors.value[i.path[0]as string]=i.message;error.value='Mohon perbaiki error di bawah.'}else error.value=e?.data?.error||'Gagal menyimpan.'}finally{saving.value=false}
 }
 </script>

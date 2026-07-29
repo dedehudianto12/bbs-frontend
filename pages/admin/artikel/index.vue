@@ -10,7 +10,9 @@ watch([search, filterTag, sort, page], () => refresh(), { immediate: true })
 const items = computed(() => res.value?.data?.items ?? []); const total = computed(() => res.value?.data?.total ?? 0); const totalPages = computed(() => Math.ceil(total.value / limit))
 function goTo(p: number) { page.value = Math.max(1, Math.min(p, totalPages.value)) }
 function toggleSort() { sort.value = sort.value === 'desc' ? 'asc' : 'desc'; page.value = 1 }
-async function handleDelete(id: string, title: string) { if (!confirm(`Hapus "${title}"?`)) return; await del(`/admin/artikel/${id}`); refresh() }
+const { open: confirm } = useConfirm()
+const toast = useToast()
+async function handleDelete(id: string, title: string) { if (!await confirm({ title: `Hapus "${title}"?`, message: 'Artikel yang dihapus tidak dapat dikembalikan.' })) return; try { await del(`/admin/artikel/${id}`); toast.success(`"${title}" berhasil dihapus`); refresh() } catch { toast.error('Gagal menghapus artikel') } }
 </script>
 
 <template>

@@ -17,7 +17,7 @@ const fillerCount = computed(() => {
         <SectionTitle
           eyebrow="Kenapa BBS Conveyor"
           title="Mitra terpercaya untuk conveyor industri"
-          description="Lima alasan perusahaan di seluruh Indonesia mempercayakan kebutuhan conveyor mereka kepada kami."
+          description="Empat alasan perusahaan di seluruh Indonesia mempercayakan kebutuhan conveyor mereka kepada kami."
         />
       </div>
 

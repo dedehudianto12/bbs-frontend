@@ -17,7 +17,18 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      script: [
+        // Google Analytics — only when GA ID is configured
+        ...(import.meta.env.NUXT_PUBLIC_GA_ID ? [
+          { src: `https://www.googletagmanager.com/gtag/js?id=${import.meta.env.NUXT_PUBLIC_GA_ID}`, async: true },
+          {
+            innerHTML: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${import.meta.env.NUXT_PUBLIC_GA_ID}')`,
+            type: 'text/javascript',
+          },
+        ] : []),
+      ],
       link: [
+        { rel: "icon", type: "image/svg+xml", href: "/bbs-logo.svg" },
         { rel: "preconnect", href: "https://fonts.googleapis.com" },
         {
           rel: "preconnect",
@@ -73,18 +84,18 @@ export default defineNuxtConfig({
       description:
         "Supplier belt conveyor, roller, dan komponen industri terpercaya di Indonesia.",
       url: "https://bbsconveyor.com",
-      logo: "/logo.png",
-      sameAs: ["https://wa.me/6281234567890"],
+      logo: "/bbs-logo.svg",
+      sameAs: ["https://wa.me/6281287859061"],
       contactPoint: {
         contactType: "Sales",
-        telephone: "+6281234567890",
-        email: "info@bbsconveyor.com",
+        telephone: "+6281287859061",
+        email: "sales@bbsconveyor.com",
       },
       address: {
         addressLocality: "Jakarta Timur",
         addressRegion: "DKI Jakarta",
         addressCountry: "ID",
-        streetAddress: "Jl. Industri Raya No. 123, Kawasan Industri Pulogadung",
+        streetAddress: "Jl. Pulo Bangka, RT.1/RW.9, Pulo Gebang, Kec. Cakung",
       },
     },
   },
@@ -97,12 +108,7 @@ export default defineNuxtConfig({
 
   // Static generation friendly
   nitro: {
-    preset: "vercel",
-    // ponytail: inline vue — Vercel strips prebuilt node_modules, causing
-    // ERR_MODULE_NOT_FOUND at runtime. Remove if Vercel fixes this.
-    externals: {
-      inline: ["vue", "vue-router", "vue-bundle-renderer", "@vue/compiler-dom"],
-    },
+    preset: "cloudflare-pages",
     // ponytail: proxy /api → backend in dev (no CORS), production uses NUXT_PUBLIC_API_BASE
     devProxy: {
       '/api': { target: 'http://localhost:8080/api', changeOrigin: true },

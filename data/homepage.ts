@@ -18,25 +18,36 @@ export const homepageConfig = {
   whyChooseUs: {
     items: [
       {
-        title: 'Pengalaman 14+ Tahun',
+        title: 'Produk Berkualitas & Bermerek',
         description:
-          'Lebih dari satu dekade melayani industri manufaktur, tambang, dan logistik di seluruh Indonesia.',
+          'Kami menyediakan produk dan parts conveyor dari merek terkemuka dengan jaminan mutu — bukan barang kualitas rendah.',
       },
       {
-        title: 'Produk Berkualitas',
+        title: 'Harga Kompetitif',
         description:
-          'Belt conveyor PVC, PU, Rubber, dan komponen dari material pilihan dengan standar industri.',
+          'Solusi conveyor berkualitas dengan harga yang bersaing. Nilai terbaik untuk anggaran Anda tanpa mengurangi standar.',
       },
       {
-        title: 'Tim Teknisi Profesional',
+        title: 'Garansi Pengerjaan',
         description:
-          'Didukung oleh teknisi berpengalaman untuk instalasi, perbaikan, dan perawatan di lokasi Anda.',
+          'Setiap jasa penyambungan dan instalasi bergaransi. Jika ada masalah, kami kembali tanpa biaya tambahan.',
       },
       {
-        title: 'Jangkauan Nasional',
+        title: 'Layanan Cepat & Responsif',
         description:
-          'Melayani pengiriman dan pengerjaan ke seluruh Indonesia — Sumatera, Jawa, Kalimantan, hingga Indonesia Timur.',
+          'Tim kami siap merespon dalam hitungan jam — konsultasi produk, survey lokasi, hingga dukungan purna jual.',
       },
+    ],
+  },
+  leadTime: {
+    days: '2–3',
+    headline: 'Pengerjaan cepat tanpa mengorbankan kualitas',
+    description:
+      'Kami memahami urgensi industri — conveyor yang berhenti berarti produksi yang terhenti. Setiap produk dikerjakan dengan standar tinggi dan dikirim tepat waktu.',
+    steps: [
+      { label: 'Konsultasi', detail: 'Tim kami memahami kebutuhan Anda dan memberikan rekomendasi produk yang tepat.' },
+      { label: 'Fabrikasi & Persiapan', detail: 'Produk disiapkan dengan pengecekan kualitas menyeluruh sebelum dikirim.' },
+      { label: 'Siap Dikirim / Dipasang', detail: 'Pengiriman ke seluruh Indonesia atau instalasi onsite oleh teknisi kami.' },
     ],
   },
   statistics: {

@@ -1,4 +1,4 @@
-import { v as vueExports, u as useRuntimeConfig, e as encodePath, w as withLeadingSlash, b as buildAssetsURL, p as publicAssetsURL, a as defineRenderHandler, g as getQuery, c as createError, f as destr, h as getRouteRules, r as relative, j as joinURL, i as getResponseStatusText, k as getResponseStatus, l as useNitroApp } from '../nitro/nitro.mjs';
+import { v as vueExports, u as useRuntimeConfig, e as encodePath, j as joinRelativeURL, w as withLeadingSlash, a as defineRenderHandler, g as getQuery, c as createError, b as destr, f as getRouteRules, h as joinURL, i as getResponseStatusText, k as getResponseStatus, l as useNitroApp } from '../nitro/nitro.mjs';
 import { createHead as createHead$1, propsToString, renderSSRHead } from 'unhead/server';
 import { DeprecationsPlugin } from 'unhead/legacy';
 import { PromisesPlugin, TemplateParamsPlugin, AliasSortingPlugin } from 'unhead/plugins';
@@ -112,6 +112,22 @@ function setSSRError(ssrContext, error) {
 	ssrContext.error = true;
 	ssrContext.payload = { error };
 	ssrContext.url = error.url;
+}
+
+//#region src/runtime/utils/paths.ts
+function baseURL() {
+	return useRuntimeConfig().app.baseURL;
+}
+function buildAssetsDir() {
+	return useRuntimeConfig().app.buildAssetsDir;
+}
+function buildAssetsURL(...path) {
+	return joinRelativeURL(publicAssetsURL(), buildAssetsDir(), ...path);
+}
+function publicAssetsURL(...path) {
+	const app = useRuntimeConfig().app;
+	const publicBase = app.cdnURL || app.baseURL;
+	return path.length ? joinRelativeURL(publicBase, ...path) : publicBase;
 }
 
 //#region src/runtime/utils/renderer/cache.ts
@@ -391,7 +407,7 @@ globalThis.__buildAssetsURL = buildAssetsURL;
 globalThis.__publicAssetsURL = publicAssetsURL;
 const APP_ROOT_OPEN_TAG = `<${appRootTag}${propsToString(appRootAttrs)}>`;
 const APP_ROOT_CLOSE_TAG = `</${appRootTag}>`;
-const getServerEntry = () => import('../virtual/entry.mjs').then(function (n) { return n.f; }).then((r) => r.default || r);
+const getServerEntry = () => import('../virtual/entry.mjs').then(function (n) { return n.h; }).then((r) => r.default || r);
 const getPrecomputedDependencies = () => import('../virtual/precomputed.mjs').then((r) => "default" in r ? r.default : r).then((r) => typeof r === "function" ? r() : r);
 const getSSRRenderer = lazyCachedFunction(async () => {
 	const createSSRApp = await getServerEntry();
@@ -479,7 +495,119 @@ const renderSSRHeadOptions = {"omitLineBreaks":true};
 
 const entryIds = [];
 
-const entryFileName = "BAH04pRZ.js";
+const entryFileName = "DZ-wkrL1.js";
+
+const _DRIVE_LETTER_START_RE = /^[A-Za-z]:\//;
+function normalizeWindowsPath(input = "") {
+  if (!input) {
+    return input;
+  }
+  return input.replace(/\\/g, "/").replace(_DRIVE_LETTER_START_RE, (r) => r.toUpperCase());
+}
+const _IS_ABSOLUTE_RE = /^[/\\](?![/\\])|^[/\\]{2}(?!\.)|^[A-Za-z]:[/\\]/;
+const _ROOT_FOLDER_RE = /^\/([A-Za-z]:)?$/;
+function cwd() {
+  if (typeof process !== "undefined" && typeof process.cwd === "function") {
+    return process.cwd().replace(/\\/g, "/");
+  }
+  return "/";
+}
+const resolve = function(...arguments_) {
+  arguments_ = arguments_.map((argument) => normalizeWindowsPath(argument));
+  let resolvedPath = "";
+  let resolvedAbsolute = false;
+  for (let index = arguments_.length - 1; index >= -1 && !resolvedAbsolute; index--) {
+    const path = index >= 0 ? arguments_[index] : cwd();
+    if (!path || path.length === 0) {
+      continue;
+    }
+    resolvedPath = `${path}/${resolvedPath}`;
+    resolvedAbsolute = isAbsolute(path);
+  }
+  resolvedPath = normalizeString(resolvedPath, !resolvedAbsolute);
+  if (resolvedAbsolute && !isAbsolute(resolvedPath)) {
+    return `/${resolvedPath}`;
+  }
+  return resolvedPath.length > 0 ? resolvedPath : ".";
+};
+function normalizeString(path, allowAboveRoot) {
+  let res = "";
+  let lastSegmentLength = 0;
+  let lastSlash = -1;
+  let dots = 0;
+  let char = null;
+  for (let index = 0; index <= path.length; ++index) {
+    if (index < path.length) {
+      char = path[index];
+    } else if (char === "/") {
+      break;
+    } else {
+      char = "/";
+    }
+    if (char === "/") {
+      if (lastSlash === index - 1 || dots === 1) ; else if (dots === 2) {
+        if (res.length < 2 || lastSegmentLength !== 2 || res[res.length - 1] !== "." || res[res.length - 2] !== ".") {
+          if (res.length > 2) {
+            const lastSlashIndex = res.lastIndexOf("/");
+            if (lastSlashIndex === -1) {
+              res = "";
+              lastSegmentLength = 0;
+            } else {
+              res = res.slice(0, lastSlashIndex);
+              lastSegmentLength = res.length - 1 - res.lastIndexOf("/");
+            }
+            lastSlash = index;
+            dots = 0;
+            continue;
+          } else if (res.length > 0) {
+            res = "";
+            lastSegmentLength = 0;
+            lastSlash = index;
+            dots = 0;
+            continue;
+          }
+        }
+        if (allowAboveRoot) {
+          res += res.length > 0 ? "/.." : "..";
+          lastSegmentLength = 2;
+        }
+      } else {
+        if (res.length > 0) {
+          res += `/${path.slice(lastSlash + 1, index)}`;
+        } else {
+          res = path.slice(lastSlash + 1, index);
+        }
+        lastSegmentLength = index - lastSlash - 1;
+      }
+      lastSlash = index;
+      dots = 0;
+    } else if (char === "." && dots !== -1) {
+      ++dots;
+    } else {
+      dots = -1;
+    }
+  }
+  return res;
+}
+const isAbsolute = function(p) {
+  return _IS_ABSOLUTE_RE.test(p);
+};
+const relative = function(from, to) {
+  const _from = resolve(from).replace(_ROOT_FOLDER_RE, "$1").split("/");
+  const _to = resolve(to).replace(_ROOT_FOLDER_RE, "$1").split("/");
+  if (_to[0][1] === ":" && _from[0][1] === ":" && _from[0] !== _to[0]) {
+    return _to.join("/");
+  }
+  const _fromCopy = [..._from];
+  for (const segment of _fromCopy) {
+    if (_to[0] !== segment) {
+      break;
+    }
+    _from.shift();
+    _to.shift();
+  }
+  return [..._from.map(() => ".."), ..._to].join("/");
+};
 
 //#region src/runtime/handlers/renderer.ts
 globalThis.__buildAssetsURL = buildAssetsURL;
@@ -631,5 +759,5 @@ const renderer = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 	default: handler
 }, Symbol.toStringTag, { value: 'Module' }));
 
-export { VueResolver as V, headSymbol as h, injectHead as i, renderer as r };
+export { VueResolver as V, baseURL as b, headSymbol as h, injectHead as i, renderer as r };
 //# sourceMappingURL=renderer.mjs.map

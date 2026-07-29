@@ -5,13 +5,46 @@ const sources = [
     },
     {
         "context": {
-            "name": "@nuxt/content@v3:urls",
-            "description": "Generated from your markdown files.",
+            "name": "nuxt:pages",
+            "description": "Generated from your static page files.",
             "tips": [
-                "No collections found. Make sure your content collections have a `path` field."
+                "Can be disabled with `{ excludeAppSources: ['nuxt:pages'] }`."
             ]
         },
-        "fetch": "/__sitemap__/nuxt-content-urls.json",
+        "urls": [
+            {
+                "loc": "/admin/artikel",
+                "lastmod": "2026-07-27T14:58:02.151Z"
+            },
+            {
+                "loc": "/admin/galeri",
+                "lastmod": "2026-07-27T14:58:15.265Z"
+            },
+            {
+                "loc": "/admin/industri",
+                "lastmod": "2026-07-27T14:58:22.672Z"
+            },
+            {
+                "loc": "/admin/jasa",
+                "lastmod": "2026-07-27T14:58:35.570Z"
+            },
+            {
+                "loc": "/admin/kategori",
+                "lastmod": "2026-07-27T15:00:12.107Z"
+            },
+            {
+                "loc": "/admin/login",
+                "lastmod": "2026-07-26T16:27:59.251Z"
+            },
+            {
+                "loc": "/admin/produk",
+                "lastmod": "2026-07-27T14:58:48.653Z"
+            },
+            {
+                "loc": "/admin",
+                "lastmod": "2026-07-26T17:47:18.933Z"
+            }
+        ],
         "sourceType": "app"
     },
     {
@@ -24,36 +57,36 @@ const sources = [
         },
         "urls": [
             {
-                "loc": "/artikel",
-                "lastmod": "2026-07-24T08:46:05.473Z"
-            },
-            {
                 "loc": "/jasa",
-                "lastmod": "2026-07-24T08:46:05.473Z"
+                "lastmod": "2026-07-27T06:26:10.022Z"
             },
             {
-                "loc": "/kontak",
-                "lastmod": "2026-07-24T08:46:05.473Z"
+                "loc": "/artikel",
+                "lastmod": "2026-07-27T06:46:16.728Z"
             },
             {
                 "loc": "/tentang-kami",
-                "lastmod": "2026-07-24T08:46:05.474Z"
+                "lastmod": "2026-07-24T13:24:11.848Z"
             },
             {
-                "loc": "/galeri",
-                "lastmod": "2026-07-24T08:46:05.473Z"
+                "loc": "/kontak",
+                "lastmod": "2026-07-27T06:42:22.628Z"
             },
             {
                 "loc": "/",
-                "lastmod": "2026-07-24T08:46:05.473Z"
+                "lastmod": "2026-07-27T06:21:24.309Z"
             },
             {
-                "loc": "/produk/belt-conveyor",
-                "lastmod": "2026-07-24T08:46:05.473Z"
+                "loc": "/galeri",
+                "lastmod": "2026-07-27T06:30:06.719Z"
             },
             {
                 "loc": "/produk/lainnya",
-                "lastmod": "2026-07-24T08:46:05.474Z"
+                "lastmod": "2026-07-27T06:44:01.755Z"
+            },
+            {
+                "loc": "/produk/belt-conveyor",
+                "lastmod": "2026-07-27T06:43:50.177Z"
             }
         ],
         "sourceType": "app"

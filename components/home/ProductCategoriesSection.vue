@@ -217,17 +217,17 @@ onBeforeUnmount(() => observer?.disconnect())
 </script>
 
 <template>
-  <section class="bg-paper text-ink">
+  <section class="bg-steel">
     <div class="frame">
       <!-- section tag row -->
-      <div class="blueprint-grid border-b border-line px-6 py-3 md:px-10">
+      <div class="border-b border-white/10 px-6 py-3 md:px-10">
         <span class="eyebrow text-accent">Katalog</span>
       </div>
 
       <!-- section header -->
-      <div class="border-b border-line px-6 py-16 md:px-10 md:py-24">
-        <h2 class="display text-4xl md:text-6xl">Katalog Produk</h2>
-        <p class="mt-6 max-w-md leading-relaxed text-muted">
+      <div class="border-b border-white/10 px-6 py-16 md:px-10 md:py-24">
+        <h2 class="display text-4xl text-white md:text-6xl">Katalog Produk</h2>
+        <p class="mt-6 max-w-md leading-relaxed text-white/50">
           Belt conveyor dan komponen material handling untuk lini produksi yang
           kritis — dipilih dan diuji untuk kebutuhan industri Indonesia.
         </p>
@@ -236,16 +236,16 @@ onBeforeUnmount(() => observer?.disconnect())
       <!-- sidebar + rows -->
       <div class="grid lg:grid-cols-[230px_1fr]">
         <!-- sticky sidebar -->
-        <aside class="hidden border-r border-line lg:block">
+        <aside class="hidden border-r border-white/10 lg:block">
           <nav class="sticky top-24 flex flex-col gap-1 p-6">
             <a
               v-for="row in rows"
               :key="row.cat"
               :href="`#produk-${row.i}`"
               class="flex items-center gap-2.5 rounded-md px-2 py-2 text-sm font-medium transition-colors"
-              :class="activeIdx === row.i ? 'text-ink' : 'text-muted hover:text-ink'"
+              :class="activeIdx === row.i ? 'text-white' : 'text-white/40 hover:text-white/70'"
             >
-              <ProductIcon :name="row.icon" class="h-3.5 w-3.5 shrink-0" :class="activeIdx === row.i ? 'text-accent' : 'text-ink/30'" />
+              <ProductIcon :name="row.icon" class="h-3.5 w-3.5 shrink-0" :class="activeIdx === row.i ? 'text-accent' : 'text-white/20'" />
               {{ row.cat }}
             </a>
           </nav>
@@ -260,7 +260,7 @@ onBeforeUnmount(() => observer?.disconnect())
             :data-idx="row.i"
             data-produk-row
             v-gsap.whenVisible.once.from="rowFrom"
-            class="grid border-b border-line last:border-b-0 md:grid-cols-2"
+            class="mb-4 overflow-hidden bg-white md:grid md:grid-cols-2"
           >
             <!-- text cell -->
             <div class="px-6 py-12 md:px-10 md:py-16">
@@ -268,7 +268,7 @@ onBeforeUnmount(() => observer?.disconnect())
               <h3 class="display mt-4 max-w-xs text-2xl text-ink md:text-[1.9rem]">{{ row.title }}</h3>
               <p class="mt-4 max-w-sm text-[15px] leading-relaxed text-muted">{{ row.desc }}</p>
               <div class="mt-8">
-                <NuxtLink :to="row.href" class="inline-flex items-center gap-2 rounded-md border border-[rgb(var(--line))] bg-white px-6 py-2.5 text-sm font-semibold text-[rgb(var(--ink))] transition-colors hover:bg-[rgb(var(--paper))]">Lihat {{ row.cat }}</NuxtLink>
+                <NuxtLink :to="row.href" class="inline-flex items-center gap-2 rounded-md border border-line bg-paper-soft px-6 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-paper">Lihat {{ row.cat }}</NuxtLink>
               </div>
               <div class="mt-10 flex items-center gap-2 text-sm text-muted">
                 <svg class="h-4 w-4 text-ink/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">

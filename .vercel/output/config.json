@@ -1,29 +1,29 @@
 {
   "version": 3,
   "overrides": {
-    "artikel/index.html": {
-      "path": "artikel"
-    },
     "jasa/index.html": {
       "path": "jasa"
     },
-    "kontak/index.html": {
-      "path": "kontak"
+    "artikel/index.html": {
+      "path": "artikel"
     },
     "tentang-kami/index.html": {
       "path": "tentang-kami"
     },
-    "galeri/index.html": {
-      "path": "galeri"
+    "kontak/index.html": {
+      "path": "kontak"
     },
     "index.html": {
       "path": ""
     },
-    "produk/belt-conveyor/index.html": {
-      "path": "produk/belt-conveyor"
+    "galeri/index.html": {
+      "path": "galeri"
     },
     "produk/lainnya/index.html": {
       "path": "produk/lainnya"
+    },
+    "produk/belt-conveyor/index.html": {
+      "path": "produk/belt-conveyor"
     }
   },
   "routes": [
@@ -38,12 +38,6 @@
         "cache-control": "public, max-age=1, immutable"
       },
       "src": "/_nuxt/builds/(.*)"
-    },
-    {
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
-      },
-      "src": "/_studio-app/1.7.0/(.*)"
     },
     {
       "headers": {
@@ -80,26 +74,11 @@
       "continue": true
     },
     {
-      "src": "/_studio-app/1.7.0(.*)",
-      "headers": {
-        "cache-control": "public,max-age=31536000,immutable"
-      },
-      "continue": true
-    },
-    {
       "handle": "filesystem"
     },
     {
       "src": "(?<__isr_route>/__nuxt_error)",
       "dest": "/__fallback"
-    },
-    {
-      "src": "(?<__isr_route>/__nuxt_content/(?:.*))",
-      "dest": "/__fallback"
-    },
-    {
-      "src": "/sw.js",
-      "dest": "/sw.js"
     },
     {
       "src": "/sitemap.xml",
@@ -110,16 +89,36 @@
       "dest": "/robots.txt"
     },
     {
-      "src": "/api/component-meta.json",
-      "dest": "/api/component-meta.json"
+      "src": "/admin/produk",
+      "dest": "/admin/produk"
     },
     {
-      "src": "/api/component-meta",
-      "dest": "/api/component-meta"
+      "src": "/admin/login",
+      "dest": "/admin/login"
     },
     {
-      "src": "/_studio",
-      "dest": "/_studio"
+      "src": "/admin/kategori",
+      "dest": "/admin/kategori"
+    },
+    {
+      "src": "/admin/jasa",
+      "dest": "/admin/jasa"
+    },
+    {
+      "src": "/admin/industri",
+      "dest": "/admin/industri"
+    },
+    {
+      "src": "/admin/galeri",
+      "dest": "/admin/galeri"
+    },
+    {
+      "src": "/admin/artikel",
+      "dest": "/admin/artikel"
+    },
+    {
+      "src": "/admin",
+      "dest": "/admin"
     },
     {
       "src": "/__sitemap__/urls",
@@ -130,80 +129,8 @@
       "dest": "/__sitemap__/style.xsl"
     },
     {
-      "src": "/__sitemap__/nuxt-content-urls.json",
-      "dest": "/__sitemap__/nuxt-content-urls.json"
-    },
-    {
-      "src": "/__nuxt_studio/meta",
-      "dest": "/__nuxt_studio/meta"
-    },
-    {
-      "src": "/__nuxt_studio/auth/sso",
-      "dest": "/__nuxt_studio/auth/sso"
-    },
-    {
-      "src": "/__nuxt_studio/auth/session",
-      "dest": "/__nuxt_studio/auth/session"
-    },
-    {
-      "src": "/__nuxt_studio/auth/google",
-      "dest": "/__nuxt_studio/auth/google"
-    },
-    {
-      "src": "/__nuxt_studio/auth/gitlab",
-      "dest": "/__nuxt_studio/auth/gitlab"
-    },
-    {
-      "src": "/__nuxt_studio/auth/github",
-      "dest": "/__nuxt_studio/auth/github"
-    },
-    {
       "src": "/__nuxt_error",
       "dest": "/__nuxt_error"
-    },
-    {
-      "src": "/__nuxt_content/services/query",
-      "dest": "/__nuxt_content/services/query"
-    },
-    {
-      "src": "/__nuxt_content/products/query",
-      "dest": "/__nuxt_content/products/query"
-    },
-    {
-      "src": "/__nuxt_content/pages/query",
-      "dest": "/__nuxt_content/pages/query"
-    },
-    {
-      "src": "/__nuxt_content/navigation/query",
-      "dest": "/__nuxt_content/navigation/query"
-    },
-    {
-      "src": "/__nuxt_content/info/sql_dump.txt",
-      "dest": "/__nuxt_content/info/sql_dump.txt"
-    },
-    {
-      "src": "/__nuxt_content/info/query",
-      "dest": "/__nuxt_content/info/query"
-    },
-    {
-      "src": "/__nuxt_content/industries/query",
-      "dest": "/__nuxt_content/industries/query"
-    },
-    {
-      "src": "/__nuxt_content/homepageConfig/query",
-      "dest": "/__nuxt_content/homepageConfig/query"
-    },
-    {
-      "src": "/__nuxt_content/homepage/query",
-      "dest": "/__nuxt_content/homepage/query"
-    },
-    {
-      "src": "/__nuxt_content/gallery/query",
-      "dest": "/__nuxt_content/gallery/query"
-    },
-    {
-      "src": "/__nuxt_content/blog/query",
-      "dest": "/__nuxt_content/blog/query"
     },
     {
       "src": "/produk/lainnya/(?<kategori>[^/]+)",
@@ -226,12 +153,24 @@
       "dest": "/artikel/[slug]"
     },
     {
-      "src": "/api/component-meta/(?<component>[^/]+)?",
-      "dest": "/api/component-meta/[component-]"
+      "src": "/admin/produk/(?<id>[^/]+)",
+      "dest": "/admin/produk/[id]"
     },
     {
-      "src": "/__nuxt_studio/ipx/(?:.*)",
-      "dest": "/__nuxt_studio/ipx/[...]"
+      "src": "/admin/jasa/(?<id>[^/]+)",
+      "dest": "/admin/jasa/[id]"
+    },
+    {
+      "src": "/admin/industri/(?<id>[^/]+)",
+      "dest": "/admin/industri/[id]"
+    },
+    {
+      "src": "/admin/galeri/(?<id>[^/]+)",
+      "dest": "/admin/galeri/[id]"
+    },
+    {
+      "src": "/admin/artikel/(?<id>[^/]+)",
+      "dest": "/admin/artikel/[id]"
     },
     {
       "src": "/__nuxt_island/(?:.*)",

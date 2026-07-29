@@ -1,6 +1,7 @@
 import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import { defineProdDiagnostics } from 'nostics';
 import { ansiFormatter } from 'nostics/formatters/ansi';
-import { v as vueExports, c as createError, m as defu, n as hasProtocol, j as joinURL, o as parseQuery$1, s as parseURL$1, e as encodePath$1, t as decodePath, x as isScriptProtocol, y as withQuery, z as withTrailingSlash, A as withoutTrailingSlash, B as sanitizeStatusCode, $ as $fetch, C as baseURL, D as titleCase, E as stringifyQuery$1, w as withLeadingSlash, F as withBase, G as hasTrailingSlash } from '../nitro/nitro.mjs';
+import { v as vueExports, c as createError, m as defu, n as hasProtocol, h as joinURL, p as parseQuery$1, o as parseURL$1, e as encodePath$1, q as decodePath, r as withQuery, s as sanitizeStatusCode, t as isScriptProtocol, x as withTrailingSlash, y as withoutTrailingSlash, $ as $fetch, z as titleCase, A as stringifyQuery$1, w as withLeadingSlash, B as withBase, C as hasTrailingSlash } from '../nitro/nitro.mjs';
+import { i as injectHead$1, V as VueResolver, b as baseURL, h as headSymbol } from '../routes/renderer.mjs';
 import { fnv1a64Base36 } from 'fnv1a-64';
 import { identify } from 'object-identity';
 import { isPlainObject } from '@vue/shared';
@@ -8,8 +9,7 @@ import { debounce } from 'perfect-debounce';
 import * as import_unhead_plugins from 'unhead/plugins';
 import { FlatMetaPlugin, defineHeadPlugin, TemplateParamsPlugin } from 'unhead/plugins';
 import { walkResolver, processTemplateParams } from 'unhead/utils';
-import { i as injectHead$1, V as VueResolver, h as headSymbol } from '../routes/renderer.mjs';
-import { ssrRenderSuspense, ssrRenderComponent, ssrRenderVNode, ssrRenderAttrs } from '@vue/server-renderer';
+import { ssrRenderSuspense, ssrRenderComponent, ssrRenderVNode, ssrRenderAttrs, ssrInterpolate } from '@vue/server-renderer';
 
 function useHead(input, options = {}) {
   const head = options.head || injectHead$1();
@@ -15697,6 +15697,8 @@ var __copyProps = (to, from, except, desc) => {
 	return to;
 };
 var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget);
+//#endregion
+//#region node_modules/nuxt/dist/app/utils.js
 globalThis._importMeta_.url.replace(/\/app\/.*$/, "/");
 //#endregion
 //#region node_modules/nuxt/dist/app/components/injections.js
@@ -16002,7 +16004,7 @@ function _mergeTransitionProps(routeProps) {
 //#endregion
 //#region node_modules/nuxt/dist/app/components/client-only.js
 var clientOnlySymbol = Symbol.for("nuxt:client-only");
-vueExports.defineComponent({
+var ClientOnly = vueExports.defineComponent({
 	name: "ClientOnly",
 	inheritAttrs: false,
 	props: [
@@ -16489,69 +16491,13 @@ var manifestDiagnostics = /* #__PURE__ */ defineProdDiagnostics({
 //#endregion
 //#region virtual:nuxt:node_modules%2F.cache%2Fnuxt%2F.nuxt%2Froute-rules.mjs
 var matcher = /* @__PURE__ */ (() => {
-	const $0 = { prerender: true }, $2 = {
-		__proto__: null,
-		"/__nuxt_content/products/sql_dump.txt": {
-			__proto__: null,
-			"": [$0]
-		},
-		"/__nuxt_content/services/sql_dump.txt": {
-			__proto__: null,
-			"": [$0]
-		},
-		"/__nuxt_content/industries/sql_dump.txt": {
-			__proto__: null,
-			"": [$0]
-		},
-		"/__nuxt_content/blog/sql_dump.txt": {
-			__proto__: null,
-			"": [$0]
-		},
-		"/__nuxt_content/gallery/sql_dump.txt": {
-			__proto__: null,
-			"": [$0]
-		},
-		"/__nuxt_content/pages/sql_dump.txt": {
-			__proto__: null,
-			"": [$0]
-		},
-		"/__nuxt_content/homepage/sql_dump.txt": {
-			__proto__: null,
-			"": [$0]
-		},
-		"/__nuxt_content/homepageConfig/sql_dump.txt": {
-			__proto__: null,
-			"": [$0]
-		},
-		"/__nuxt_content/navigation/sql_dump.txt": {
-			__proto__: null,
-			"": [$0]
-		},
-		"/_nuxt": {
-			__proto__: null,
-			"": [{}]
-		}
-	}, $3 = { payload: false };
+	const $0 = {};
 	return (m, p) => {
 		let r = [];
 		if (p.charCodeAt(p.length - 1) === 47) p = p.slice(0, -1);
-		let _n = $2[p];
-		if (_n === void 0 && p.charCodeAt(p.length - 1) === 47) _n = $2[p.slice(0, -1)];
-		if (_n !== void 0) {
-			let _a = _n[m];
-			if (_a === void 0) _a = _n[""];
-			if (_a !== void 0) for (let _i = _a.length - 1; _i >= 0; _i--) r.push({ data: _a[_i] });
-		}
-		let s = p.split("/");
-		if (s.length > 1 && s[s.length - 1] === "") {
-			s.pop();
-			p = p.slice(0, -1);
-		}
-		if (s.length > 1) {
-			if (s[1] === "__nuxt_content") r.push({
-				data: $3,
-				params: { "_": p.slice(16) }
-			});
+		if (p === "/_nuxt") r.push({ data: $0 });
+		else if (p.charCodeAt(p.length - 1) === 47) {
+			if (p === "/_nuxt/") r.push({ data: $0 });
 		}
 		return r.reverse();
 	};
@@ -16559,11 +16505,11 @@ var matcher = /* @__PURE__ */ (() => {
 var virtual_nuxt_node_modules_2F_cache_2Fnuxt_2F_nuxt_2Froute_rules_default = (path) => defu({}, ...matcher("", typeof path === "string" ? path.toLowerCase() : path).map((r) => r.data).reverse());
 //#endregion
 //#region node_modules/nuxt/dist/app/composables/manifest.js
-var routeRulesMatcher$2 = virtual_nuxt_node_modules_2F_cache_2Fnuxt_2F_nuxt_2Froute_rules_default;
+var routeRulesMatcher$1 = virtual_nuxt_node_modules_2F_cache_2Fnuxt_2F_nuxt_2Froute_rules_default;
 function getRouteRules(arg) {
 	const path = typeof arg === "string" ? arg : arg.path;
 	try {
-		return routeRulesMatcher$2(path.toLowerCase());
+		return routeRulesMatcher$1(path.toLowerCase());
 	} catch (e) {
 		manifestDiagnostics.NUXT_E5003({
 			path,
@@ -16583,9 +16529,9 @@ function definePayloadReducer(name, reduce) {
 }
 //#endregion
 //#region node_modules/nuxt/dist/app/composables/layout.js
-var routeRulesMatcher$1 = virtual_nuxt_node_modules_2F_cache_2Fnuxt_2F_nuxt_2Froute_rules_default;
+var routeRulesMatcher = virtual_nuxt_node_modules_2F_cache_2Fnuxt_2F_nuxt_2Froute_rules_default;
 function resolveLayoutName(route, name) {
-	return vueExports.unref(name) ?? route?.meta.layout ?? routeRulesMatcher$1(route?.path ?? "/").appLayout ?? "default";
+	return vueExports.unref(name) ?? route?.meta.layout ?? routeRulesMatcher(route?.path ?? "/").appLayout ?? "default";
 }
 //#endregion
 //#region node_modules/nuxt/dist/pages/runtime/router.options.js
@@ -16943,7 +16889,7 @@ function freezeHead(head) {
 }
 //#endregion
 //#region node_modules/nuxt/dist/head/runtime/plugins/unhead.server.js
-var plugin$3 = defineNuxtPlugin({
+var plugin$2 = defineNuxtPlugin({
 	name: "nuxt:head",
 	enforce: "pre",
 	setup(nuxtApp) {
@@ -16988,79 +16934,232 @@ var globalMiddleware = [/* @__PURE__ */ defineNuxtRouteMiddleware(async (to) => 
 		data: { path: to.fullPath }
 	});
 }), /* @__PURE__ */ defineNuxtRouteMiddleware((to) => {})];
-var namedMiddleware = {};
+var namedMiddleware = { auth: () => import('../build/auth-DUX9sEh8.mjs') };
+//#endregion
+//#region pages/admin/artikel/[id].vue?macro=true&vue&type=script&setup=true&lang.ts
+var __nuxt_page_meta$12 = { layout: "admin" };
+//#endregion
+//#region pages/admin/galeri/[id].vue?macro=true&vue&type=script&setup=true&lang.ts
+var __nuxt_page_meta$11 = { layout: "admin" };
+//#endregion
+//#region pages/admin/industri/[id].vue?macro=true&vue&type=script&setup=true&lang.ts
+var __nuxt_page_meta$10 = { layout: "admin" };
+//#endregion
+//#region pages/admin/jasa/[id].vue?macro=true&vue&type=script&setup=true&lang.ts
+var __nuxt_page_meta$9 = { layout: "admin" };
+//#endregion
+//#region pages/admin/produk/[id].vue?macro=true&vue&type=script&setup=true&lang.ts
+var __nuxt_page_meta$8 = { layout: "admin" };
+//#endregion
+//#region pages/admin/artikel/index.vue?macro=true&vue&type=script&setup=true&lang.ts
+var __nuxt_page_meta$7 = { layout: "admin" };
+//#endregion
+//#region pages/admin/galeri/index.vue?macro=true&vue&type=script&setup=true&lang.ts
+var __nuxt_page_meta$6 = { layout: "admin" };
+//#endregion
+//#region pages/admin/industri/index.vue?macro=true&vue&type=script&setup=true&lang.ts
+var __nuxt_page_meta$5 = { layout: "admin" };
+//#endregion
+//#region pages/admin/jasa/index.vue?macro=true&vue&type=script&setup=true&lang.ts
+var __nuxt_page_meta$4 = { layout: "admin" };
+//#endregion
+//#region pages/admin/kategori/index.vue?macro=true&vue&type=script&setup=true&lang.ts
+var __nuxt_page_meta$3 = { layout: "admin" };
+//#endregion
+//#region pages/admin/login.vue?macro=true&vue&type=script&setup=true&lang.ts
+var __nuxt_page_meta$2 = { layout: false };
+//#endregion
+//#region pages/admin/produk/index.vue?macro=true&vue&type=script&setup=true&lang.ts
+var __nuxt_page_meta$1 = { layout: "admin" };
+//#endregion
+//#region pages/admin/index.vue?macro=true&vue&type=script&setup=true&lang.ts
+var __nuxt_page_meta = { layout: "admin" };
 //#endregion
 //#region virtual:nuxt:node_modules%2F.cache%2Fnuxt%2F.nuxt%2Froutes.mjs
 var virtual_nuxt_node_modules_2F_cache_2Fnuxt_2F_nuxt_2Froutes_default = [
 	{
+		name: "admin-artikel-id",
+		path: "/admin/artikel/:id()",
+		meta: {
+			...__nuxt_page_meta$12 || {},
+			"middleware": "auth"
+		},
+		component: () => import('../build/_id_-Df40kGns.mjs')
+	},
+	{
+		name: "admin-galeri-id",
+		path: "/admin/galeri/:id()",
+		meta: {
+			...__nuxt_page_meta$11 || {},
+			"middleware": "auth"
+		},
+		component: () => import('../build/_id_-DpkRHwJc.mjs')
+	},
+	{
+		name: "admin-industri-id",
+		path: "/admin/industri/:id()",
+		meta: {
+			...__nuxt_page_meta$10 || {},
+			"middleware": "auth"
+		},
+		component: () => import('../build/_id_-DlLAARXj.mjs')
+	},
+	{
+		name: "admin-jasa-id",
+		path: "/admin/jasa/:id()",
+		meta: {
+			...__nuxt_page_meta$9 || {},
+			"middleware": "auth"
+		},
+		component: () => import('../build/_id_-D7xrIxIO.mjs')
+	},
+	{
+		name: "admin-produk-id",
+		path: "/admin/produk/:id()",
+		meta: {
+			...__nuxt_page_meta$8 || {},
+			"middleware": "auth"
+		},
+		component: () => import('../build/_id_-CmThziuU.mjs')
+	},
+	{
 		name: "produk-belt-conveyor-kategori",
 		path: "/produk/belt-conveyor/:kategori()",
-		component: () => import('../build/_kategori_-CylXc2kf.mjs')
+		component: () => import('../build/_kategori_-B3ox1l3f.mjs')
 	},
 	{
 		name: "produk-lainnya-kategori",
 		path: "/produk/lainnya/:kategori()",
-		component: () => import('../build/_kategori_-BHq30pmR.mjs')
+		component: () => import('../build/_kategori_-wctveELk.mjs')
+	},
+	{
+		name: "admin-artikel",
+		path: "/admin/artikel",
+		meta: {
+			...__nuxt_page_meta$7 || {},
+			"middleware": "auth"
+		},
+		component: () => import('../build/artikel-DKTA60p6.mjs')
+	},
+	{
+		name: "admin-galeri",
+		path: "/admin/galeri",
+		meta: {
+			...__nuxt_page_meta$6 || {},
+			"middleware": "auth"
+		},
+		component: () => import('../build/galeri-CiSkyU5m.mjs')
+	},
+	{
+		name: "admin-industri",
+		path: "/admin/industri",
+		meta: {
+			...__nuxt_page_meta$5 || {},
+			"middleware": "auth"
+		},
+		component: () => import('../build/industri-XEslpiUD.mjs')
+	},
+	{
+		name: "admin-jasa",
+		path: "/admin/jasa",
+		meta: {
+			...__nuxt_page_meta$4 || {},
+			"middleware": "auth"
+		},
+		component: () => import('../build/jasa-QCDpUqTr.mjs')
+	},
+	{
+		name: "admin-kategori",
+		path: "/admin/kategori",
+		meta: {
+			...__nuxt_page_meta$3 || {},
+			"middleware": "auth"
+		},
+		component: () => import('../build/kategori-C_WraXDf.mjs')
+	},
+	{
+		name: "admin-login",
+		path: "/admin/login",
+		meta: __nuxt_page_meta$2 || {},
+		component: () => import('../build/login-AxyS8TR1.mjs')
+	},
+	{
+		name: "admin-produk",
+		path: "/admin/produk",
+		meta: {
+			...__nuxt_page_meta$1 || {},
+			"middleware": "auth"
+		},
+		component: () => import('../build/produk-Btjch28V.mjs')
 	},
 	{
 		name: "produk-belt-conveyor",
 		path: "/produk/belt-conveyor",
-		component: () => import('../build/belt-conveyor-BiSgT36E.mjs')
+		component: () => import('../build/belt-conveyor-CVaoIuaC.mjs')
 	},
 	{
 		name: "produk-lainnya",
 		path: "/produk/lainnya",
-		component: () => import('../build/lainnya-DxGQC1Xv.mjs')
+		component: () => import('../build/lainnya-BkB6bzfT.mjs')
 	},
 	{
 		name: "artikel-slug",
 		path: "/artikel/:slug()",
-		component: () => import('../build/_slug_-CzAOGFmj.mjs')
+		component: () => import('../build/_slug_-BYqCW2nm.mjs')
 	},
 	{
 		name: "jasa-slug",
 		path: "/jasa/:slug()",
-		component: () => import('../build/_slug_-CnYO7q9P.mjs')
+		component: () => import('../build/_slug_-Bd4iwPli.mjs')
 	},
 	{
 		name: "produk-slug",
 		path: "/produk/:slug()",
-		component: () => import('../build/_slug_-ClLqQRf7.mjs')
+		component: () => import('../build/_slug_-DYgEx_pu.mjs')
+	},
+	{
+		name: "admin",
+		path: "/admin",
+		meta: {
+			...__nuxt_page_meta || {},
+			"middleware": "auth"
+		},
+		component: () => import('../build/admin-ipFDx8Ng.mjs')
 	},
 	{
 		name: "artikel",
 		path: "/artikel",
-		component: () => import('../build/artikel-B9S1FDQx.mjs')
+		component: () => import('../build/artikel-BsotV-3I.mjs')
 	},
 	{
 		name: "galeri",
 		path: "/galeri",
-		component: () => import('../build/galeri-4TlEMtue.mjs')
+		component: () => import('../build/galeri-CMhg3SZ_.mjs')
 	},
 	{
 		name: "jasa",
 		path: "/jasa",
-		component: () => import('../build/jasa-fqm0hG51.mjs')
+		component: () => import('../build/jasa-DH7gP7nT.mjs')
 	},
 	{
 		name: "kontak",
 		path: "/kontak",
-		component: () => import('../build/kontak-DL_9Dgmu.mjs')
+		component: () => import('../build/kontak-G_sZWxGk.mjs')
 	},
 	{
 		name: "tentang-kami",
 		path: "/tentang-kami",
-		component: () => import('../build/tentang-kami-DRB6GTLL.mjs')
+		component: () => import('../build/tentang-kami-zrJx5epX.mjs')
 	},
 	{
 		name: "index",
 		path: "/",
-		component: () => import('../build/pages-WF1q6GxV.mjs')
+		component: () => import('../build/pages-CwFyDAvt.mjs')
 	}
 ];
 //#endregion
 //#region node_modules/nuxt/dist/pages/runtime/plugins/router.js
-var plugin$2 = defineNuxtPlugin({
+var plugin$1 = defineNuxtPlugin({
 	name: "nuxt:router",
 	enforce: "pre",
 	async setup(nuxtApp) {
@@ -17238,7 +17337,7 @@ var reducers = [
 	["Ref", (data) => vueExports.isRef(data) && data.value],
 	["Reactive", (data) => vueExports.isReactive(data) && vueExports.toRaw(data)]
 ];
-var plugin$1 = /* @__PURE__ */ defineNuxtPlugin({
+var plugin = /* @__PURE__ */ defineNuxtPlugin({
 	name: "nuxt:revive-payload:server",
 	setup() {
 		for (const [reducer, fn] of reducers) definePayloadReducer(reducer, fn);
@@ -18371,118 +18470,8 @@ var robot_meta_server_default = defineNuxtPlugin({ setup() {
 	}] });
 } });
 //#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseA.vue?nuxt_component=async&nuxt_component_name=ProseA&nuxt_component_export=default
-var ProseA_default = vueExports.defineAsyncComponent(() => import('../build/ProseA-Ch7Blj24.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseBlockquote.vue?nuxt_component=async&nuxt_component_name=ProseBlockquote&nuxt_component_export=default
-var ProseBlockquote_default = vueExports.defineAsyncComponent(() => import('../build/ProseBlockquote-HS6gff3F.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseCode.vue?nuxt_component=async&nuxt_component_name=ProseCode&nuxt_component_export=default
-var ProseCode_default = vueExports.defineAsyncComponent(() => import('../build/ProseCode-D3ZQnbrx.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseEm.vue?nuxt_component=async&nuxt_component_name=ProseEm&nuxt_component_export=default
-var ProseEm_default = vueExports.defineAsyncComponent(() => import('../build/ProseEm-BKnR8F2J.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseH1.vue?nuxt_component=async&nuxt_component_name=ProseH1&nuxt_component_export=default
-var ProseH1_default = vueExports.defineAsyncComponent(() => import('../build/ProseH1-P-MolYbV.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseH2.vue?nuxt_component=async&nuxt_component_name=ProseH2&nuxt_component_export=default
-var ProseH2_default = vueExports.defineAsyncComponent(() => import('../build/ProseH2-9V3PttGO.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseH3.vue?nuxt_component=async&nuxt_component_name=ProseH3&nuxt_component_export=default
-var ProseH3_default = vueExports.defineAsyncComponent(() => import('../build/ProseH3-DmPXeMD9.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseH4.vue?nuxt_component=async&nuxt_component_name=ProseH4&nuxt_component_export=default
-var ProseH4_default = vueExports.defineAsyncComponent(() => import('../build/ProseH4-B2Pqade9.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseH5.vue?nuxt_component=async&nuxt_component_name=ProseH5&nuxt_component_export=default
-var ProseH5_default = vueExports.defineAsyncComponent(() => import('../build/ProseH5-Bev5GhBH.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseH6.vue?nuxt_component=async&nuxt_component_name=ProseH6&nuxt_component_export=default
-var ProseH6_default = vueExports.defineAsyncComponent(() => import('../build/ProseH6-CVzrpdgL.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseHr.vue?nuxt_component=async&nuxt_component_name=ProseHr&nuxt_component_export=default
-var ProseHr_default = vueExports.defineAsyncComponent(() => import('../build/ProseHr-DvEkZyDv.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseImg.vue?nuxt_component=async&nuxt_component_name=ProseImg&nuxt_component_export=default
-var ProseImg_default = vueExports.defineAsyncComponent(() => import('../build/ProseImg-KRCEPsyg.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseLi.vue?nuxt_component=async&nuxt_component_name=ProseLi&nuxt_component_export=default
-var ProseLi_default = vueExports.defineAsyncComponent(() => import('../build/ProseLi-BAfYH0F1.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseOl.vue?nuxt_component=async&nuxt_component_name=ProseOl&nuxt_component_export=default
-var ProseOl_default = vueExports.defineAsyncComponent(() => import('../build/ProseOl-CC7KYyal.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseP.vue?nuxt_component=async&nuxt_component_name=ProseP&nuxt_component_export=default
-var ProseP_default = vueExports.defineAsyncComponent(() => import('../build/ProseP-Dhio2Uu5.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProsePre.vue?nuxt_component=async&nuxt_component_name=ProsePre&nuxt_component_export=default
-var ProsePre_default = vueExports.defineAsyncComponent(() => import('../build/ProsePre-vOqXBIjb.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseScript.vue?nuxt_component=async&nuxt_component_name=ProseScript&nuxt_component_export=default
-var ProseScript_default = vueExports.defineAsyncComponent(() => import('../build/ProseScript-VvDbX_NI.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseStrong.vue?nuxt_component=async&nuxt_component_name=ProseStrong&nuxt_component_export=default
-var ProseStrong_default = vueExports.defineAsyncComponent(() => import('../build/ProseStrong-Dcq62CmB.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseTable.vue?nuxt_component=async&nuxt_component_name=ProseTable&nuxt_component_export=default
-var ProseTable_default = vueExports.defineAsyncComponent(() => import('../build/ProseTable-CtJuHhth.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseTbody.vue?nuxt_component=async&nuxt_component_name=ProseTbody&nuxt_component_export=default
-var ProseTbody_default = vueExports.defineAsyncComponent(() => import('../build/ProseTbody-DC97euj5.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseTd.vue?nuxt_component=async&nuxt_component_name=ProseTd&nuxt_component_export=default
-var ProseTd_default = vueExports.defineAsyncComponent(() => import('../build/ProseTd-BbTqLw0X.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseTh.vue?nuxt_component=async&nuxt_component_name=ProseTh&nuxt_component_export=default
-var ProseTh_default = vueExports.defineAsyncComponent(() => import('../build/ProseTh-C17106Sx.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseThead.vue?nuxt_component=async&nuxt_component_name=ProseThead&nuxt_component_export=default
-var ProseThead_default = vueExports.defineAsyncComponent(() => import('../build/ProseThead-BQ68XT81.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseTr.vue?nuxt_component=async&nuxt_component_name=ProseTr&nuxt_component_export=default
-var ProseTr_default = vueExports.defineAsyncComponent(() => import('../build/ProseTr-kwkeOPdA.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
-//#region node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseUl.vue?nuxt_component=async&nuxt_component_name=ProseUl&nuxt_component_export=default
-var ProseUl_default = vueExports.defineAsyncComponent(() => import('../build/ProseUl-DoN5LVLe.mjs').then((r) => r["default"] || r.default || r));
-//#endregion
 //#region virtual:nuxt:node_modules%2F.cache%2Fnuxt%2F.nuxt%2Fcomponents.plugin.mjs
-var lazyGlobalComponents = [
-	["ProseA", ProseA_default],
-	["ProseBlockquote", ProseBlockquote_default],
-	["ProseCode", ProseCode_default],
-	["ProseEm", ProseEm_default],
-	["ProseH1", ProseH1_default],
-	["ProseH2", ProseH2_default],
-	["ProseH3", ProseH3_default],
-	["ProseH4", ProseH4_default],
-	["ProseH5", ProseH5_default],
-	["ProseH6", ProseH6_default],
-	["ProseHr", ProseHr_default],
-	["ProseImg", ProseImg_default],
-	["ProseLi", ProseLi_default],
-	["ProseOl", ProseOl_default],
-	["ProseP", ProseP_default],
-	["ProsePre", ProsePre_default],
-	["ProseScript", ProseScript_default],
-	["ProseStrong", ProseStrong_default],
-	["ProseTable", ProseTable_default],
-	["ProseTbody", ProseTbody_default],
-	["ProseTd", ProseTd_default],
-	["ProseTh", ProseTh_default],
-	["ProseThead", ProseThead_default],
-	["ProseTr", ProseTr_default],
-	["ProseUl", ProseUl_default]
-];
-var virtual_nuxt_node_modules_2F_cache_2Fnuxt_2F_nuxt_2Fcomponents_plugin_default = defineNuxtPlugin({
-	name: "nuxt:global-components",
-	setup(nuxtApp) {
-		for (const [name, component] of lazyGlobalComponents) {
-			nuxtApp.vueApp.component(name, component);
-			nuxtApp.vueApp.component("Lazy" + name, component);
-		}
-	}
-});
+var virtual_nuxt_node_modules_2F_cache_2Fnuxt_2F_nuxt_2Fcomponents_plugin_default = defineNuxtPlugin({ name: "nuxt:global-components" });
 //#endregion
 //#region node_modules/v-gsap-nuxt/dist/runtime/utils/utils.js
 var uuidv4 = () => {
@@ -18959,9 +18948,6 @@ var nuxt_default = defineNuxtPlugin((nuxtApp) => {
 	let resizeListener;
 	nuxtApp.vueApp.directive("gsap", vGsapDirective("nuxt", useRuntimeConfig().public.vgsap ?? {}, null, resizeListener));
 });
-var plugin = defineNuxtPlugin(async () => {
-	return;
-});
 //#endregion
 //#region node_modules/nuxt-seo-utils/dist/runtime/shared/minify.js
 function minifyJS(code) {
@@ -19255,9 +19241,9 @@ function applyDefaults() {
 //#region virtual:nuxt:node_modules%2F.cache%2Fnuxt%2F.nuxt%2Fplugins.server.mjs
 var virtual_nuxt_node_modules_2F_cache_2Fnuxt_2F_nuxt_2Fplugins_server_default = [
 	_0_siteConfig_default,
-	plugin$3,
 	plugin$2,
 	plugin$1,
+	plugin,
 	siteConfig_default,
 	inferSeoMetaPlugin_default,
 	titles_default,
@@ -19266,7 +19252,6 @@ var virtual_nuxt_node_modules_2F_cache_2Fnuxt_2F_nuxt_2Fplugins_server_default =
 	robot_meta_server_default,
 	virtual_nuxt_node_modules_2F_cache_2Fnuxt_2F_nuxt_2Fcomponents_plugin_default,
 	nuxt_default,
-	plugin,
 	minifyScripts_server_default,
 	_1_absoluteImageUrls_server_default,
 	_0_routeRules_default,
@@ -19281,7 +19266,10 @@ var virtual_nuxt_node_modules_2F_cache_2Fnuxt_2F_nuxt_2Fplugins_server_default =
 ];
 //#endregion
 //#region virtual:nuxt:node_modules%2F.cache%2Fnuxt%2F.nuxt%2Flayouts.mjs
-var virtual_nuxt_node_modules_2F_cache_2Fnuxt_2F_nuxt_2Flayouts_default = { default: vueExports.defineAsyncComponent(() => import('../build/default-DLEjM8l-.mjs').then((m) => m.default || m)) };
+var virtual_nuxt_node_modules_2F_cache_2Fnuxt_2F_nuxt_2Flayouts_default = {
+	admin: vueExports.defineAsyncComponent(() => import('../build/admin-DaVZu_5C.mjs').then((m) => m.default || m)),
+	default: vueExports.defineAsyncComponent(() => import('../build/default-Ct7jp35V.mjs').then((m) => m.default || m))
+};
 //#endregion
 //#region node_modules/nuxt/dist/app/components/nuxt-layout.js
 var LayoutLoader = vueExports.defineComponent({
@@ -19531,39 +19519,33 @@ app_vue_vue_type_script_setup_true_lang_default.setup = (props, ctx) => {
 };
 var app_default = app_vue_vue_type_script_setup_true_lang_default;
 //#endregion
-//#region node_modules/nuxt/dist/app/components/nuxt-error-page.vue
-var _sfc_main$1 = {
-	__name: "nuxt-error-page",
+//#region error.vue?vue&type=script&setup=true&lang.ts
+var error_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ vueExports.defineComponent({
+	__name: "error",
 	__ssrInlineRender: true,
-	props: { error: Object },
+	props: { error: {} },
 	setup(__props) {
-		const _error = __props.error;
-		const status = Number(_error.statusCode || 500);
-		const is404 = status === 404;
-		const statusText = _error.statusMessage ?? (is404 ? "Page Not Found" : "Internal Server Error");
-		const description = _error.message || _error.toString();
-		const stack = void 0;
-		const _Error404 = vueExports.defineAsyncComponent(() => import('../build/error-404-Gk7D0yE6.mjs'));
-		const _Error = vueExports.defineAsyncComponent(() => import('../build/error-500--P0nj3yT.mjs'));
-		const ErrorTemplate = is404 ? _Error404 : _Error;
+		const props = __props;
+		const message = vueExports.computed(() => {
+			if (!props.error) return "Terjadi kesalahan yang tidak diketahui.";
+			if (props.error.statusCode === 404) return "Halaman tidak ditemukan.";
+			if (props.error.statusCode === 500) return "Terjadi kesalahan pada server.";
+			return props.error.message || props.error.statusMessage || "Terjadi kesalahan.";
+		});
 		return (_ctx, _push, _parent, _attrs) => {
-			_push(ssrRenderComponent(vueExports.unref(ErrorTemplate), vueExports.mergeProps({
-				status: vueExports.unref(status),
-				statusText: vueExports.unref(statusText),
-				statusCode: vueExports.unref(status),
-				statusMessage: vueExports.unref(statusText),
-				description: vueExports.unref(description),
-				stack: vueExports.unref(stack)
-			}, _attrs), null, _parent));
+			_push(`<div${ssrRenderAttrs(vueExports.mergeProps({ class: "flex min-h-screen items-center justify-center bg-paper p-6 font-sans" }, _attrs))}><div class="text-center"><div class="text-[80px] font-extrabold leading-none tracking-[-0.04em] text-accent">${ssrInterpolate(__props.error?.statusCode || 500)}</div><p class="mt-4 text-lg font-semibold text-ink">${ssrInterpolate(vueExports.unref(message))}</p><p class="mt-2 text-[13px] text-muted">${ssrInterpolate(__props.error?.statusCode === 404 ? "Periksa kembali alamat halaman." : "Silakan coba beberapa saat lagi atau hubungi kami.")}</p><div class="mt-8 flex items-center justify-center gap-3"><button class="cursor-pointer rounded-md border border-line bg-white px-5 py-2.5 text-[13px] font-semibold text-ink transition-colors hover:bg-paper-soft"> Kembali ke Beranda </button></div></div></div>`);
 		};
 	}
-};
-var _sfc_setup$1 = _sfc_main$1.setup;
-_sfc_main$1.setup = (props, ctx) => {
+});
+//#endregion
+//#region error.vue
+var _sfc_setup$1 = error_vue_vue_type_script_setup_true_lang_default.setup;
+error_vue_vue_type_script_setup_true_lang_default.setup = (props, ctx) => {
 	const ssrContext = vueExports.useSSRContext();
-	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("node_modules/nuxt/dist/app/components/nuxt-error-page.vue");
+	(ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("error.vue");
 	return _sfc_setup$1 ? _sfc_setup$1(props, ctx) : void 0;
 };
+var error_default = error_vue_vue_type_script_setup_true_lang_default;
 //#endregion
 //#region virtual:nuxt:node_modules%2F.cache%2Fnuxt%2F.nuxt%2Fisland-renderer.mjs
 var IslandRenderer = () => null;
@@ -19603,7 +19585,7 @@ var _sfc_main = {
 			ssrRenderSuspense(_push, {
 				default: () => {
 					if (vueExports.unref(abortRender)) _push(`<div></div>`);
-					else if (vueExports.unref(error)) _push(ssrRenderComponent(vueExports.unref(_sfc_main$1), { error: vueExports.unref(error) }, null, _parent));
+					else if (vueExports.unref(error)) _push(ssrRenderComponent(vueExports.unref(error_default), { error: vueExports.unref(error) }, null, _parent));
 					else if (vueExports.unref(islandContext)) _push(ssrRenderComponent(vueExports.unref(IslandRenderer), { context: vueExports.unref(islandContext) }, null, _parent));
 					else if (vueExports.unref(SingleRenderer)) ssrRenderVNode(_push, vueExports.createVNode(vueExports.resolveDynamicComponent(vueExports.unref(SingleRenderer)), null, null), _parent);
 					else _push(ssrRenderComponent(vueExports.unref(app_default), null, null, _parent));
@@ -19644,5 +19626,5 @@ const entry = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: entry_default
 }, Symbol.toStringTag, { value: 'Module' }));
 
-export { NuxtLink as N, useRouter as a, useAsyncData as b, useHead$1 as c, useRuntimeConfig as d, useSeoMeta$1 as e, entry as f, tryUseNuxtApp as t, useRoute$1 as u };
+export { $fetch$2 as $, ClientOnly as C, NuxtLink as N, useRouter as a, useAsyncData as b, useHead$1 as c, defineNuxtRouteMiddleware as d, useRuntimeConfig as e, useState as f, useSeoMeta$1 as g, entry as h, navigateTo as n, useRoute$1 as u };
 //# sourceMappingURL=entry.mjs.map
