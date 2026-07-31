@@ -117,19 +117,38 @@ const headlineParts = computed(() => {
         </div>
         </div>
 
-        <!-- The counterweight. This was a standalone ProofStrip section below
-             the fold; the headline asserted "2–3 hari" and nothing supported it
-             until the reader scrolled, which is an assertion without evidence
-             for anyone who lands and does not. Moving it here puts the proof
-             beside the claim, fills the void the left alignment created, and
-             removes a whole section from the page.
-             It is also where the type contrast lives: 11px mono against a 68px
-             display face. Big jumps between levels with nothing in the middle
-             is most of what makes a layout read as expensive — and mono is
-             doing the one job the system reserves it for, a datasheet of keys
-             and values. -->
-        <aside class="lg:col-span-5 lg:self-end lg:pb-2">
-          <dl class="border-t border-line">
+        <!-- The counterweight: a product plate over its datasheet, which is the
+             oldest arrangement in an industrial catalog and the one Interroll
+             still uses.
+             The photograph is the first real product image the site has had.
+             It is a flat belt folded to show both faces — black cover over the
+             pale fabric carcass — shot on white with a soft shadow, which is
+             the one frame in everything the client sent that is neutral enough
+             not to fight the gold and clean enough to enlarge. The plate is a
+             4:3 white cell and the image sits inside it with object-contain: the
+             photo's own white margin and the cell's white are the same colour,
+             so the letterboxing is invisible and the belt keeps its full shape
+             instead of being cropped to fit a box.
+             Below it, the datasheet that used to be a standalone ProofStrip
+             section under the fold — the headline asserted "2–3 hari" and
+             nothing supported it until the reader scrolled. It also carries the
+             type contrast: 11px mono against a 68px display face, big jumps
+             between levels with nothing in the middle, and mono doing the one
+             job the system reserves it for. -->
+        <aside class="lg:col-span-5">
+          <div class="border border-line bg-white">
+            <img
+              src="/images/hero-belt.webp"
+              alt="Flat belt conveyor BBS — penampang cover hitam dengan lapisan kain"
+              width="1150"
+              height="1441"
+              fetchpriority="high"
+              decoding="async"
+              class="aspect-[4/3] w-full object-contain"
+            />
+          </div>
+
+          <dl class="mt-8 border-t border-line">
             <div
               v-for="fact in facts"
               :key="fact.key"
@@ -155,23 +174,12 @@ const headlineParts = computed(() => {
         </aside>
       </div>
 
-      <!-- Still the drawing, not a photograph.
-           The client's photo set was reviewed for this slot and none of it
-           survives at hero scale: they are workshop documentation shot on a
-           phone — a safety vest, an office chair, parked motorbikes and a
-           grubby wall in frame — and a watermark sits dead centre of every
-           frame, so only narrow horizontal bands crop clean. Enlarged across
-           the first screen they would make the site look worse, not more
-           credible. The drawing is controlled, on-brand and sharp at any size,
-           so it holds this position until real product photography lands. The
-           best of the photos is used further down, at a size it can carry.
-           It sits in its own hairline-topped register now, below the claim and
-           the evidence rather than dominating the fold, and narrowed from
-           max-w-4xl so it reads as a technical plate instead of the largest
-           thing on the page. -->
-      <div class="border-t border-line px-5 py-10 md:px-8 md:py-12">
-        <HeroBlueprint class="!max-w-3xl" />
-      </div>
+      <!-- HeroBlueprint used to sit here, below everything, holding the slot
+           until a real product photograph existed. One does now, and a real
+           belt out-argues a drawing of a generic conveyor, so the drawing moved
+           to the head of /produk/belt-conveyor — the page where someone is
+           actually working out which part they need. The hero is one screen
+           shorter for it. -->
     </div>
   </section>
 </template>

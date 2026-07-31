@@ -46,6 +46,18 @@ useSeoMeta({
       description="Pilih dari berbagai jenis belt conveyor untuk aplikasi industri Anda."
     />
 
+    <!-- HeroBlueprint's new home. It held the homepage hero until a real
+         product photograph existed; now that one does, a labelled side
+         elevation of a belt conveyor — pulleys, idlers, A-frame, carried load —
+         earns its place here instead, at the head of the catalog it describes.
+         Better here than on the homepage anyway: this is where someone is
+         actually trying to work out which part they need. -->
+    <section class="bg-paper">
+      <div class="frame border-b border-line px-5 py-10 md:px-8 md:py-12">
+        <HeroBlueprint class="!max-w-3xl" />
+      </div>
+    </section>
+
     <div v-if="productErr" class="container-tech py-12">
       <div class="rounded-none border border-red-200 bg-red-50 px-6 py-8 text-center">
         <p class="text-sm font-semibold text-red-700">Gagal memuat produk.</p>

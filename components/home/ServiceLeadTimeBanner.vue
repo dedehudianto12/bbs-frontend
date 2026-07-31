@@ -62,19 +62,30 @@ const { root } = useRevealOnScroll({ stagger: 45 })
         </div>
       </div>
 
-      <!-- The site's first photograph, and the only one that survived review.
-           It is the finished product wrapped on a pallet — belt coiled, shrink
-           wrapped, on the truck — which is the literal end of the 2–3 day
-           promise stated directly above it. The rest of the client's set is
-           workshop documentation with a safety vest or a parked motorbike in
-           frame; this one is material, and material is what they sell.
-           A 3:1 band rather than a square: the source is a phone photo, and
-           less area means less visible softness while the coils keep their
-           rhythm. object-cover, not contain — this is a decorative band that
-           should fill its box, unlike the product cards where the whole item
-           must stay visible. Empty alt: the caption beneath carries the meaning
-           and a screen reader repeating it would be noise. -->
-      <div class="border-t border-ink/20">
+      <!-- Two photographs, because this band makes two claims and each one
+           answers a different half.
+           Left is onsite work: two technicians in coveralls, hairnets and masks
+           running a portable splicing press on a food-grade belt inside a clean
+           production room. It proves "tim kami datang ke lokasi Anda" and
+           food-grade capability in a single frame, which no other photo in the
+           client's set does.
+           Right is the finished product wrapped on a pallet — the literal end
+           of the 2–3 day promise.
+           Only the first shows below sm. At 360px a two-up would give each
+           image about 180px of width, and two people at that size are unreadable
+           smudges; one legible photograph beats two illegible ones.
+           object-cover because these are bands that should fill their box, and
+           empty alt because the copy above already says what they show. -->
+      <div class="grid grid-cols-1 gap-px border-t border-ink/20 bg-ink/20 sm:grid-cols-2">
+        <img
+          src="/images/onsite-joint.webp"
+          alt=""
+          width="1200"
+          height="800"
+          loading="lazy"
+          decoding="async"
+          class="h-[200px] w-full object-cover md:h-[280px]"
+        />
         <img
           src="/images/belt-rolls.webp"
           alt=""
@@ -82,7 +93,7 @@ const { root } = useRevealOnScroll({ stagger: 45 })
           height="531"
           loading="lazy"
           decoding="async"
-          class="h-[180px] w-full object-cover md:h-[260px]"
+          class="hidden h-[200px] w-full object-cover sm:block md:h-[280px]"
         />
       </div>
 
