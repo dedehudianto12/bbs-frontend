@@ -134,8 +134,12 @@ useSeoMeta({
          The articles keep /artikel and stay in the sitemap; they just stop
          competing with the catalog for a buyer whose line is down.
 
-       Tonal rhythm is deliberate: steel at the katalog, gold at the service
-       band, steel again at the footer. -->
+       Tonal rhythm is deliberate, and it now brightens toward the products
+       rather than darkening: paper through the hero and proof band, white at
+       the katalog — the cleanest surface on the page, where the photography
+       goes — gold at the service band, back to paper, then steel at the footer.
+       The katalog used to be a steel anchor with a blueprint grid; see that
+       component for why it is not any more. -->
   <template v-else>
     <ProofMarquee :items="galleryItems" />
     <ProofStrip />

@@ -2,7 +2,7 @@
 import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
 
 defineProps<{
-  items: { title: string; description: string }[]
+  items: { icon?: string; title: string; description: string }[]
 }>()
 
 // Four items across four columns, so the row closes on its own.
@@ -20,22 +20,36 @@ const { root } = useRevealOnScroll({ stagger: 45 })
 <template>
   <section ref="root" class="bg-paper">
     <div class="frame border-b border-line">
-      <div class="border-b border-line px-6 py-14 md:px-10 md:py-16">
+      <!-- Header trimmed to eyebrow and title. The standfirst under it read
+           "Empat alasan perusahaan di seluruh Indonesia mempercayakan kebutuhan
+           conveyor mereka kepada kami" — which said nothing the four cells below
+           do not say better, and asserted a nationwide client base we have no
+           source for. -->
+      <div class="border-b border-line px-6 py-12 md:px-10 md:py-14">
         <SectionTitle
           eyebrow="Kenapa BBS Conveyor"
           title="Mitra terpercaya untuk conveyor industri"
-          description="Empat alasan perusahaan di seluruh Indonesia mempercayakan kebutuhan conveyor mereka kepada kami."
         />
       </div>
 
       <div class="grid grid-cols-1 gap-px bg-line sm:grid-cols-2 lg:grid-cols-4">
+        <!-- Icon replaces the 01–04 numeral. The numbers implied a ranking or a
+             sequence and these four values are neither; a pictogram is read at
+             a glance where a number has to be counted. The index stays visible
+             as a small ordinal beside it, because losing it entirely made the
+             four cells harder to scan as a set. -->
         <div
           v-for="(item, i) in items"
           :key="item.title"
           data-reveal-item
           class="bg-paper p-6 md:p-7"
         >
-          <span class="num text-sm font-semibold text-accent">{{ String(i + 1).padStart(2, '0') }}</span>
+          <div class="flex items-center gap-3">
+            <ValueIcon :name="item.icon" class="h-[22px] w-[22px] shrink-0 text-accent" />
+            <span class="num text-[11px] font-semibold text-muted/70">
+              {{ String(i + 1).padStart(2, '0') }}
+            </span>
+          </div>
           <h3 class="mt-5 text-[17px] font-semibold leading-snug text-ink">{{ item.title }}</h3>
           <p class="mt-2 text-sm leading-relaxed text-muted">{{ item.description }}</p>
         </div>

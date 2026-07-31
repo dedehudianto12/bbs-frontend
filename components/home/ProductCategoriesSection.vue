@@ -73,18 +73,30 @@ const { root } = useRevealOnScroll({ stagger: 45 })
 </script>
 
 <template>
-  <section ref="root" class="bg-steel">
-    <div class="frame frame-dark blueprint-grid-steel">
+  <!-- White, not steel, and no blueprint grid.
+       This band used to be the page's dark anchor with a graph-paper texture
+       behind it. Two things were wrong with that. The grid is decoration
+       competing with the cards for the same attention, and graph paper on
+       charcoal is developer-tool vocabulary — it signals sophistication to
+       someone who reads Hacker News and nothing at all to a maintenance manager
+       in Cakung. More practically, product photography lands in these cards:
+       a photo on a dark textured field reads as a dashboard widget, and the
+       same photo on white reads as a catalog page. Interroll, Habasit and
+       Ammeraal are all white for exactly this reason.
+       White also buys the gold cell back. On steel it was a muted note; on a
+       clean field it is the one piece of colour in the section. -->
+  <section ref="root" class="bg-white">
+    <div class="frame">
       <!-- Section tag row. The "Semua produk" link lives here rather than
            relying on the gold CTA cell at the end of the rail: below lg the
            cells are a horizontal track, and a buyer who never swipes to the end
            would otherwise have no way out of this band. Same pattern as
            ProofMarquee — a static link that never moves under the thumb. -->
-      <div class="flex items-center justify-between gap-4 border-b border-white/10 px-6 py-3 md:px-10">
+      <div class="flex items-center justify-between gap-4 border-b border-line px-6 py-3 md:px-10">
         <span class="eyebrow text-accent">Katalog</span>
         <NuxtLink
           to="/produk/belt-conveyor"
-          class="cat-all inline-flex items-center gap-1.5 text-[12px] font-semibold text-white/70 lg:hidden"
+          class="cat-all inline-flex items-center gap-1.5 text-[12px] font-semibold text-muted lg:hidden"
         >
           Semua produk
           <svg
@@ -100,10 +112,16 @@ const { root } = useRevealOnScroll({ stagger: 45 })
         </NuxtLink>
       </div>
 
-      <!-- section header -->
-      <div class="border-b border-white/10 px-6 py-16 md:px-10 md:py-24">
-        <h2 class="display text-4xl text-white md:text-6xl">Katalog Produk</h2>
-        <p class="mt-6 max-w-md leading-relaxed text-white/50">
+      <!-- Section header, roughly a third shorter than it was (py-16/24 → 12/16).
+           A catalog earns attention with the goods, not with an empty field
+           above them; the old header pushed the first row of cards most of a
+           screen down. The gold rule is the section's only ornament and does
+           the job the blueprint grid was failing to do — marking where the band
+           starts. -->
+      <div class="border-b border-line px-6 py-12 md:px-10 md:py-16">
+        <div class="h-1 w-14 bg-accent" aria-hidden="true" />
+        <h2 class="display mt-6 text-4xl text-ink md:text-[3.25rem]">Katalog Produk</h2>
+        <p class="mt-5 max-w-md leading-relaxed text-muted">
           Belt conveyor dan komponen material handling untuk lini produksi yang
           kritis — dipilih dan diuji untuk kebutuhan industri Indonesia.
         </p>
@@ -111,7 +129,7 @@ const { root } = useRevealOnScroll({ stagger: 45 })
 
       <!-- Two layouts, one DOM.
            At lg+ this is the 3-column grid it has always been; gap-px over
-           bg-white/10 makes the gutters read as 1px structural hairlines rather
+           bg-line makes the gutters read as 1px structural hairlines rather
            than empty space.
            Below lg it becomes a swipeable rail. That grid never existed on a
            phone — it collapsed to one column, so the section was nine
@@ -128,39 +146,39 @@ const { root } = useRevealOnScroll({ stagger: 45 })
            sit at opacity 0 until swiped to, fading in under the thumb. -->
       <div
         data-reveal-item
-        class="flex snap-x snap-mandatory gap-px overflow-x-auto overscroll-x-contain bg-white/10 cat-rail lg:grid lg:snap-none lg:grid-cols-3 lg:overflow-visible"
+        class="cat-rail flex snap-x snap-mandatory gap-px overflow-x-auto overscroll-x-contain bg-line lg:grid lg:snap-none lg:grid-cols-3 lg:overflow-visible"
       >
         <NuxtLink
           v-for="card in cards"
           :key="card.cat"
           :to="card.href"
-          class="cat-cell group flex w-[78%] shrink-0 snap-start flex-col bg-steel px-6 py-8 sm:w-[46%] md:w-[38%] md:px-8 md:py-10 lg:w-auto"
+          class="cat-cell group flex w-[78%] shrink-0 snap-start flex-col bg-white px-6 py-8 sm:w-[46%] md:w-[38%] md:px-8 md:py-10 lg:w-auto"
         >
           <ProductIcon
             :name="card.icon"
-            class="cat-icon h-5 w-5 shrink-0 text-white/30"
+            class="cat-icon h-5 w-5 shrink-0 text-muted"
           />
 
-          <h3 class="display mt-6 text-xl text-white md:text-[1.4rem]">
+          <h3 class="display mt-6 text-xl text-ink md:text-[1.4rem]">
             {{ card.cat }}
           </h3>
-          <p class="mt-2.5 text-[14px] leading-relaxed text-white/45">
+          <p class="mt-2.5 text-[14px] leading-relaxed text-muted">
             {{ card.blurb }}
           </p>
 
           <!-- metadata: true by construction, straight off the API response -->
-          <dl class="mt-8 flex items-center gap-3 border-t border-white/10 pt-4">
+          <dl class="mt-8 flex items-center gap-3 border-t border-line pt-4">
             <dt class="sr-only">Grup</dt>
-            <dd class="spec-key text-white/35">{{ card.groupLabel }}</dd>
-            <span class="text-white/15" aria-hidden="true">·</span>
+            <dd class="spec-key">{{ card.groupLabel }}</dd>
+            <span class="text-line" aria-hidden="true">·</span>
             <dt class="sr-only">Jumlah produk</dt>
-            <dd class="spec-val text-white/70">
+            <dd class="spec-val">
               {{ String(card.count).padStart(2, '0') }} produk
             </dd>
           </dl>
 
           <span
-            class="mt-6 inline-flex items-center gap-1.5 text-[13px] font-semibold text-white/70"
+            class="mt-6 inline-flex items-center gap-1.5 text-[13px] font-semibold text-ink"
           >
             Lihat
             <svg
@@ -209,7 +227,7 @@ const { root } = useRevealOnScroll({ stagger: 45 })
         <div
           v-for="n in fillerCount"
           :key="`filler-${n}`"
-          class="hidden bg-steel lg:block"
+          class="hidden bg-white lg:block"
           aria-hidden="true"
         />
       </div>
@@ -238,11 +256,11 @@ const { root } = useRevealOnScroll({ stagger: 45 })
   transition: color 140ms ease;
 }
 .cat-all:active {
-  color: rgb(255 255 255 / 0.9);
+  color: rgb(var(--ink));
 }
 @media (hover: hover) and (pointer: fine) {
   .cat-all:hover {
-    color: rgb(var(--accent));
+    color: rgb(var(--ink));
   }
   .cat-all:hover .cat-arrow {
     transform: translateX(2px);
@@ -250,8 +268,10 @@ const { root } = useRevealOnScroll({ stagger: 45 })
 }
 
 /* Explicit properties only, never `transition: all`. Sheet metal does not
-   lift or cast soft shadows, so hover darkens/lifts the surface and the
-   hairline instead of translating the cell. */
+   lift or cast soft shadows, so hover shifts the surface and tightens the
+   hairline instead of translating the cell. On white the move is the inverse of
+   the old steel behaviour: the cell settles toward paper rather than lifting
+   toward a lighter grey. */
 .cat-cell {
   transition:
     background-color 140ms ease,
@@ -269,9 +289,9 @@ const { root } = useRevealOnScroll({ stagger: 45 })
    hovered state until the next tap elsewhere. */
 @media (hover: hover) and (pointer: fine) {
   .cat-cell:hover {
-    background-color: rgb(var(--steel-soft));
+    background-color: rgb(var(--paper-soft));
     /* inset ring rather than an outer shadow — reads as a machined edge */
-    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.18);
+    box-shadow: inset 0 0 0 1px rgb(var(--ink) / 0.16);
   }
   .cat-cell:hover .cat-icon {
     color: rgb(var(--accent));
@@ -287,7 +307,10 @@ const { root } = useRevealOnScroll({ stagger: 45 })
 
 /* Press feedback on the whole cell — it is a link, so it must acknowledge. */
 .cat-cell:active {
-  background-color: rgb(var(--steel-soft));
+  background-color: rgb(var(--paper-soft));
+}
+.cat-cell--cta:active {
+  background-color: rgb(var(--accent-glow));
 }
 
 @media (prefers-reduced-motion: reduce) {

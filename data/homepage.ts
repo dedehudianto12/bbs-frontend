@@ -25,27 +25,33 @@ export const homepageConfig = {
     description:
       'BBS Conveyor adalah supplier conveyor terpercaya di Indonesia yang menyediakan belt conveyor, roller, dan komponen industri berkualitas tinggi.',
   },
+  // The four values from the client's company profile (p5), cut to one line
+  // each. They ran two to three clauses apiece and the client's own note was
+  // that the section read as too much — a buyer scanning four cells is not
+  // reading three sentences in any of them, so the detail was costing
+  // comprehension rather than adding it. Each `icon` keys a pictogram in
+  // components/brand/ValueIcon.vue.
   whyChooseUs: {
     items: [
       {
-        title: 'Produk Berkualitas & Bermerek',
-        description:
-          'Kami menyediakan produk dan parts conveyor dari merek terkemuka dengan jaminan mutu — bukan barang kualitas rendah.',
+        icon: 'mutu',
+        title: 'Produk Bermerek',
+        description: 'Merek terkemuka, dengan jaminan mutu.',
       },
       {
+        icon: 'harga',
         title: 'Harga Kompetitif',
-        description:
-          'Solusi conveyor berkualitas dengan harga yang bersaing. Nilai terbaik untuk anggaran Anda tanpa mengurangi standar.',
+        description: 'Harga bersaing, tanpa menurunkan standar.',
       },
       {
+        icon: 'garansi',
         title: 'Garansi Pengerjaan',
-        description:
-          'Setiap jasa penyambungan dan instalasi bergaransi. Jika ada masalah, kami kembali tanpa biaya tambahan.',
+        description: 'Penyambungan dan instalasi bergaransi.',
       },
       {
-        title: 'Layanan Cepat & Responsif',
-        description:
-          'Tim kami siap merespon dalam hitungan jam — konsultasi produk, survey lokasi, hingga dukungan purna jual.',
+        icon: 'respons',
+        title: 'Respons Cepat',
+        description: 'Dijawab dalam hitungan jam, bukan hari.',
       },
     ],
   },
