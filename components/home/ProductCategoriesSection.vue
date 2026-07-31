@@ -152,22 +152,49 @@ const { root } = useRevealOnScroll({ stagger: 45 })
           v-for="card in cards"
           :key="card.cat"
           :to="card.href"
-          class="cat-cell group flex w-[78%] shrink-0 snap-start flex-col bg-white px-6 py-8 sm:w-[46%] md:w-[38%] md:px-8 md:py-10 lg:w-auto"
+          class="cat-cell group relative flex w-[78%] shrink-0 snap-start flex-col bg-white px-6 py-8 sm:w-[46%] md:w-[38%] md:px-8 md:py-10 lg:w-auto"
         >
-          <ProductIcon
-            :name="card.icon"
-            class="cat-icon h-5 w-5 shrink-0 text-muted"
-          />
+          <!-- The pictogram is the card's identity, so it is drawn at 40px
+               instead of 20 and in ink rather than muted grey. At the old size
+               eight cards were eight near-identical blocks of text and nothing
+               helped the eye pick one; at this size each has a distinct
+               silhouette, which is exactly the job an industrial catalog gives
+               its icons.
+               The arrow moves up here to pair with it. It used to sit on its
+               own line at the bottom next to the word "Lihat" — a redundant
+               affordance, since the whole cell is already a link, costing a
+               line of vertical space and a line of reading. -->
+          <div class="flex items-start justify-between gap-4">
+            <ProductIcon
+              :name="card.icon"
+              class="cat-icon h-10 w-10 shrink-0 text-ink"
+            />
+            <svg
+              class="cat-arrow mt-1 h-4 w-4 shrink-0 text-muted"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
 
-          <h3 class="display mt-6 text-xl text-ink md:text-[1.4rem]">
+          <h3 class="display mt-7 text-[1.4rem] text-ink md:text-[1.55rem]">
             {{ card.cat }}
           </h3>
           <p class="mt-2.5 text-[14px] leading-relaxed text-muted">
             {{ card.blurb }}
           </p>
 
-          <!-- metadata: true by construction, straight off the API response -->
-          <dl class="mt-8 flex items-center gap-3 border-t border-line pt-4">
+          <!-- mt-auto pins this to the floor of the cell, so every card in the
+               row shares one metadata baseline however long its blurb runs.
+               Previously a fixed mt-8 let the rule float at a different height
+               in each card, which is what made the grid look loose.
+               The values themselves are true by construction — group and count
+               both come straight off the API response. -->
+          <dl class="mt-auto flex items-center gap-3 border-t border-line pt-4 md:pt-5">
             <dt class="sr-only">Grup</dt>
             <dd class="spec-key">{{ card.groupLabel }}</dd>
             <span class="text-line" aria-hidden="true">·</span>
@@ -177,21 +204,9 @@ const { root } = useRevealOnScroll({ stagger: 45 })
             </dd>
           </dl>
 
-          <span
-            class="mt-6 inline-flex items-center gap-1.5 text-[13px] font-semibold text-ink"
-          >
-            Lihat
-            <svg
-              class="cat-arrow h-3.5 w-3.5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              aria-hidden="true"
-            >
-              <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </span>
+          <!-- Hover rule: 2px of gold along the floor of the cell, scaling out
+               from the left. Transform only, so it runs on the compositor. -->
+          <span class="cat-rule" aria-hidden="true" />
         </NuxtLink>
 
         <!-- 9th cell: closes the 3×3 grid at lg+ and is the only accent on the
@@ -202,16 +217,16 @@ const { root } = useRevealOnScroll({ stagger: 45 })
              exit on mobile instead. -->
         <NuxtLink
           to="/produk/belt-conveyor"
-          class="cat-cell cat-cell--cta group flex w-[78%] shrink-0 snap-start flex-col justify-between bg-accent px-6 py-8 sm:w-[46%] md:w-[38%] md:px-8 md:py-10 lg:w-auto"
+          class="cat-cell cat-cell--cta group relative flex w-[78%] shrink-0 snap-start flex-col bg-accent px-6 py-8 sm:w-[46%] md:w-[38%] md:px-8 md:py-10 lg:w-auto"
         >
-          <span class="eyebrow text-ink/60">Semua kategori</span>
-          <span class="display mt-6 text-xl text-ink md:text-[1.4rem]">
-            Lihat Semua Produk
-          </span>
-          <span class="mt-8 inline-flex items-center gap-1.5 text-[13px] font-semibold text-ink">
-            Buka katalog
+          <!-- Same skeleton as the category cells: mark top-left, arrow
+               top-right, heading, then metadata on the floor. It reads as one
+               of the set rather than a bolted-on button, and the gold does the
+               work of telling you it is different. -->
+          <div class="flex items-start justify-between gap-4">
+            <span class="eyebrow text-ink/60">Semua kategori</span>
             <svg
-              class="cat-arrow h-3.5 w-3.5"
+              class="cat-arrow h-4 w-4 shrink-0 text-ink/60"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -220,6 +235,14 @@ const { root } = useRevealOnScroll({ stagger: 45 })
             >
               <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
+          </div>
+
+          <span class="display mt-7 text-[1.4rem] text-ink md:text-[1.55rem]">
+            Lihat Semua Produk
+          </span>
+
+          <span class="mt-auto border-t border-ink/20 pt-4 md:pt-5">
+            <span class="spec-key !text-ink/60">Belt conveyor &amp; lainnya</span>
           </span>
         </NuxtLink>
 
@@ -273,9 +296,7 @@ const { root } = useRevealOnScroll({ stagger: 45 })
    the old steel behaviour: the cell settles toward paper rather than lifting
    toward a lighter grey. */
 .cat-cell {
-  transition:
-    background-color 140ms ease,
-    box-shadow 140ms ease;
+  transition: background-color 140ms ease;
 }
 
 .cat-icon,
@@ -285,23 +306,40 @@ const { root } = useRevealOnScroll({ stagger: 45 })
     transform 140ms var(--ease-out);
 }
 
+/* Replaces the inset ring the steel version used. A ring plus a background
+   shift plus a moving arrow was three things answering one hover; a rule
+   growing along the floor is one, and it points the same way the arrow does.
+   scaleX from the left edge — transform only, so it composites. */
+.cat-rule {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background-color: rgb(var(--accent));
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 180ms var(--ease-out);
+}
+
 /* Gated: touch devices fire :hover on tap and leave cells stuck in the
    hovered state until the next tap elsewhere. */
 @media (hover: hover) and (pointer: fine) {
   .cat-cell:hover {
     background-color: rgb(var(--paper-soft));
-    /* inset ring rather than an outer shadow — reads as a machined edge */
-    box-shadow: inset 0 0 0 1px rgb(var(--ink) / 0.16);
   }
   .cat-cell:hover .cat-icon {
     color: rgb(var(--accent));
   }
   .cat-cell:hover .cat-arrow {
-    transform: translateX(2px);
+    color: rgb(var(--ink));
+    transform: translateX(3px);
+  }
+  .cat-cell:hover .cat-rule {
+    transform: scaleX(1);
   }
   .cat-cell--cta:hover {
     background-color: rgb(var(--accent-glow));
-    box-shadow: inset 0 0 0 1px rgb(var(--ink) / 0.18);
   }
 }
 
@@ -313,11 +351,17 @@ const { root } = useRevealOnScroll({ stagger: 45 })
   background-color: rgb(var(--accent-glow));
 }
 
+/* Reduced motion keeps the colour and background changes — they carry the
+   meaning — and drops only the movement. The gold rule stays as a state, it
+   just appears instead of growing. */
 @media (prefers-reduced-motion: reduce) {
   .cat-cell,
   .cat-icon,
   .cat-arrow {
     transition: background-color 140ms ease, color 140ms ease;
+  }
+  .cat-rule {
+    transition: none;
   }
   .cat-cell:hover .cat-arrow {
     transform: none;
