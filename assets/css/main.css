@@ -51,7 +51,17 @@
 
   html {
     -webkit-text-size-adjust: 100%;
-    scroll-behavior: smooth;
+  }
+
+  /* Smooth scrolling is motion the user did not ask for, and an anchor jump
+     that glides the whole page is one of the more reliable triggers for
+     vestibular discomfort. Every other animation in this system is guarded;
+     this one was not. Opting in rather than out means the reduced-motion case
+     is the default and cannot be forgotten. */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 
   body {
