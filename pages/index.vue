@@ -18,6 +18,7 @@ const heroProps = computed(() => ({
   primaryWhatsApp: true,
   secondaryCTA: hpData.hero.secondaryCTA,
   secondaryLink: hpData.hero.secondaryLink,
+  facts: hpData.hero.facts,
 }))
 
 const ctaProps = computed(() => ({
@@ -120,7 +121,7 @@ useSeoMeta({
     </div>
   </div>
 
-  <!-- Eleven sections down to seven.
+  <!-- Eleven sections down to six.
        Cut, and why:
        - IndustriesSection: its cells linked nowhere and hid their descriptions
          in a `title` tooltip, which is invisible on touch and unreachable by
@@ -134,15 +135,21 @@ useSeoMeta({
          The articles keep /artikel and stay in the sitemap; they just stop
          competing with the catalog for a buyer whose line is down.
 
-       Tonal rhythm is deliberate, and it now brightens toward the products
-       rather than darkening: paper through the hero and proof band, white at
+       - ProofStrip: not cut but promoted. Its four facts are now the datasheet
+         beside the headline, where they sit next to the claim they support
+         rather than a screen below it.
+
+       Tonal rhythm is deliberate, and it brightens toward the products
+       rather than darkening: paper through the hero and marquee, white at
        the katalog — the cleanest surface on the page, where the photography
        goes — gold at the service band, back to paper, then steel at the footer.
        The katalog used to be a steel anchor with a blueprint grid; see that
        component for why it is not any more. -->
   <template v-else>
+    <!-- ProofStrip is gone: its four facts moved into the hero as the datasheet
+         beside the headline, where they sit next to the claim they support
+         instead of a screen below it. -->
     <ProofMarquee :items="galleryItems" />
-    <ProofStrip />
 
     <ProductCategoriesSection v-if="catItems.length" :items="catItems" />
 

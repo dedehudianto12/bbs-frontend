@@ -22,6 +22,24 @@ export const homepageConfig = {
     primaryCTA: 'Chat WhatsApp',
     secondaryCTA: 'Lihat Produk',
     secondaryLink: '/produk/belt-conveyor',
+    // The datasheet block that counterweights the headline, moved up out of
+    // the old standalone ProofStrip section. It belongs beside the claim it
+    // supports: the headline asserts 2–3 hari and nothing backed that up until
+    // the reader scrolled. Values are shortened from the ProofStrip wording so
+    // they set on one line in a narrow column.
+    //
+    // Every line is quotable from the client's company profile (bbsconveyor.com,
+    // Dec 2024) — lead time and the splicing guarantee from its values page,
+    // hot/cold joint and the onsite-or-workshop split from its services page,
+    // the sectors from its numbered list. The industries row names sectors
+    // rather than counting them: the source lists eight and then adds "industri
+    // lainnya", so any total would be a guess.
+    facts: [
+      { key: 'Lead time', value: '2–3 hari' },
+      { key: 'Sambungan', value: 'Hot & cold joint' },
+      { key: 'Lokasi', value: 'Pabrik Anda / workshop kami' },
+      { key: 'Industri', value: 'Manufaktur, food, farmasi, tambang' },
+    ],
   },
   company: {
     companyName: 'CV Bintang Berjaya Satu',

@@ -34,6 +34,16 @@ export function waMessage(ctx: WaContext = {}): string {
 }
 
 /**
+ * Formats a stored 62-prefixed number for display: 6281287859061 →
+ * "+62 812-878-590-61". Lived as a local helper inside WhatsAppFloat; the hero
+ * now prints a number too, and two copies would be two formats the first time
+ * either was touched.
+ */
+export function prettyPhone(n: string): string {
+  return `+62 ${n.replace(/^62/, '').replace(/(\d{3})(?=\d)/g, '$1-')}`
+}
+
+/**
  * Builds a wa.me deep link with the message prefilled.
  * Numbers come from data/contact.ts, which stays the single source.
  */

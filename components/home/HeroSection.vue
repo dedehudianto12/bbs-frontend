@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { contactInfo } from '~/data/contact'
+import { prettyPhone } from '~/utils/whatsapp'
+
 const props = withDefaults(
   defineProps<{
     headline: string
@@ -11,9 +14,13 @@ const props = withDefaults(
     primaryWhatsApp?: boolean
     secondaryCTA?: string
     secondaryLink?: string
+    /** Datasheet rows counterweighting the headline. */
+    facts?: { key: string; value: string }[]
   }>(),
-  { highlights: () => [], primaryWhatsApp: false },
+  { highlights: () => [], primaryWhatsApp: false, facts: () => [] },
 )
+
+const phone = prettyPhone(contactInfo.waSales1)
 
 // Split the headline so chosen words render in logo gold (partial-word
 // highlight). Case-insensitive, longest phrases first.
@@ -39,20 +46,26 @@ const headlineParts = computed(() => {
 </script>
 
 <template>
-  <section class="relative bg-paper">
-    <!-- faint blueprint grid backing the hero -->
-    <div class="pointer-events-none absolute inset-0 blueprint-grid opacity-60" aria-hidden="true" />
-    <div class="frame relative border-b border-line">
-      <!-- Left-aligned, not centred.
+  <!-- The blueprint-grid backdrop is gone. HeroBlueprint below is itself a
+       technical drawing, so graph paper behind it was the same idea said twice
+       — the identical argument that took the grid off the katalog band. One
+       blueprint device per screen. -->
+  <section class="bg-paper">
+    <div class="frame border-b border-line">
+      <!-- Left-aligned, not centred, and now counterweighted.
            Centred pill over centred headline over centred subhead over centred
-           buttons is the arrangement a page has when nobody chose one — it is
-           the default of every SaaS template since about 2019, and it is the
-           single loudest signal that a layout was not designed. Premium
-           industrial sites are left-aligned on an asymmetric grid without
-           exception: Interroll, Trumpf, Festo, Vitsoe. Moving the axis left
-           costs nothing and buys more perceived care than any amount of
-           decoration. -->
-      <div class="flex flex-col items-start px-5 pb-10 pt-14 text-left md:px-8 md:pb-14 md:pt-20">
+           buttons is the arrangement a page has when nobody chose one — the
+           default of every SaaS template since about 2019, and the loudest
+           signal that a layout was not designed. Premium industrial sites are
+           left-aligned on an asymmetric grid without exception: Interroll,
+           Trumpf, Festo, Vitsoe.
+           But left-aligning alone left the entire right half of the first
+           screen as empty paper, which reads as unfinished rather than as
+           composed. Asymmetry only works when something small and precise sits
+           opposite the mass — hence the datasheet, pinned low with self-end so
+           the eye travels from the big claim down to the small evidence. -->
+      <div class="grid gap-y-10 px-5 pb-12 pt-12 text-left md:px-8 md:pt-16 lg:grid-cols-12 lg:gap-x-12">
+        <div class="flex flex-col items-start lg:col-span-7">
         <!-- The status pill is gone. A bordered capsule with a pulsing green
              dot is status-page vocabulary — Vercel, Linear, "all systems
              operational" — and on a conveyor supplier it reads as a startup in
@@ -102,21 +115,62 @@ const headlineParts = computed(() => {
             {{ secondaryCTA }}
           </UiButton>
         </div>
-
-        <!-- Still the drawing, not a photograph.
-             The client's photo set was reviewed for this slot and none of it
-             survives at hero scale: they are workshop documentation shot on a
-             phone — a safety vest, an office chair, parked motorbikes and a
-             grubby wall in frame — and a watermark sits dead centre of every
-             frame, so only narrow horizontal bands crop clean. Enlarged across
-             the first screen they would make the site look worse, not more
-             credible. The drawing is controlled, on-brand and sharp at any
-             size, so it holds this position until real product photography
-             lands. The best of the photos is used further down, at a size it
-             can carry. -->
-        <div class="mt-12 w-full md:mt-16">
-          <HeroBlueprint />
         </div>
+
+        <!-- The counterweight. This was a standalone ProofStrip section below
+             the fold; the headline asserted "2–3 hari" and nothing supported it
+             until the reader scrolled, which is an assertion without evidence
+             for anyone who lands and does not. Moving it here puts the proof
+             beside the claim, fills the void the left alignment created, and
+             removes a whole section from the page.
+             It is also where the type contrast lives: 11px mono against a 68px
+             display face. Big jumps between levels with nothing in the middle
+             is most of what makes a layout read as expensive — and mono is
+             doing the one job the system reserves it for, a datasheet of keys
+             and values. -->
+        <aside class="lg:col-span-5 lg:self-end lg:pb-2">
+          <dl class="border-t border-line">
+            <div
+              v-for="fact in facts"
+              :key="fact.key"
+              class="flex items-baseline justify-between gap-5 border-b border-line py-3"
+            >
+              <dt class="spec-key shrink-0">{{ fact.key }}</dt>
+              <dd class="spec-val text-right">{{ fact.value }}</dd>
+            </div>
+          </dl>
+
+          <!-- A number printed on the page is a fact; a button that opens
+               WhatsApp is a promise. For an Indonesian B2B buyer the former is
+               a trust signal in its own right, and it costs one line.
+               The hours are the honest version of what the deleted "● SIAP"
+               pill was gesturing at: someone whose line stopped at 07:00 wants
+               to know whether anyone will actually answer. -->
+          <div class="mt-5 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+            <a :href="`tel:+${contactInfo.waSales1}`" class="hero-tel num text-[15px] font-semibold text-ink">
+              {{ phone }}
+            </a>
+            <span class="spec-key">{{ contactInfo.jamSingkat }}</span>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Still the drawing, not a photograph.
+           The client's photo set was reviewed for this slot and none of it
+           survives at hero scale: they are workshop documentation shot on a
+           phone — a safety vest, an office chair, parked motorbikes and a
+           grubby wall in frame — and a watermark sits dead centre of every
+           frame, so only narrow horizontal bands crop clean. Enlarged across
+           the first screen they would make the site look worse, not more
+           credible. The drawing is controlled, on-brand and sharp at any size,
+           so it holds this position until real product photography lands. The
+           best of the photos is used further down, at a size it can carry.
+           It sits in its own hairline-topped register now, below the claim and
+           the evidence rather than dominating the fold, and narrowed from
+           max-w-4xl so it reads as a technical plate instead of the largest
+           thing on the page. -->
+      <div class="border-t border-line px-5 py-10 md:px-8 md:py-12">
+        <HeroBlueprint class="!max-w-3xl" />
       </div>
     </div>
   </section>
@@ -129,5 +183,18 @@ const headlineParts = computed(() => {
 .hero-h1 {
   line-height: 0.98;
   letter-spacing: -0.03em;
+}
+
+/* Explicit property, never `transition: all`. */
+.hero-tel {
+  transition: color 140ms ease;
+}
+.hero-tel:active {
+  color: rgb(var(--accent));
+}
+@media (hover: hover) and (pointer: fine) {
+  .hero-tel:hover {
+    color: rgb(var(--accent));
+  }
 }
 </style>

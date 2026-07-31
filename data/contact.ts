@@ -6,6 +6,11 @@ export const contactInfo = {
   email: 'sales@bbsconveyor.com',
   alamat: 'Jl. Pulo Bangka, RT.1/RW.9, Pulo Gebang\nKec. Cakung, Jakarta Timur\nDKI Jakarta 13950',
   jamOperasional: 'Senin – Jumat, 08:00 – 17:00 WIB\nSabtu, 08:00 – 12:00 WIB',
+  // Same hours, abbreviated for the hero datasheet where the full two-line
+  // string will not set. Kept as its own field rather than sliced off
+  // jamOperasional at runtime, so editing one does not silently truncate the
+  // other.
+  jamSingkat: 'Sen–Jum 08:00–17:00 WIB',
   waLabel1: 'Chat Sales 1',
   waLabel2: 'Chat Sales 2',
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onClickOutside } from '@vueuse/core'
 import { contactInfo } from '~/data/contact'
-import { waLink } from '~/utils/whatsapp'
+import { prettyPhone, waLink } from '~/utils/whatsapp'
 
 const isOpen = ref(false)
 const panelRef = ref<HTMLElement | null>(null)
@@ -33,9 +33,6 @@ const salesLinks = [
   { href: waLink({ halaman: 'Tombol WhatsApp mengapung' }, 2), label: contactInfo.waLabel2, number: contactInfo.waSales2 },
 ]
 
-function prettyNumber(n: string): string {
-  return `+62 ${n.replace(/^62/, '').replace(/(\d{3})(?=\d)/g, '$1-')}`
-}
 </script>
 
 <template>
@@ -84,7 +81,7 @@ function prettyNumber(n: string): string {
             </span>
             <div class="min-w-0">
               <p class="text-[13px] font-semibold text-ink">{{ sales.label }}</p>
-              <p class="num text-[12px] text-muted">{{ prettyNumber(sales.number) }}</p>
+              <p class="num text-[12px] text-muted">{{ prettyPhone(sales.number) }}</p>
             </div>
           </a>
         </div>
