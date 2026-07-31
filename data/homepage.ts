@@ -10,7 +10,11 @@ export const homepageConfig = {
     // Substrings rendered in logo gold. Lives here so a copy edit and its
     // highlight move together — this used to be a HIGHLIGHTS const inside
     // HeroSection, so changing the headline silently killed the gold.
-    headlineHighlights: ['2–3 hari'],
+    // Only the numeral, not "2–3 hari". Gold across two whole words at 68px
+    // reads as highlighter pen; confined to the figure it reads as the one
+    // measured thing on the page — accent buys weight in inverse proportion to
+    // how much of it there is.
+    headlineHighlights: ['2–3'],
     subheadline:
       'Penyambungan hot joint & cold joint di pabrik Anda atau di workshop kami. Belt conveyor, roller, dan komponen industri — CV Bintang Berjaya Satu, Jakarta Timur.',
     // primaryLink is built in pages/index.vue with waLink() so the prefilled

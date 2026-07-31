@@ -52,10 +52,19 @@ useSeoMeta({
           :key="item.id ?? i"
           class="card-shell"
         >
+          <!-- Square and cover, not 4:3 and contain.
+               The real site photos are 3:4 portrait — phone-shot. Letterboxed
+               into a 4:3 landscape frame they would sit at about half the cell
+               width with paper bars either side, which reads as broken rather
+               than as a choice. Cover fills the cell instead, and a square
+               crops a portrait source by ~25% against ~44% for 4:3, so it keeps
+               the most of each frame while staying tidy whatever orientation
+               the client uploads next. -->
           <ImageOrSkeleton
             :src="item.image"
             :alt="item.caption"
-            aspect="aspect-[4/3]"
+            aspect="aspect-square"
+            fit="object-cover"
             rounded="rounded-none"
             :fallback-index="i * 2 + 1"
           />

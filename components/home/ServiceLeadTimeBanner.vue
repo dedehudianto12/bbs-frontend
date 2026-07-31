@@ -62,6 +62,30 @@ const { root } = useRevealOnScroll({ stagger: 45 })
         </div>
       </div>
 
+      <!-- The site's first photograph, and the only one that survived review.
+           It is the finished product wrapped on a pallet — belt coiled, shrink
+           wrapped, on the truck — which is the literal end of the 2–3 day
+           promise stated directly above it. The rest of the client's set is
+           workshop documentation with a safety vest or a parked motorbike in
+           frame; this one is material, and material is what they sell.
+           A 3:1 band rather than a square: the source is a phone photo, and
+           less area means less visible softness while the coils keep their
+           rhythm. object-cover, not contain — this is a decorative band that
+           should fill its box, unlike the product cards where the whole item
+           must stay visible. Empty alt: the caption beneath carries the meaning
+           and a screen reader repeating it would be noise. -->
+      <div class="border-t border-ink/20">
+        <img
+          src="/images/belt-rolls.webp"
+          alt=""
+          width="1600"
+          height="531"
+          loading="lazy"
+          decoding="async"
+          class="h-[180px] w-full object-cover md:h-[260px]"
+        />
+      </div>
+
       <!-- Lead time and the three process steps, as one hairline row. The 2–3
            used to be a 9rem numeral owning half a section of its own; at this
            size it still anchors the row while the steps that explain it stay on
