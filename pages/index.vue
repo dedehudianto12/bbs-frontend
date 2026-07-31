@@ -19,16 +19,6 @@ const heroProps = computed(() => ({
   secondaryLink: hpData.hero.secondaryLink,
 }))
 
-const stats = computed(() => {
-  const s = hpData.statistics
-  return [
-    { label: 'Tahun Pengalaman', value: `${s.years}+` },
-    { label: 'Proyek Selesai', value: `${s.projects}+` },
-    { label: 'Klien Aktif', value: `${s.clients}+` },
-    { label: 'Tenaga Teknisi', value: `${s.engineers}+` },
-  ]
-})
-
 const ctaProps = computed(() => ({
   headline: hpData.cta.headline,
   description: hpData.cta.description,
@@ -169,7 +159,6 @@ useSeoMeta({
     <ProofMarquee :items="galleryItems" />
 
     <ProductCategoriesSection v-if="catItems.length" :items="catItems" />
-    <StatisticsSection v-if="stats.length" :items="stats" />
 
     <LeadTimeBanner
       v-if="hpData.leadTime"

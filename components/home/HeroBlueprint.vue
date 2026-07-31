@@ -1,17 +1,19 @@
 <script setup lang="ts">
 // Product-forward hero — a precise engineering side-elevation of a belt
 // conveyor: head/tail pulleys, belt envelope, idlers, A-frame supports and
-// carried load, annotated with dimension lines, a travel arrow and material
-// callouts. Replaces the floating isometric glow illustration. Draws in with
-// the shared rise/belt-travel motion; collapses under prefers-reduced-motion.
+// carried load, annotated with dimension lines and a travel arrow. Draws in
+// with the shared rise/belt-travel motion; collapses under
+// prefers-reduced-motion.
+//
+// The three spec callouts that used to hang off the belt — "LEBAR s/d 3000 mm",
+// "ROLLER Ø25–76", "PVC · PU FOOD-GRADE" — are gone. Two of them contradicted
+// the catalog this same site publishes: the widest belt on /produk is 2000 mm,
+// and roller diameters run 40–150 mm, not 25–76. A buyer who reads a limit here
+// and finds a different one on the product page has caught us exaggerating in
+// the first ten seconds, which costs more than the labels were worth. BBS
+// fabricates to order, so there is no fixed limit to state. The drawing carries
+// the hero on its own.
 const RISE = [0, 80, 150, 220, 300, 360]
-
-// Material / spec callouts anchored to points on the belt (SVG user units)
-const callouts = [
-  { label: 'PVC · PU', sub: 'FOOD-GRADE', x: 250, y: 96, tx: 250, ty: 132, delay: 380 },
-  { label: 'LEBAR s/d 3000 mm', sub: '', x: 470, y: 96, tx: 470, ty: 132, delay: 440 },
-  { label: 'ROLLER Ø25–76', sub: '', x: 560, y: 268, tx: 540, ty: 232, delay: 500 },
-]
 </script>
 
 <template>
@@ -93,14 +95,6 @@ const callouts = [
         <path d="M64 142h12M64 210h12" />
       </g>
 
-      <!-- material / spec callouts -->
-      <g v-for="c in callouts" :key="c.label" class="animate-rise motion-reduce:animate-none"
-        :style="{ animationDelay: `${c.delay}ms` }">
-        <circle :cx="c.tx" :cy="c.ty" r="2.5" fill="rgb(var(--accent))" />
-        <path :d="`M${c.tx} ${c.ty}L${c.x} ${c.y}`" stroke="rgb(var(--ink) / 0.25)" stroke-width="1" stroke-dasharray="3 3" />
-        <text :x="c.x" :y="c.y - 4" text-anchor="middle" font-size="11" font-weight="700" letter-spacing="0.12em" fill="rgb(var(--ink) / 0.72)">{{ c.label }}</text>
-        <text v-if="c.sub" :x="c.x" :y="c.y + 9" text-anchor="middle" font-size="10" font-weight="600" letter-spacing="0.1em" fill="rgb(var(--accent))">{{ c.sub }}</text>
-      </g>
     </svg>
   </div>
 </template>

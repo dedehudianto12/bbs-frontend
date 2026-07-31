@@ -50,12 +50,14 @@ export const homepageConfig = {
       { label: 'Siap Dikirim / Dipasang', detail: 'Pengiriman ke seluruh Indonesia atau instalasi onsite oleh teknisi kami.' },
     ],
   },
-  statistics: {
-    projects: 500,
-    years: 14,
-    clients: 120,
-    engineers: 25,
-  },
+  // No `statistics` block. "14 tahun / 500 proyek / 120 klien / 25 teknisi"
+  // were invented: the client's own company profile (bbsconveyor.com, Dec 2024)
+  // states no founding year and no figures of any kind, and `years: 14`
+  // contradicted the "sejak 2010" claim it sat next to — it was written in 2024
+  // and silently decayed. Proof on this site is carried by facts the client has
+  // actually published instead: 2–3 day lead time, hot & cold joint, onsite at
+  // your plant or our workshop. Any number added here must come from the
+  // backend or from the client in writing.
   cta: {
     headline: 'Butuh Solusi Conveyor?',
     description:
