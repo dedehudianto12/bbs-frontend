@@ -13,7 +13,7 @@ defineProps<{
 <template>
   <div
     v-if="src"
-    :class="[aspect ?? 'aspect-[4/3]', rounded ?? 'rounded-lg', 'relative overflow-hidden bg-paper-soft w-full']"
+    :class="[aspect ?? 'aspect-[4/3]', rounded ?? 'rounded-none', 'relative overflow-hidden bg-paper-soft w-full']"
   >
     <img
       :src="src"
@@ -24,7 +24,7 @@ defineProps<{
   <GradientPanel
     v-else
     :index="fallbackIndex ?? 0"
-    :rounded="rounded ?? 'rounded-lg'"
+    :rounded="rounded ?? 'rounded-none'"
     :class="aspect ?? 'aspect-[4/3]'"
     class="w-full"
   />

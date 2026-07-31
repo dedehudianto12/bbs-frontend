@@ -42,7 +42,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="relative z-0 overflow-hidden rounded-xl border border-line">
+  <div class="relative z-0 overflow-hidden rounded-none border border-line">
     <div ref="mapContainer" class="aspect-[4/3] w-full" />
   </div>
 </template>

@@ -53,10 +53,10 @@ useSeoMeta({
 
 <template>
   <div v-if="productErr" class="container-tech py-12">
-    <div class="rounded-xl border border-red-200 bg-red-50 px-6 py-8 text-center">
+    <div class="rounded-none border border-red-200 bg-red-50 px-6 py-8 text-center">
       <p class="text-sm font-semibold text-red-700">Gagal memuat produk.</p>
       <p class="mt-1 text-[13px] text-red-600">Tidak dapat menghubungi server.</p>
-      <button @click="() => refreshNuxtData(`produk-belt-conveyor-${subcat}`)" class="mt-4 cursor-pointer rounded-md bg-accent px-5 py-2 text-[13px] font-semibold text-white border-none">Coba Lagi</button>
+      <button @click="() => refreshNuxtData(`produk-belt-conveyor-${subcat}`)" class="mt-4 cursor-pointer rounded-none bg-accent px-5 py-2 text-[13px] font-semibold text-white border-none">Coba Lagi</button>
     </div>
   </div>
 
@@ -91,7 +91,7 @@ useSeoMeta({
   <div v-else class="container-tech py-24 md:py-32 text-center">
     <h1 class="display text-3xl text-ink md:text-4xl">Kategori Tidak Ditemukan</h1>
     <div class="mt-8 flex justify-center">
-      <NuxtLink to="/produk/belt-conveyor" class="inline-flex items-center gap-2 rounded-md px-6 py-2.5 text-sm font-semibold text-[rgb(var(--ink))] transition-colors hover:bg-[rgb(var(--paper-soft))]">Kembali ke Belt Conveyor <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></NuxtLink>
+      <UiButton href="/produk/belt-conveyor" variant="ghost">Kembali ke Belt Conveyor <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></UiButton>
     </div>
   </div>
 </template>

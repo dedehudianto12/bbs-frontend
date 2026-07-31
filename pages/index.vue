@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { homepageConfig, whyChooseUsItems } from '~/data/homepage'
+import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
 
 const { get } = useApi()
+
+// Mission band is inline in this page rather than a component, so it needs its
+// own reveal root.
+const { root: missionRoot } = useRevealOnScroll()
 
 const hpData = homepageConfig
 
@@ -33,7 +38,7 @@ const ctaProps = computed(() => ({
 
 const mission = computed(() => hpData.company.description)
 
-// Product categories, industries, articles — from backend
+// Product categories, industries, articles, gallery — from backend
 const { data: productRes, error: productErr } = await useAsyncData('homepage-products', () =>
   get<any[]>('/produk')
 )
@@ -43,11 +48,17 @@ const { data: industryRes, error: industryErr } = await useAsyncData('homepage-i
 const { data: articleRes, error: articleErr } = await useAsyncData('homepage-articles', () =>
   get<any[]>('/artikel')
 )
+const { data: galleryRes } = await useAsyncData('homepage-gallery', () =>
+  get<any[]>('/galeri')
+)
 
 const products = computed(() => productRes.value?.data ?? [])
 const industries = computed(() => industryRes.value?.data ?? [])
 const allArticles = computed(() => articleRes.value?.data ?? [])
+const galleries = computed(() => galleryRes.value?.data ?? [])
 
+// Gallery drives a decorative proof strip only, so its failure must not
+// escalate to the page-level error state — ProofMarquee self-hides when empty.
 const hasApiError = computed(() => productErr.value || industryErr.value || articleErr.value)
 
 // If SSR payload is empty (backend unreachable), show skeleton while client
@@ -56,22 +67,27 @@ const hasApiError = computed(() => productErr.value || industryErr.value || arti
 const emptyPayload = !productRes.value?.data?.length && !industryRes.value?.data?.length && !articleRes.value?.data?.length
 const isLoading = ref(hasApiError.value && emptyPayload)
 
+const REFRESH_KEYS = [
+  'homepage-products',
+  'homepage-industries',
+  'homepage-articles',
+  'homepage-gallery',
+] as const
+
+async function retry() {
+  isLoading.value = true
+  await Promise.allSettled(REFRESH_KEYS.map((key) => refreshNuxtData(key)))
+  isLoading.value = false
+}
+
 if (import.meta.client) {
   onMounted(async () => {
     if (!emptyPayload) return
-
-    isLoading.value = true
-    await Promise.allSettled([
-      refreshNuxtData('homepage-products'),
-      refreshNuxtData('homepage-industries'),
-      refreshNuxtData('homepage-articles'),
-    ])
-    isLoading.value = false
+    await retry()
   })
 }
 
 // Unique categories with group + product count, in first-seen order.
-// Also picks up the first product's specs for the SpecCard.
 const catItems = computed(() => {
   const map = new Map<string, { cat: string; group: string; count: number; specs: Record<string, string> }>()
   for (const p of products.value) {
@@ -96,6 +112,13 @@ const industryItems = computed(() =>
     name: i.name,
     description: i.description,
     slug: i.slug,
+  }))
+)
+
+const galleryItems = computed(() =>
+  galleries.value.map((g: any) => ({
+    caption: g.caption ?? '',
+    location: g.location ?? null,
   }))
 )
 
@@ -130,20 +153,21 @@ useSeoMeta({
 
   <!-- Error banner — only shown when refetch also failed -->
   <div v-else-if="hasApiError" class="container-tech py-12">
-    <div class="rounded-xl border border-red-200 bg-red-50 px-6 py-8 text-center">
+    <div class="border border-red-200 bg-red-50 px-6 py-8 text-center">
       <p class="text-sm font-semibold text-red-700">Gagal memuat konten.</p>
       <p class="mt-1 text-[13px] text-red-600">Tidak dapat menghubungi server. Periksa koneksi Anda dan coba lagi.</p>
-      <button
-        @click="async () => { isLoading = true; await Promise.allSettled([refreshNuxtData('homepage-products'), refreshNuxtData('homepage-industries'), refreshNuxtData('homepage-articles')]); isLoading = false; }"
-        class="mt-4 cursor-pointer rounded-md bg-accent px-5 py-2 text-[13px] font-semibold text-white border-none hover:bg-accent-glow"
-      >
-        Coba Lagi
-      </button>
+      <div class="mt-4 flex justify-center">
+        <UiButton size="sm" @click="retry">Coba Lagi</UiButton>
+      </div>
     </div>
   </div>
 
-  <!-- Content -->
+  <!-- Content — tonal rhythm is deliberate: steel at ~25%, gold at ~55%,
+       steel again at the footer. Six consecutive paper sections inside the
+       .frame rails read as monotonous without those two anchors. -->
   <template v-else>
+    <ProofMarquee :items="galleryItems" />
+
     <ProductCategoriesSection v-if="catItems.length" :items="catItems" />
     <StatisticsSection v-if="stats.length" :items="stats" />
 
@@ -155,17 +179,22 @@ useSeoMeta({
       :steps="hpData.leadTime.steps"
     />
 
+    <!-- Directly after LeadTimeBanner: "2–3 days" and "we come to you
+         nationwide" are the same thought, and the gold band closes it before
+         the page pivots to trust. -->
+    <ServiceBanner />
+
     <WhyChooseUsSection :items="whyChooseUsItems" />
 
     <!-- Mission band (cream cell) -->
-    <section class="bg-paper">
+    <section ref="missionRoot" class="bg-paper">
       <div class="frame border-b border-line">
-        <div class="bg-paper-soft px-6 py-20 text-center md:py-28">
+        <div data-reveal-item class="bg-paper-soft px-6 py-20 text-center md:py-28">
           <p class="display mx-auto max-w-3xl text-2xl leading-snug text-ink md:text-[2.4rem]">
             {{ mission }}
           </p>
           <div class="mt-10 flex justify-center">
-            <NuxtLink to="/tentang-kami" class="inline-flex items-center gap-2 rounded-md border border-[rgb(var(--line))] bg-white px-6 py-2.5 text-sm font-semibold text-[rgb(var(--ink))] transition-colors hover:bg-[rgb(var(--paper))]">Selengkapnya</NuxtLink>
+            <UiButton href="/tentang-kami" variant="outline">Selengkapnya</UiButton>
           </div>
         </div>
       </div>

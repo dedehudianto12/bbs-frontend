@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { contactInfo } from '~/data/contact'
+import { waLink } from '~/utils/whatsapp'
 
 defineProps<{
   footerColumns: { title: string; links: { label: string; href: string }[] }[]
@@ -8,7 +9,7 @@ defineProps<{
 const year = new Date().getFullYear()
 
 const socials = [
-  { label: 'WhatsApp', href: `https://wa.me/${contactInfo.waSales1}`, icon: 'wa' },
+  { label: 'WhatsApp', href: waLink({ halaman: 'Footer' }), icon: 'wa' },
   { label: 'Email', href: `mailto:${contactInfo.email}`, icon: 'mail' },
   { label: 'Lokasi', href: '/kontak', icon: 'pin' },
 ]
@@ -21,7 +22,7 @@ const NuxtLink = resolveComponent('NuxtLink')
     <div class="frame frame-dark border-y-0">
       <!-- Steel banner with centered badge + blueprint grid -->
       <div class="relative border-b border-white/10 p-3 md:p-4">
-        <div class="relative isolate grid h-36 place-items-center overflow-hidden rounded-lg bg-steel-soft md:h-44">
+        <div class="relative isolate grid h-36 place-items-center overflow-hidden rounded-none bg-steel-soft md:h-44">
           <div class="blueprint-grid-steel absolute inset-0" aria-hidden="true" />
           <div class="hazard-stripe absolute inset-x-0 bottom-0 h-1 opacity-70" aria-hidden="true" />
           <BrandMark :size="60" />

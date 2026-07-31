@@ -79,7 +79,7 @@ const sparkFillFrom = computed(() =>
           <p ref="heroNumEl" class="display text-6xl tabular-nums text-ink md:text-8xl">{{ heroDisplay }}{{ heroSuffix }}</p>
         </div>
         <div class="flex flex-col border-t border-line px-6 py-8 md:border-l md:border-t-0 md:px-8">
-          <span class="inline-flex w-fit items-center gap-2 rounded-md border border-line bg-white px-3 py-1.5 text-[13px] font-medium text-ink/80 shadow-sm">
+          <span class="inline-flex w-fit items-center gap-2 rounded-none border border-line bg-white px-3 py-1.5 text-[13px] font-medium text-ink/80">
             <span class="h-1.5 w-1.5 rounded-full bg-accent" />
             Pertumbuhan proyek
             <svg class="h-3 w-3 text-ink/40" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>

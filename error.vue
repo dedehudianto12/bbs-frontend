@@ -20,12 +20,9 @@ const message = computed(() => {
         {{ error?.statusCode === 404 ? 'Periksa kembali alamat halaman.' : 'Silakan coba beberapa saat lagi atau hubungi kami.' }}
       </p>
       <div class="mt-8 flex items-center justify-center gap-3">
-        <button
-          class="cursor-pointer rounded-md border border-line bg-white px-5 py-2.5 text-[13px] font-semibold text-ink transition-colors hover:bg-paper-soft"
-          @click="() => clearError({ redirect: '/' })"
-        >
+        <UiButton variant="outline" @click="clearError({ redirect: '/' })">
           Kembali ke Beranda
-        </button>
+        </UiButton>
       </div>
     </div>
   </div>

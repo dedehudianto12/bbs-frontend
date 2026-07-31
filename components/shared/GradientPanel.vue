@@ -10,7 +10,7 @@ const props = withDefaults(defineProps<{
   grain?: boolean
 }>(), {
   index: 0,
-  rounded: 'rounded-lg',
+  rounded: 'rounded-none',
   grain: true,
 })
 

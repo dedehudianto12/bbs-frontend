@@ -42,7 +42,7 @@ useSeoMeta({
     <h1 class="display text-3xl text-ink md:text-4xl">Gagal Memuat</h1>
     <p class="mt-4 text-muted">Tidak dapat menghubungi server. Periksa koneksi Anda.</p>
     <div class="mt-8 flex justify-center">
-      <button @click="() => refreshNuxtData(`artikel-${slug}`)" class="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent-glow cursor-pointer border-none">Coba Lagi</button>
+      <UiButton @click="refreshNuxtData(`artikel-${slug}`)">Coba Lagi</UiButton>
     </div>
   </div>
 
@@ -87,7 +87,7 @@ useSeoMeta({
     <h1 class="display text-3xl text-ink md:text-4xl">Artikel Tidak Ditemukan</h1>
     <p class="mt-4 text-muted">Artikel yang Anda cari tidak tersedia atau telah dihapus.</p>
     <div class="mt-8 flex justify-center">
-      <NuxtLink to="/artikel" class="inline-flex items-center gap-2 rounded-md px-6 py-2.5 text-sm font-semibold text-[rgb(var(--ink))] transition-colors hover:bg-[rgb(var(--paper-soft))]">Kembali ke Artikel <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></NuxtLink>
+      <UiButton href="/artikel" variant="ghost">Kembali ke Artikel <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></UiButton>
     </div>
   </div>
 </template>

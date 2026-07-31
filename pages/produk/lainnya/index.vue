@@ -46,10 +46,10 @@ useSeoMeta({
     />
 
     <div v-if="productErr" class="container-tech py-12">
-      <div class="rounded-xl border border-red-200 bg-red-50 px-6 py-8 text-center">
+      <div class="rounded-none border border-red-200 bg-red-50 px-6 py-8 text-center">
         <p class="text-sm font-semibold text-red-700">Gagal memuat produk.</p>
         <p class="mt-1 text-[13px] text-red-600">Tidak dapat menghubungi server.</p>
-        <button @click="() => refreshNuxtData('produk-lainnya')" class="mt-4 cursor-pointer rounded-md bg-accent px-5 py-2 text-[13px] font-semibold text-white border-none">Coba Lagi</button>
+        <button @click="() => refreshNuxtData('produk-lainnya')" class="mt-4 cursor-pointer rounded-none bg-accent px-5 py-2 text-[13px] font-semibold text-white border-none">Coba Lagi</button>
       </div>
     </div>
 

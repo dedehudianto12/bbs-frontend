@@ -231,7 +231,7 @@ useSeoMeta({
               class="group flex items-start gap-5 p-6 transition-colors hover:bg-paper md:gap-6 md:p-8"
             >
               <span
-                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-[15px] font-bold text-accent transition-colors group-hover:bg-accent group-hover:text-white"
+                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-none bg-accent/10 text-[15px] font-bold text-accent transition-colors group-hover:bg-accent group-hover:text-white"
               >
                 {{ item.letter }}
               </span>

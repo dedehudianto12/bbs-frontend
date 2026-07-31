@@ -14,11 +14,12 @@ export default defineSitemapEventHandler(async () => {
     }
   }
 
-  const [products, articles, services, industries] = await Promise.all([
+  // Industries are deliberately not fetched: they have no detail route, so
+  // every /industries/:slug URL this used to emit was a 404 in the sitemap.
+  const [products, articles, services] = await Promise.all([
     fetchAll('/produk'),
     fetchAll('/artikel'),
     fetchAll('/jasa'),
-    fetchAll('/industri'),
   ])
 
   const urls: { loc: string; lastmod?: string }[] = []
@@ -35,10 +36,6 @@ export default defineSitemapEventHandler(async () => {
 
   for (const s of services) {
     urls.push({ loc: `/jasa/${s.slug}`, lastmod: s.updatedAt })
-  }
-
-  for (const i of industries) {
-    urls.push({ loc: `/industries/${i.slug}`, lastmod: i.updatedAt })
   }
 
   return urls

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
+
 const props = defineProps<{
   items: { title: string; description: string }[]
 }>()
@@ -8,10 +10,12 @@ const fillerCount = computed(() => {
   const cells = props.items.length + 1
   return (3 - (cells % 3)) % 3
 })
+
+const { root } = useRevealOnScroll({ stagger: 45 })
 </script>
 
 <template>
-  <section class="bg-paper">
+  <section ref="root" class="bg-paper">
     <div class="frame border-b border-line">
       <div class="border-b border-line px-6 py-14 md:px-10 md:py-16">
         <SectionTitle
@@ -25,9 +29,10 @@ const fillerCount = computed(() => {
         <div
           v-for="(item, i) in items"
           :key="item.title"
+          data-reveal-item
           class="bg-paper p-7 md:p-9"
         >
-          <span class="text-sm font-semibold tabular-nums text-accent">{{ String(i + 1).padStart(2, '0') }}</span>
+          <span class="num text-sm font-semibold text-accent">{{ String(i + 1).padStart(2, '0') }}</span>
           <h3 class="mt-5 text-lg font-semibold text-ink">{{ item.title }}</h3>
           <p class="mt-2 text-sm leading-relaxed text-muted">{{ item.description }}</p>
         </div>
@@ -35,7 +40,8 @@ const fillerCount = computed(() => {
         <!-- CTA cell -->
         <NuxtLink
           to="/kontak"
-          class="group flex flex-col justify-between bg-paper p-7 transition-colors hover:bg-paper-soft md:p-9"
+          data-reveal-item
+          class="group flex flex-col justify-between bg-paper p-7 transition-colors duration-150 hover:bg-paper-soft active:bg-paper-soft md:p-9"
         >
           <span class="text-lg leading-none text-accent">→</span>
           <div>

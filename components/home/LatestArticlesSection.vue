@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
+
 const props = defineProps<{
   articles: {
     slug: string
@@ -22,26 +24,28 @@ function onScroll() {
   const ratio = max > 0 ? el.scrollLeft / max : 0
   activeDot.value = Math.round(ratio * (props.articles.length - 1))
 }
+
+const { root } = useRevealOnScroll({ stagger: 60 })
 </script>
 
 <template>
-  <section class="bg-paper">
+  <section ref="root" class="bg-paper">
     <div class="frame border-b border-line">
       <div class="grid lg:grid-cols-[360px_1fr]">
         <!-- intro cell -->
-        <div class="flex flex-col border-b border-line px-6 py-12 md:px-10 lg:border-b-0 lg:border-r lg:py-16">
+        <div data-reveal-item class="flex flex-col border-b border-line px-6 py-12 md:px-10 lg:border-b-0 lg:border-r lg:py-16">
           <h2 class="display text-3xl text-ink md:text-4xl">Artikel &amp; update terbaru</h2>
           <div class="mt-8">
-            <NuxtLink to="/artikel" class="inline-flex items-center gap-2 rounded-md border border-[rgb(var(--line))] bg-white px-6 py-2.5 text-sm font-semibold text-[rgb(var(--ink))] transition-colors hover:bg-[rgb(var(--paper))]">Semua Artikel</NuxtLink>
+            <UiButton href="/artikel" variant="outline">Semua Artikel</UiButton>
           </div>
 
           <!-- decorative work-order docket -->
           <div class="mt-auto hidden pt-14 lg:block">
-            <div class="rounded-lg border border-line bg-white p-4 shadow-sm">
-              <span class="inline-flex items-center gap-1.5 rounded bg-paper-soft px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted">
+            <div class="rounded-none border border-line bg-white p-4">
+              <span class="inline-flex items-center gap-1.5 rounded-none bg-paper-soft px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted">
                 <span class="h-2 w-2 border-l-2 border-t-2 border-accent" />Work Order
               </span>
-              <dl class="mt-3 space-y-1.5 text-[12.5px] tabular-nums">
+              <dl class="num mt-3 space-y-1.5 text-[12.5px]">
                 <div class="flex justify-between gap-4 border-b border-line/70 pb-1.5"><dt class="text-muted">No.</dt><dd class="font-semibold text-ink">WO-2026-118</dd></div>
                 <div class="flex justify-between gap-4"><dt class="text-muted">Item</dt><dd class="font-semibold text-accent">PU Belt Food Grade</dd></div>
                 <div class="flex justify-between gap-4"><dt class="text-muted">Qty</dt><dd class="text-ink">40 m</dd></div>
@@ -53,7 +57,7 @@ function onScroll() {
 
         <!-- carousel cell — min-w-0 lets the grid track shrink so the inner
              overflow-x-auto scroller scrolls instead of widening the page -->
-        <div class="min-w-0 px-6 py-12 md:px-8 lg:py-16">
+        <div data-reveal-item class="min-w-0 px-6 py-12 md:px-8 lg:py-16">
           <div
             v-if="articles.length"
             ref="scroller"
@@ -68,7 +72,7 @@ function onScroll() {
               <ArticleCard v-bind="article" />
             </div>
           </div>
-          <p v-else class="rounded-xl border border-dashed border-line py-16 text-center text-sm text-muted">
+          <p v-else class="rounded-none border border-dashed border-line py-16 text-center text-sm text-muted">
             Belum ada artikel.
           </p>
 

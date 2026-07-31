@@ -55,10 +55,10 @@ useSeoMeta({
     />
 
     <div v-if="articleErr" class="container-tech py-16 md:py-24">
-      <div class="rounded-xl border border-red-200 bg-red-50 px-6 py-10 text-center">
+      <div class="rounded-none border border-red-200 bg-red-50 px-6 py-10 text-center">
         <p class="text-sm font-semibold text-red-700">Gagal memuat artikel.</p>
         <p class="mt-1 text-[13px] text-red-600">Tidak dapat menghubungi server.</p>
-        <button @click="() => refreshNuxtData('artikel-listing')" class="mt-4 cursor-pointer rounded-md bg-accent px-5 py-2 text-[13px] font-semibold text-white border-none">Coba Lagi</button>
+        <button @click="() => refreshNuxtData('artikel-listing')" class="mt-4 cursor-pointer rounded-none bg-accent px-5 py-2 text-[13px] font-semibold text-white border-none">Coba Lagi</button>
       </div>
     </div>
 
@@ -75,7 +75,7 @@ useSeoMeta({
       <!-- Tag filter -->
       <div v-if="allTags.length" class="mb-10 flex flex-wrap gap-2">
         <button
-          class="rounded-md border px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] transition-colors"
+          class="rounded-none border px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] transition-colors"
           :class="tag === '' ? 'border-accent bg-accent text-white' : 'border-line bg-white text-muted hover:border-ink/30 hover:text-ink'"
           @click="tag = ''"
         >
@@ -84,7 +84,7 @@ useSeoMeta({
         <button
           v-for="t in allTags"
           :key="t"
-          class="rounded-md border px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] transition-colors"
+          class="rounded-none border px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] transition-colors"
           :class="tag === t ? 'border-accent bg-accent text-white' : 'border-line bg-white text-muted hover:border-ink/30 hover:text-ink'"
           @click="tag = t"
         >

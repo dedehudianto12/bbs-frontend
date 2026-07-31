@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="rounded-lg border border-line bg-white/95 p-5 text-[12.5px] leading-[2] tabular-nums shadow-xl shadow-ink/10 backdrop-blur-sm">
+  <div class="rounded-none border border-line bg-white/95 p-5 text-[12.5px] leading-[2] tabular-nums shadow-xl shadow-ink/10 backdrop-blur-sm">
     <div
       v-for="(line, i) in lines"
       :key="`${line.pre}-${line.text}-${i}`"

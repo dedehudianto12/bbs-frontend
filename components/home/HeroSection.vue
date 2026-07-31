@@ -8,7 +8,7 @@ const props = defineProps<{
   secondaryLink?: string
 }>()
 
-// Split the headline so chosen words render in safety orange (partial-word
+// Split the headline so chosen words render in logo gold (partial-word
 // highlight). Case-insensitive, longest phrases first.
 const HIGHLIGHTS = ['Bisnis Anda', 'Conveyor']
 
@@ -35,13 +35,13 @@ const headlineParts = computed(() => {
     <div class="frame relative border-b border-line">
       <div class="flex flex-col items-center px-5 pb-10 pt-16 text-center md:px-8 md:pb-14 md:pt-24">
         <!-- status pill — plain tracked sans, operational signal dot -->
-        <span class="inline-flex items-center gap-2 rounded-md border border-line bg-white px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-ink/70 shadow-sm">
+        <span class="inline-flex items-center gap-2 rounded-none border border-line bg-white px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-ink/70">
           <span class="h-1.5 w-1.5 rounded-full bg-signal animate-pulse-glow" />
           Workshop &amp; tim teknisi
           <span class="text-signal">— siap</span>
         </span>
 
-        <!-- headline with safety-orange highlights -->
+        <!-- headline with logo-gold highlights -->
         <h1
           class="display mt-8 max-w-3xl text-ink"
           style="font-size: clamp(2.4rem, 5.4vw, 4.25rem)"
@@ -56,16 +56,14 @@ const headlineParts = computed(() => {
         </p>
 
         <div class="mt-8 flex flex-col items-center gap-3 sm:flex-row">
-          <NuxtLink :to="primaryLink" class="inline-flex items-center gap-2 rounded-md bg-[rgb(var(--accent))] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[rgb(var(--accent-glow))]">
-            {{ primaryCTA }}
-          </NuxtLink>
-          <NuxtLink
+          <UiButton :href="primaryLink">{{ primaryCTA }}</UiButton>
+          <UiButton
             v-if="secondaryCTA && secondaryLink"
-            :to="secondaryLink"
-            class="inline-flex items-center gap-2 rounded-md border border-[rgb(var(--line))] bg-white px-6 py-2.5 text-sm font-semibold text-[rgb(var(--ink))] transition-colors hover:bg-[rgb(var(--paper))]"
+            :href="secondaryLink"
+            variant="outline"
           >
             {{ secondaryCTA }}
-          </NuxtLink>
+          </UiButton>
         </div>
 
         <!-- product-forward technical blueprint -->

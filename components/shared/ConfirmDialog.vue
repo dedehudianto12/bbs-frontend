@@ -9,12 +9,7 @@ function onConfirm() { close(true) }
 
 <template>
   <Teleport to="body">
-    <Transition
-      enter-from-class="opacity-0"
-      enter-active-class="transition-opacity duration-200"
-      leave-to-class="opacity-0"
-      leave-active-class="transition-opacity duration-150"
-    >
+    <Transition name="dialog">
       <div
         v-if="state?.open"
         class="fixed inset-0 z-[9998] flex items-center justify-center"
@@ -26,10 +21,10 @@ function onConfirm() { close(true) }
         />
 
         <!-- Dialog -->
-        <div class="relative z-10 mx-4 w-full max-w-[400px] rounded-xl border border-line bg-white p-6 shadow-2xl">
+        <div class="dialog-panel relative z-10 mx-4 w-full max-w-[400px] rounded-none border border-line bg-white p-6">
           <div class="flex items-start gap-4">
             <!-- Icon -->
-            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/10">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-none bg-accent/10">
               <AlertTriangle :size="20" class="text-accent" />
             </div>
 
@@ -46,21 +41,52 @@ function onConfirm() { close(true) }
 
           <!-- Actions -->
           <div class="mt-5 flex justify-end gap-2.5">
-            <button
-              class="cursor-pointer rounded-md border border-line bg-white px-4 py-2 text-[13px] font-medium text-muted transition-colors hover:bg-paper-soft hover:text-ink"
-              @click="onCancel"
-            >
+            <UiButton size="sm" variant="outline" @click="onCancel">
               {{ state.cancelLabel }}
-            </button>
-            <button
-              class="cursor-pointer rounded-md border-none bg-accent px-4 py-2 text-[13px] font-semibold text-white transition-colors hover:bg-accent-glow"
-              @click="onConfirm"
-            >
+            </UiButton>
+            <UiButton size="sm" @click="onConfirm">
               {{ state.confirmLabel }}
-            </button>
+            </UiButton>
           </div>
         </div>
       </div>
     </Transition>
   </Teleport>
 </template>
+
+<style scoped>
+/* Backdrop fades; the panel scales with it. Nothing in the real world appears
+   from nothing, so the panel starts at 0.96 rather than 0. transform-origin
+   stays centred — a modal is not anchored to a trigger, unlike a popover.
+   Exit is faster than enter: the system responding vs. the user deciding. */
+.dialog-enter-active,
+.dialog-leave-active {
+  transition: opacity 200ms var(--ease-out);
+}
+.dialog-leave-active {
+  transition-duration: 150ms;
+}
+.dialog-enter-from,
+.dialog-leave-to {
+  opacity: 0;
+}
+
+.dialog-enter-active .dialog-panel,
+.dialog-leave-active .dialog-panel {
+  transition: transform 200ms var(--ease-out);
+}
+.dialog-leave-active .dialog-panel {
+  transition-duration: 150ms;
+}
+.dialog-enter-from .dialog-panel,
+.dialog-leave-to .dialog-panel {
+  transform: scale(0.96);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog-enter-from .dialog-panel,
+  .dialog-leave-to .dialog-panel {
+    transform: none;
+  }
+}
+</style>

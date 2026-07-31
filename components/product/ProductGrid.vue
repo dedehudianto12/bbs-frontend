@@ -17,5 +17,5 @@ defineProps<{
       <ProductCard v-bind="product" />
     </div>
   </div>
-  <p v-else class="rounded-xl border border-dashed border-line py-16 text-center text-sm text-muted">Tidak ada produk ditemukan.</p>
+  <p v-else class="rounded-none border border-dashed border-line py-16 text-center text-sm text-muted">Tidak ada produk ditemukan.</p>
 </template>

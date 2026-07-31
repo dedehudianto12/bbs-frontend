@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { onClickOutside } from '@vueuse/core'
 import { contactInfo } from '~/data/contact'
+import { waLink } from '~/utils/whatsapp'
 
 const isOpen = ref(false)
 const panelRef = ref<HTMLElement | null>(null)
+const fabRef = ref<HTMLElement | null>(null)
 
 function toggle() {
   isOpen.value = !isOpen.value
@@ -12,34 +15,51 @@ function close() {
   isOpen.value = false
 }
 
-// Close when clicking outside
+// Close when clicking outside. panelRef was previously declared and never
+// used, so only Escape closed the panel. The FAB is excluded — without that,
+// clicking it would fire close() and toggle() in the same tick and the panel
+// would never open.
+onClickOutside(panelRef, close, { ignore: [fabRef] })
+
 function onKeydown(e: KeyboardEvent) {
   if (e.key === 'Escape') close()
 }
 
 onMounted(() => window.addEventListener('keydown', onKeydown))
 onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
+
+const salesLinks = [
+  { href: waLink({ halaman: 'Tombol WhatsApp mengapung' }, 1), label: contactInfo.waLabel1, number: contactInfo.waSales1 },
+  { href: waLink({ halaman: 'Tombol WhatsApp mengapung' }, 2), label: contactInfo.waLabel2, number: contactInfo.waSales2 },
+]
+
+function prettyNumber(n: string): string {
+  return `+62 ${n.replace(/^62/, '').replace(/(\d{3})(?=\d)/g, '$1-')}`
+}
 </script>
 
 <template>
   <div class="fixed bottom-6 right-6 z-[999] flex flex-col items-end gap-3">
     <!-- Options panel -->
+    <!-- Origin-aware: the panel is anchored to the FAB at its bottom-right, so
+         it scales out of the trigger rather than out of its own centre. Exit is
+         faster than enter — the system responding vs. the user deciding. -->
     <Transition
-      enter-active-class="transition duration-200 ease-out"
+      enter-active-class="transition duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]"
       enter-from-class="translate-y-3 opacity-0 scale-95"
       enter-to-class="translate-y-0 opacity-100 scale-100"
-      leave-active-class="transition duration-150 ease-in"
+      leave-active-class="transition duration-150 ease-[cubic-bezier(0.22,1,0.36,1)]"
       leave-from-class="translate-y-0 opacity-100 scale-100"
       leave-to-class="translate-y-3 opacity-0 scale-95"
     >
       <div
         v-if="isOpen"
         ref="panelRef"
-        class="w-[260px] overflow-hidden rounded-xl border border-line bg-white shadow-lg"
+        class="w-[260px] origin-bottom-right overflow-hidden rounded-none border border-line bg-white"
       >
         <!-- Header -->
         <div class="flex items-center gap-3 border-b border-line bg-[#075e54] px-4 py-3">
-          <div class="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
+          <div class="flex h-9 w-9 items-center justify-center rounded-none bg-white/20">
             <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
             </svg>
@@ -53,38 +73,22 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
         <!-- Contact options -->
         <div class="p-3">
           <a
-            :href="`https://wa.me/${contactInfo.waSales1}?text=Halo%2C%20saya%20tertarik%20dengan%20produk%20BBS%20Conveyor.%20Bisakah%20dibantu%3F`"
+            v-for="sales in salesLinks"
+            :key="sales.number"
+            :href="sales.href"
             target="_blank"
             rel="noopener noreferrer"
-            class="flex items-center gap-3 rounded-lg p-3 transition-colors hover:bg-paper-soft"
+            class="wa-row flex items-center gap-3 rounded-none p-3"
             @click="close"
           >
-            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25D366]/10 text-[#128c7e]">
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-none bg-[#25D366]/10 text-[#128c7e]">
               <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
               </svg>
             </span>
             <div class="min-w-0">
-              <p class="text-[13px] font-semibold text-ink">{{ contactInfo.waLabel1 }}</p>
-              <p class="text-[12px] text-muted">+62 {{ contactInfo.waSales1.replace(/^62/, '').replace(/(\d{3})(?=\d)/g, '$1-') }}</p>
-            </div>
-          </a>
-
-          <a
-            :href="`https://wa.me/${contactInfo.waSales2}?text=Halo%2C%20saya%20tertarik%20dengan%20produk%20BBS%20Conveyor.%20Bisakah%20dibantu%3F`"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center gap-3 rounded-lg p-3 transition-colors hover:bg-paper-soft"
-            @click="close"
-          >
-            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25D366]/10 text-[#128c7e]">
-              <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
-              </svg>
-            </span>
-            <div class="min-w-0">
-              <p class="text-[13px] font-semibold text-ink">{{ contactInfo.waLabel2 }}</p>
-              <p class="text-[12px] text-muted">+62 {{ contactInfo.waSales2.replace(/^62/, '').replace(/(\d{3})(?=\d)/g, '$1-') }}</p>
+              <p class="text-[13px] font-semibold text-ink">{{ sales.label }}</p>
+              <p class="num text-[12px] text-muted">{{ prettyNumber(sales.number) }}</p>
             </div>
           </a>
         </div>
@@ -93,8 +97,11 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
 
     <!-- Toggle button -->
     <button
-      class="flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-200 hover:scale-105 active:scale-95"
+      ref="fabRef"
+      type="button"
+      class="wa-fab flex h-14 w-14 items-center justify-center rounded-none"
       :class="isOpen ? 'rotate-45 bg-[#075e54]' : 'bg-[#25D366]'"
+      :aria-expanded="isOpen"
       aria-label="Chat via WhatsApp"
       @click="toggle"
     >
@@ -107,3 +114,46 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
     </button>
   </div>
 </template>
+
+<style scoped>
+/* Explicit properties only — this previously used `transition-all` plus
+   hover:scale-105, and growing on hover is consumer-SaaS vocabulary. */
+.wa-fab {
+  /* Hard drop with zero blur: a physical key sitting above the page, not a
+     soft floating card. Pressing pushes it down into its own shadow. */
+  box-shadow: 0 3px 0 0 rgb(var(--ink) / 0.3);
+  transition:
+    transform 140ms var(--ease-out),
+    background-color 140ms ease,
+    box-shadow 140ms var(--ease-out);
+}
+.wa-fab:active {
+  box-shadow: 0 0 0 0 rgb(var(--ink) / 0.3);
+}
+/* The open state already carries rotate-45, so the press travel is composed
+   as a translate on top of it rather than replacing the transform. */
+.wa-fab:active:not(.rotate-45) {
+  transform: translateY(3px);
+}
+
+.wa-row {
+  transition: background-color 140ms ease;
+}
+.wa-row:active {
+  background-color: rgb(var(--paper));
+}
+@media (hover: hover) and (pointer: fine) {
+  .wa-row:hover {
+    background-color: rgb(var(--paper-soft));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wa-fab {
+    transition: background-color 140ms ease;
+  }
+  .wa-fab:active:not(.rotate-45) {
+    transform: none;
+  }
+}
+</style>

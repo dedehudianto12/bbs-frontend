@@ -74,14 +74,14 @@ watch(() => route.path, () => { isOpen.value = false; activeIndex.value = -1 })
       <div
         v-if="isOpen"
         ref="dropdownRef"
-        class="absolute left-0 top-full z-50 mt-2 w-[230px] rounded-xl border border-line bg-white p-1.5 shadow-xl shadow-ink/5"
+        class="absolute left-0 top-full z-50 mt-2 w-[230px] rounded-none border border-line bg-white p-1.5"
         @keydown="onKeydown"
       >
         <NuxtLink
           v-for="(item, i) in items"
           :key="item.label"
           :to="item.href"
-          class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13.5px] font-medium transition-colors"
+          class="flex items-center gap-2.5 rounded-none px-3 py-2 text-[13.5px] font-medium transition-colors"
           :class="i === activeIndex || route.path.startsWith(item.href)
             ? 'bg-paper-soft text-ink'
             : 'text-ink/60 hover:bg-paper-soft hover:text-ink'"

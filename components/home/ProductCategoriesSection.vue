@@ -1,224 +1,80 @@
 <script setup lang="ts">
-// Light framed section — sticky sidebar of product lines, one row per
-// category: kicker / heading / copy / button / count, with a blueprint art
-// panel + datasheet-style spec card on the right.
+import { computed } from 'vue'
+import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
+
+// The catalog band — the home page's single dark tonal anchor before the
+// footer. A 3-column grid of hard cells, one per real category.
+//
+// This used to be a 304-line sticky-scrollspy layout whose SpecCards rendered
+// a hardcoded META map of invented figures ("karkas EP100–EP500 · 2–5 ply",
+// "tahan abrasi, panas & benturan") *above* the real backend specs, separated
+// by a ─────── rule, in a datasheet frame, with no admin able to correct any
+// of it. A datasheet that mixes invented and real numbers poisons both, so the
+// spec bullets are gone. What remains per category is one positioning line,
+// which makes no numeric claim, plus metadata that is true by construction:
+// the product count and the group, both derived from the backend response.
+
 const props = defineProps<{
   items: { cat: string; group: string; count: number; specs?: Record<string, string> }[]
 }>()
 
-interface Meta {
-  family?: 'belt' | 'roller' | 'joint'
-  title: string
-  desc: string
-  theme: number
-  specs: { pre: string; preClass?: string; text: string; textClass?: string }[]
+// One positioning line per category. Deliberately claim-free — no dimensions,
+// no grades, no certifications. Anything numeric must come from the backend.
+const BLURB: Record<string, string> = {
+  'pvc belt': 'Belt serbaguna untuk lini produksi',
+  'pu': 'Higienis & tahan minyak untuk proses presisi',
+  'flat belt': 'Transmisi daya & transport yang mulus',
+  'rubber belt': 'Tenaga besar untuk beban berat',
+  'timing belt': 'Gerak sinkron tanpa slip',
+  'fastener': 'Sambungan belt cepat & kuat',
+  'cleat': 'Bawa material menanjak tanpa tumpah',
+  'gravity roll': 'Handling efisien tanpa daya',
 }
 
-const orange = 'text-accent'
-const steel = 'text-muted'
-const green = 'text-signal'
-const dim = 'text-ink/40'
+const FALLBACK_BLURB = 'Komponen conveyor industri'
 
-// Datasheet header — the top line of a product cut-sheet.
-function specHeader(label: string) {
-  return { pre: '▣', preClass: 'text-accent', text: `SPEC — ${label}`, textClass: 'text-ink font-semibold tracking-[0.08em]' }
+const GROUP_LABEL: Record<string, string> = {
+  'belt-conveyor': 'Belt Conveyor',
+  lainnya: 'Lainnya',
 }
 
-const META: Record<string, Meta> = {
-  'pvc belt': {
-    family: 'belt',
-    title: 'Belt serbaguna untuk lini produksi',
-    desc: 'Permukaan bersih, tahan aus, dan mudah dibersihkan — pilihan utama untuk lini makanan, packaging, dan logistik ringan.',
-    theme: 0,
-    specs: [
-      specHeader('PVC BELT'),
-      { pre: '◇', preClass: steel, text: 'ketebalan 1–5 mm · lebar s/d 3000 mm' },
-      { pre: '·', text: 'permukaan: glossy / matte / grip', textClass: dim },
-      { pre: '✓', preClass: green, text: 'varian food-grade tersedia', textClass: green },
-      { pre: '→', preClass: orange, text: 'aplikasi: F&B · packaging · logistik' },
-    ],
-  },
-  // canonical slug is 'pu' (content/config/site.yml) — the old 'pu belt'
-  // duplicate was drift and has been reconciled into this one entry
-  'pu': {
-    family: 'belt',
-    title: 'Higienis & tahan minyak untuk proses presisi',
-    desc: 'Belt polyurethane yang elastis, food-safe, dan tahan minyak — untuk industri pangan dan farmasi dengan standar tinggi.',
-    theme: 2,
-    specs: [
-      specHeader('PU'),
-      { pre: '◇', preClass: steel, text: 'ketebalan 0.9–3 mm · anti-statis' },
-      { pre: '·', text: 'tahan minyak & lemak hewani', textClass: dim },
-      { pre: '✓', preClass: green, text: 'sertifikasi food-grade (FDA)', textClass: green },
-      { pre: '→', preClass: orange, text: 'aplikasi: pangan · farmasi · tembakau' },
-    ],
-  },
-  'flat belt': {
-    family: 'belt',
-    title: 'Transmisi daya & transport yang mulus',
-    desc: 'Flat belt nylon, polyester, dan rubber cover untuk transmisi daya berkecepatan tinggi dan konveyor datar.',
-    theme: 1,
-    specs: [
-      specHeader('FLAT BELT'),
-      { pre: '◇', preClass: steel, text: 'material: nylon · polyester · rubber' },
-      { pre: '·', text: 'kecepatan tinggi, slip rendah', textClass: dim },
-      { pre: '✓', preClass: green, text: 'sambungan endless tersedia', textClass: green },
-      { pre: '→', preClass: orange, text: 'aplikasi: tekstil · percetakan · kayu' },
-    ],
-  },
-  'rubber belt': {
-    family: 'belt',
-    title: 'Tenaga besar untuk beban berat',
-    desc: 'Rubber belt EP dengan kekuatan tarik tinggi dan tahan abrasi — andalan tambang, semen, dan material curah.',
-    theme: 3,
-    specs: [
-      specHeader('RUBBER BELT'),
-      { pre: '◇', preClass: steel, text: 'karkas EP100–EP500 · 2–5 ply' },
-      { pre: '·', text: 'tahan abrasi, panas & benturan', textClass: dim },
-      { pre: '✓', preClass: green, text: 'onsite joint: hot / cold splicing', textClass: green },
-      { pre: '→', preClass: orange, text: 'aplikasi: tambang · semen · smelter' },
-    ],
-  },
-  'timing belt': {
-    family: 'belt',
-    title: 'Gerak sinkron tanpa slip',
-    desc: 'Timing belt bergigi untuk transmisi presisi dan positioning yang akurat pada mesin produksi.',
-    theme: 4,
-    specs: [
-      specHeader('TIMING BELT'),
-      { pre: '◇', preClass: steel, text: 'profil: T · AT · HTD · STD' },
-      { pre: '·', text: 'penguat steel / kevlar cord', textClass: dim },
-      { pre: '✓', preClass: green, text: 'custom cleat & coating', textClass: green },
-      { pre: '→', preClass: orange, text: 'aplikasi: otomasi · packaging' },
-    ],
-  },
-  'fastener': {
-    family: 'joint',
-    title: 'Sambungan belt cepat & kuat',
-    desc: 'Alligator, clipper, dan bolt fastener untuk penyambungan belt yang cepat tanpa vulkanisir.',
-    theme: 5,
-    specs: [
-      specHeader('FASTENER'),
-      { pre: '◇', preClass: steel, text: 'tipe: alligator · clipper · bolt plate' },
-      { pre: '·', text: 'material steel & stainless', textClass: dim },
-      { pre: '✓', preClass: green, text: 'pemasangan di lokasi tersedia', textClass: green },
-      { pre: '→', preClass: orange, text: 'aplikasi: perbaikan darurat · MRO' },
-    ],
-  },
-  'cleat': {
-    family: 'joint',
-    title: 'Bawa material menanjak tanpa tumpah',
-    desc: 'Cleat PU/PVC dan profile guide untuk konveyor miring dan pengarah jalur belt.',
-    theme: 1,
-    specs: [
-      specHeader('CLEAT'),
-      { pre: '◇', preClass: steel, text: 'tipe A · C · profil custom' },
-      { pre: '·', text: 'las frekuensi tinggi (HF welding)', textClass: dim },
-      { pre: '✓', preClass: green, text: 'desain sesuai sudut incline', textClass: green },
-      { pre: '→', preClass: orange, text: 'aplikasi: incline · unit dosing' },
-    ],
-  },
-  'gravity roll': {
-    family: 'roller',
-    title: 'Handling efisien tanpa daya',
-    desc: 'Gravity roller conveyor baja dan stainless untuk transport ringan hingga berat di gudang dan lini kemasan.',
-    theme: 4,
-    specs: [
-      specHeader('GRAVITY ROLL'),
-      { pre: '◇', preClass: steel, text: 'roller Ø25–Ø76 mm · baja / SS' },
-      { pre: '·', text: 'rangka statis / adjustable', textClass: dim },
-      { pre: '✓', preClass: green, text: 'bearing presisi, putaran ringan', textClass: green },
-      { pre: '→', preClass: orange, text: 'aplikasi: gudang · loading dock' },
-    ],
-  },
+function slugOf(cat: string): string {
+  return cat.toLowerCase().replace(/\s+/g, '-')
 }
 
-const FALLBACK: Meta = {
-  title: 'Komponen conveyor industri',
-  desc: 'Komponen berkualitas untuk menjaga sistem material handling Anda tetap berjalan.',
-  theme: 0,
-  specs: [
-    specHeader('PRODUK'),
-    { pre: '◇', preClass: steel, text: 'spesifikasi sesuai kebutuhan' },
-    { pre: '✓', preClass: green, text: 'stok ready & indent', textClass: green },
-    { pre: '→', preClass: orange, text: 'konsultasi teknis gratis' },
-  ],
-}
-
-function metaOf(cat: string): Meta {
-  return META[cat.toLowerCase()] ?? FALLBACK
-}
-
-function hrefOf(item: { cat: string; group: string }): string {
-  const slug = item.cat.toLowerCase().replace(/\s+/g, '-')
-  return item.group === 'belt-conveyor'
-    ? `/produk/belt-conveyor/${slug}`
-    : `/produk/lainnya/${slug}`
-}
-
-// Merge hardcoded META specs with backend specs (if any) for the SpecCard.
-function mergedSpecs(item: (typeof props.items)[number]) {
-  const meta = metaOf(item.cat)
-  const backend = item.specs
-  if (!backend || !Object.keys(backend).length) return meta.specs
-
-  // append backend specs after a visual separator
-  return [
-    ...meta.specs,
-    { pre: '', text: '───────', textClass: 'text-line' },
-    ...Object.entries(backend).map(([k, v]) => ({
-      pre: '◇',
-      preClass: steel,
-      text: `${k}: ${v}`,
+const cards = computed(() =>
+  // Sorted so the two real groups cluster, which lets the grid read as grouped
+  // without subhead rows breaking the 3-column tiling.
+  [...props.items]
+    .sort((a, b) => (a.group === b.group ? 0 : a.group === 'belt-conveyor' ? -1 : 1))
+    .map((item) => ({
+      cat: item.cat,
+      count: item.count,
+      icon: slugOf(item.cat),
+      blurb: BLURB[item.cat.toLowerCase()] ?? FALLBACK_BLURB,
+      groupLabel: GROUP_LABEL[item.group] ?? item.group,
+      href:
+        item.group === 'belt-conveyor'
+          ? `/produk/belt-conveyor/${slugOf(item.cat)}`
+          : `/produk/lainnya/${slugOf(item.cat)}`,
     })),
-  ]
-}
-
-const rows = computed(() =>
-  props.items.map((item, i) => ({
-    ...item,
-    i,
-    ...metaOf(item.cat),
-    specs: mergedSpecs(item),
-    href: hrefOf(item),
-    icon: item.cat.toLowerCase().replace(/\s+/g, '-'),
-  }))
 )
 
-// #3 — row entrance on scroll; pairs with the scrollspy below (which stays
-// IntersectionObserver-based). Collapses under prefers-reduced-motion.
-const reduced = usePrefersReducedMotion()
-const rowFrom = computed(() =>
-  reduced.value
-    ? { duration: 0.001 }
-    : { scale: 0.97, opacity: 0, duration: DUR.base, ease: EASE_OUT_GSAP }
-)
-
-// Scrollspy for the sidebar
-const activeIdx = ref(0)
-let observer: IntersectionObserver | null = null
-
-onMounted(() => {
-  observer = new IntersectionObserver(
-    (entries) => {
-      for (const e of entries) {
-        if (e.isIntersecting) {
-          const idx = Number((e.target as HTMLElement).dataset.idx ?? 0)
-          activeIdx.value = idx
-        }
-      }
-    },
-    { rootMargin: '-40% 0px -55% 0px' }
-  )
-  document.querySelectorAll('[data-produk-row]').forEach((el) => observer!.observe(el))
+// Keep the 3-column grid rectangular whatever the backend returns. With the
+// 8 seeded categories this is 8 + 1 CTA = exactly 9 cells and no fillers are
+// needed; the guard is for when a category has no products and drops out.
+// Same technique WhyChooseUsSection already uses.
+const fillerCount = computed(() => {
+  const cells = cards.value.length + 1
+  return (3 - (cells % 3)) % 3
 })
 
-onBeforeUnmount(() => observer?.disconnect())
+const { root } = useRevealOnScroll({ stagger: 45 })
 </script>
 
 <template>
-  <section class="bg-steel">
-    <div class="frame">
+  <section ref="root" class="bg-steel">
+    <div class="frame frame-dark blueprint-grid-steel">
       <!-- section tag row -->
       <div class="border-b border-white/10 px-6 py-3 md:px-10">
         <span class="eyebrow text-accent">Katalog</span>
@@ -233,72 +89,143 @@ onBeforeUnmount(() => observer?.disconnect())
         </p>
       </div>
 
-      <!-- sidebar + rows -->
-      <div class="grid lg:grid-cols-[230px_1fr]">
-        <!-- sticky sidebar -->
-        <aside class="hidden border-r border-white/10 lg:block">
-          <nav class="sticky top-24 flex flex-col gap-1 p-6">
-            <a
-              v-for="row in rows"
-              :key="row.cat"
-              :href="`#produk-${row.i}`"
-              class="flex items-center gap-2.5 rounded-md px-2 py-2 text-sm font-medium transition-colors"
-              :class="activeIdx === row.i ? 'text-white' : 'text-white/40 hover:text-white/70'"
-            >
-              <ProductIcon :name="row.icon" class="h-3.5 w-3.5 shrink-0" :class="activeIdx === row.i ? 'text-accent' : 'text-white/20'" />
-              {{ row.cat }}
-            </a>
-          </nav>
-        </aside>
+      <!-- 3-column card grid; gap-px + bg-white/10 makes the gutters read as
+           1px structural hairlines rather than empty space -->
+      <div class="grid gap-px bg-white/10 sm:grid-cols-2 lg:grid-cols-3">
+        <NuxtLink
+          v-for="card in cards"
+          :key="card.cat"
+          :to="card.href"
+          data-reveal-item
+          class="cat-cell group flex flex-col bg-steel px-6 py-8 md:px-8 md:py-10"
+        >
+          <ProductIcon
+            :name="card.icon"
+            class="cat-icon h-5 w-5 shrink-0 text-white/30"
+          />
 
-        <!-- rows -->
-        <div>
-          <article
-            v-for="row in rows"
-            :id="`produk-${row.i}`"
-            :key="row.cat"
-            :data-idx="row.i"
-            data-produk-row
-            v-gsap.whenVisible.once.from="rowFrom"
-            class="mb-4 overflow-hidden bg-white md:grid md:grid-cols-2"
+          <h3 class="display mt-6 text-xl text-white md:text-[1.4rem]">
+            {{ card.cat }}
+          </h3>
+          <p class="mt-2.5 text-[14px] leading-relaxed text-white/45">
+            {{ card.blurb }}
+          </p>
+
+          <!-- metadata: true by construction, straight off the API response -->
+          <dl class="mt-8 flex items-center gap-3 border-t border-white/10 pt-4">
+            <dt class="sr-only">Grup</dt>
+            <dd class="spec-key text-white/35">{{ card.groupLabel }}</dd>
+            <span class="text-white/15" aria-hidden="true">·</span>
+            <dt class="sr-only">Jumlah produk</dt>
+            <dd class="spec-val text-white/70">
+              {{ String(card.count).padStart(2, '0') }} produk
+            </dd>
+          </dl>
+
+          <span
+            class="mt-6 inline-flex items-center gap-1.5 text-[13px] font-semibold text-white/70"
           >
-            <!-- text cell -->
-            <div class="px-6 py-12 md:px-10 md:py-16">
-              <p class="eyebrow text-muted">{{ row.cat }}</p>
-              <h3 class="display mt-4 max-w-xs text-2xl text-ink md:text-[1.9rem]">{{ row.title }}</h3>
-              <p class="mt-4 max-w-sm text-[15px] leading-relaxed text-muted">{{ row.desc }}</p>
-              <div class="mt-8">
-                <NuxtLink :to="row.href" class="inline-flex items-center gap-2 rounded-md border border-line bg-paper-soft px-6 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-paper">Lihat {{ row.cat }}</NuxtLink>
-              </div>
-              <div class="mt-10 flex items-center gap-2 text-sm text-muted">
-                <svg class="h-4 w-4 text-ink/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
-                  <path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                <span class="font-semibold tabular-nums text-ink">{{ row.count }}</span>
-                <span class="text-muted">produk</span>
-                <span class="text-line">·</span>
-                <span class="inline-flex items-center gap-1.5 text-muted">
-                  <span class="h-1.5 w-1.5 rounded-full bg-signal" />siap kirim
-                </span>
-              </div>
-            </div>
+            Lihat
+            <svg
+              class="cat-arrow h-3.5 w-3.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+        </NuxtLink>
 
-            <!-- visual cell -->
-            <div class="relative min-h-[300px] border-t border-line md:min-h-0 md:border-l md:border-t-0">
-              <GradientPanel :index="row.theme" rounded="rounded-none" :grain="false" class="absolute inset-0 border-0">
-                <ProductDiagram
-                  v-if="row.family"
-                  :family="row.family"
-                  class="absolute inset-0 h-full w-full p-6 text-ink/25"
-                />
-              </GradientPanel>
-              <div class="absolute inset-x-5 top-1/2 -translate-y-1/2 md:inset-x-8 lg:left-12 lg:right-8">
-                <SpecCard :lines="row.specs" />
-              </div>
-            </div>
-          </article>
-        </div>
+        <!-- 9th cell: closes the 3×3 grid and is the only accent on the band -->
+        <NuxtLink
+          to="/produk/belt-conveyor"
+          data-reveal-item
+          class="cat-cell cat-cell--cta group flex flex-col justify-between bg-accent px-6 py-8 md:px-8 md:py-10"
+        >
+          <span class="eyebrow text-ink/60">Semua kategori</span>
+          <span class="display mt-6 text-xl text-ink md:text-[1.4rem]">
+            Lihat Semua Produk
+          </span>
+          <span class="mt-8 inline-flex items-center gap-1.5 text-[13px] font-semibold text-ink">
+            Buka katalog
+            <svg
+              class="cat-arrow h-3.5 w-3.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+        </NuxtLink>
+
+        <!-- keeps the final row rectangular if a category dropped out -->
+        <div
+          v-for="n in fillerCount"
+          :key="`filler-${n}`"
+          class="hidden bg-steel lg:block"
+          aria-hidden="true"
+        />
       </div>
     </div>
   </section>
 </template>
+
+<style scoped>
+/* Explicit properties only, never `transition: all`. Sheet metal does not
+   lift or cast soft shadows, so hover darkens/lifts the surface and the
+   hairline instead of translating the cell. */
+.cat-cell {
+  transition:
+    background-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.cat-icon,
+.cat-arrow {
+  transition:
+    color 140ms ease,
+    transform 140ms var(--ease-out);
+}
+
+/* Gated: touch devices fire :hover on tap and leave cells stuck in the
+   hovered state until the next tap elsewhere. */
+@media (hover: hover) and (pointer: fine) {
+  .cat-cell:hover {
+    background-color: rgb(var(--steel-soft));
+    /* inset ring rather than an outer shadow — reads as a machined edge */
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.18);
+  }
+  .cat-cell:hover .cat-icon {
+    color: rgb(var(--accent));
+  }
+  .cat-cell:hover .cat-arrow {
+    transform: translateX(2px);
+  }
+  .cat-cell--cta:hover {
+    background-color: rgb(var(--accent-glow));
+    box-shadow: inset 0 0 0 1px rgb(var(--ink) / 0.18);
+  }
+}
+
+/* Press feedback on the whole cell — it is a link, so it must acknowledge. */
+.cat-cell:active {
+  background-color: rgb(var(--steel-soft));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cat-cell,
+  .cat-icon,
+  .cat-arrow {
+    transition: background-color 140ms ease, color 140ms ease;
+  }
+  .cat-cell:hover .cat-arrow {
+    transform: none;
+  }
+}
+</style>

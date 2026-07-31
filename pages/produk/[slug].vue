@@ -28,14 +28,14 @@ const categoryLink = computed(() => {
     : '/produk/lainnya'
 })
 
-// ponytail: hardcoded WA fallback — move to site-settings collection
-import { contactInfo } from '~/data/contact'
-const waSales1 = contactInfo.waSales1
+import { waLink } from '~/utils/whatsapp'
 
-const waMessage = computed(() => {
-  if (!product.value) return ''
-  return `Halo, saya ingin menanyakan ketersediaan ${product.value.name}`
-})
+const waHref = computed(() =>
+  waLink({
+    produk: product.value?.name,
+    kategori: product.value?.category,
+  }),
+)
 
 const heroTheme = computed(() => {
   let h = 0
@@ -89,7 +89,7 @@ useSeoMeta({
     <h1 class="display text-3xl text-ink md:text-4xl">Gagal Memuat</h1>
     <p class="mt-4 text-muted">Tidak dapat menghubungi server.</p>
     <div class="mt-8 flex justify-center">
-      <button @click="() => refreshNuxtData(`product-${slug}`)" class="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 text-sm font-semibold text-white cursor-pointer border-none">Coba Lagi</button>
+      <UiButton @click="refreshNuxtData(`product-${slug}`)">Coba Lagi</UiButton>
     </div>
   </div>
 
@@ -100,7 +100,7 @@ useSeoMeta({
       <!-- Left: visual (sticky on desktop) -->
       <div
         v-if="product.image"
-        class="aspect-[4/3] w-full rounded-lg overflow-hidden bg-paper-soft md:sticky md:top-24"
+        class="relative aspect-[4/3] w-full rounded-none overflow-hidden border border-line bg-paper-soft md:sticky md:top-24"
       >
         <img
           :src="product.image"
@@ -117,7 +117,7 @@ useSeoMeta({
 
       <!-- Right: info -->
       <div class="flex flex-col">
-        <span class="inline-block w-fit rounded-full bg-accent/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-accent">
+        <span class="inline-block w-fit rounded-none bg-accent/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-accent">
           {{ product.category }}
         </span>
         <h1 class="display mt-4 text-3xl text-ink md:text-4xl">
@@ -126,28 +126,25 @@ useSeoMeta({
         <p v-if="product.description && !product.detail" class="mt-5 leading-relaxed text-muted">{{ product.description }}</p>
 
         <div class="mt-8 flex flex-wrap gap-3">
-          <a
-            :href="`https://wa.me/${waSales1}?text=${encodeURIComponent(waMessage)}`"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 rounded-md bg-[rgb(var(--accent))] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[rgb(var(--accent-glow))]"
-          >
-            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>
+          <UiButton :href="waHref">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>
             Tanya via WhatsApp
-          </a>
-          <NuxtLink :to="categoryLink" class="inline-flex items-center gap-2 rounded-md px-6 py-2.5 text-sm font-semibold text-[rgb(var(--ink))] transition-colors hover:bg-[rgb(var(--paper-soft))]">
+          </UiButton>
+          <UiButton :href="categoryLink" variant="ghost">
             Lihat Produk Lain
-          </NuxtLink>
+          </UiButton>
         </div>
 
         <!-- Specs table -->
         <div v-if="specEntries.length" class="mt-8 border-t border-line pt-6">
           <h2 class="display text-lg text-ink">Spesifikasi Teknis</h2>
-          <table class="mt-4 w-full text-sm">
+          <!-- Datasheet register: mono keys + tabular figures so ranges like
+               "300–1200 mm" align column-wise down the plate. -->
+          <table class="mt-4 w-full">
             <tbody>
               <tr v-for="([key, val], i) in specEntries" :key="i" class="border-b border-line/40 last:border-b-0">
-                <td class="py-2 pr-4 font-semibold text-ink/60 whitespace-nowrap align-top w-32">{{ key }}</td>
-                <td class="py-2 text-ink">{{ val }}</td>
+                <td class="spec-key w-32 whitespace-nowrap py-2.5 pr-4 align-top">{{ key }}</td>
+                <td class="spec-val py-2.5">{{ val }}</td>
               </tr>
             </tbody>
           </table>
@@ -179,7 +176,10 @@ useSeoMeta({
     <h1 class="display text-3xl text-ink md:text-4xl">Produk Tidak Ditemukan</h1>
     <p class="mt-4 text-muted">Produk yang Anda cari tidak tersedia.</p>
     <div class="mt-8 flex justify-center">
-      <NuxtLink to="/produk/belt-conveyor" class="inline-flex items-center gap-2 rounded-md px-6 py-2.5 text-sm font-semibold text-[rgb(var(--ink))] transition-colors hover:bg-[rgb(var(--paper-soft))]">Kembali ke Produk <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></NuxtLink>
+      <UiButton href="/produk/belt-conveyor" variant="ghost">
+        Kembali ke Produk
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </UiButton>
     </div>
   </div>
 </template>

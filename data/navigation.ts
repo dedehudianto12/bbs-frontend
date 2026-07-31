@@ -1,4 +1,10 @@
+import { waLink } from '~/utils/whatsapp'
+
 // ponytail: static nav — was content/config/navigation.yml, move to backend if it changes often
+//
+// Artikel + Galeri are grouped under "Wawasan" rather than sitting at the top
+// level: logo + 7 links + WhatsApp icon-button + CTA collides below ~1100px.
+// Grouping reuses NavigationDropdown, which Produk already uses.
 export const headerNav = [
   { label: 'Beranda', href: '/' },
   {
@@ -10,15 +16,24 @@ export const headerNav = [
     ],
   },
   { label: 'Jasa', href: '/jasa' },
-  { label: 'Artikel', href: '/artikel' },
-  { label: 'Galeri', href: '/galeri' },
+  {
+    label: 'Wawasan',
+    href: '/artikel',
+    children: [
+      { label: 'Artikel', href: '/artikel' },
+      { label: 'Galeri Proyek', href: '/galeri' },
+    ],
+  },
   { label: 'Tentang Kami', href: '/tentang-kami' },
   { label: 'Kontak', href: '/kontak' },
 ]
 
+// Stays Indonesian. An English CTA on an otherwise wholly Indonesian site
+// reads as imported rather than premium. Goes straight to WhatsApp with a
+// prefilled message — there is no form to route it to.
 export const navCta = {
-  label: 'Hubungi Kami',
-  href: '/kontak',
+  label: 'Minta Penawaran',
+  href: waLink({ halaman: 'Navigasi utama' }),
 }
 
 export const footerColumns = [
@@ -41,6 +56,7 @@ export const footerColumns = [
     links: [
       { label: 'Tentang Kami', href: '/tentang-kami' },
       { label: 'Artikel', href: '/artikel' },
+      { label: 'Galeri Proyek', href: '/galeri' },
       { label: 'Kontak', href: '/kontak' },
     ],
   },

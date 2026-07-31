@@ -24,5 +24,5 @@ defineProps<{
       <ArticleCard v-bind="article" />
     </div>
   </div>
-  <p v-else class="rounded-2xl border border-dashed border-line py-16 text-center text-sm text-muted">Belum ada artikel.</p>
+  <p v-else class="rounded-none border border-dashed border-line py-16 text-center text-sm text-muted">Belum ada artikel.</p>
 </template>
