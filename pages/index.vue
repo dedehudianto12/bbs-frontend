@@ -163,6 +163,7 @@ useSeoMeta({
        .frame rails read as monotonous without those two anchors. -->
   <template v-else>
     <ProofMarquee :items="galleryItems" />
+    <ProofStrip />
 
     <ProductCategoriesSection v-if="catItems.length" :items="catItems" />
 
