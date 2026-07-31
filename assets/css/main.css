@@ -3,10 +3,12 @@
 @tailwind utilities;
 
 /* ──────────────────────────────────────────────────────────
-   Design tokens — BBS Conveyor: Safety Orange + Steel
-   Industrial supplier identity. Light-first concrete/paper canvas,
-   safety-orange accent used sparingly, a single steel dark anchor.
-   Fonts (Inter) loaded in nuxt.config. No monospace in the UI voice.
+   Design tokens — BBS Conveyor: Logo Gold + Steel
+   Precision industrial minimalist. Light-first concrete/paper canvas,
+   logo-gold accent used sparingly, a single steel dark anchor, and hard
+   0px geometry throughout the public surface.
+   Fonts (Inter + JetBrains Mono) loaded in nuxt.config. Mono is reserved
+   for datasheet keys/values and numerals — never for prose or eyebrows.
    ────────────────────────────────────────────────────────── */
 :root {
   /* RGB channel triples so Tailwind can apply the /opacity modifier */
@@ -24,7 +26,7 @@
   --steel: 58 61 66;         /* #3A3D42 steel — the single dark anchor */
   --steel-soft: 69 72 78;    /* #45484E raised surfaces on the steel anchor */
 
-  /* Accent — safety orange, deliberate + sparing */
+  /* Accent — logo gold, deliberate + sparing (~5% of canvas) */
   --accent: 214 176 69;        /* #d6b045 logo gold */
   --accent-glow: 230 196 97;   /* #e6c461 lighter gold hover */
 
@@ -32,7 +34,14 @@
   --signal: 46 150 92;       /* #2E965C */
   --signal-glow: 74 190 122; /* #4ABE7A */
 
-  --radius: 0.5rem;
+  /* Hard industrial geometry. The borderRadius scale in tailwind.config.ts
+     is pinned to 0 explicitly rather than derived from this — calc() with a
+     negative offset is invalid CSS. Kept as a token for documentation. */
+  --radius: 0rem;
+
+  /* Single easing curve for the whole system. Mirrors EASE_OUT_CSS in
+     utils/motion.ts — do not introduce a second, near-identical curve. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer base {
@@ -57,10 +66,12 @@
     color: #fff;
   }
 
+  /* Square focus ring — a rounded ring on square elements is exactly the
+     kind of 1px inconsistency that compounds. */
   :where(a, button, input, textarea, select):focus-visible {
     outline: 2px solid rgb(var(--accent));
     outline-offset: 2px;
-    border-radius: 3px;
+    border-radius: 0;
   }
 }
 
@@ -83,6 +94,97 @@
     @apply py-20 md:py-28;
   }
 
+  /* ── Card shell — shared by product / article / service cards ──
+     Previously each card carried its own copy of
+       transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md
+     which is both a `transition: all` violation and the wrong physical
+     metaphor: sheet metal does not float or cast a soft shadow. Hover now
+     darkens the hairline and the surface instead. Gated behind hover capability
+     because touch devices fire :hover on tap and leave cards stuck. */
+  .card-shell {
+    @apply relative flex flex-col overflow-hidden border border-line bg-white;
+    transition:
+      border-color 140ms ease,
+      background-color 140ms ease;
+  }
+  .card-title,
+  .card-meta {
+    transition: color 140ms ease;
+  }
+  .card-arrow {
+    transition: transform 140ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .card-shell:hover {
+      border-color: rgb(var(--ink));
+      background-color: rgb(var(--paper-soft));
+    }
+    .card-shell:hover .card-title,
+    .card-shell:hover .card-meta {
+      color: rgb(var(--accent));
+    }
+    .card-shell:hover .card-arrow {
+      transform: translateX(2px);
+    }
+  }
+  /* Press acknowledgement — the whole cell is a link. */
+  .card-shell:active {
+    background-color: rgb(var(--paper-soft));
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card-arrow {
+      transition: none;
+    }
+    .card-shell:hover .card-arrow {
+      transform: none;
+    }
+  }
+
+  /* ── Scroll reveal ──
+     useRevealOnScroll() sets data-reveal="out" on mount, then flips it to
+     "in" on intersection. No attribute at all (SSR, no JS, IO unsupported)
+     means fully visible — content is never trapped at opacity 0. */
+  [data-reveal='out'] {
+    opacity: 0;
+  }
+  [data-reveal='in'] {
+    @apply animate-rise;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal='out'] {
+      opacity: 1;
+    }
+    [data-reveal='in'] {
+      animation: none;
+    }
+  }
+
+  /* ── Marquee track ──
+     Edges are masked because hard-clipped text reads as a rendering bug.
+     Pausing (not just stopping) under reduced motion: an infinite marquee
+     is the worst offender for motion sensitivity. */
+  .marquee-mask {
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
+    );
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
+    );
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation-play-state: paused !important;
+    }
+  }
+
   /* ── Eyebrow / kicker — uppercase tracked SANS (no monospace) ── */
   .eyebrow {
     @apply inline-flex items-center gap-2 font-sans text-[11px] font-semibold uppercase tracking-[0.18em];
@@ -92,6 +194,24 @@
   .display {
     @apply font-display font-medium tracking-[-0.02em];
     line-height: 1.08;
+  }
+
+  /* ── Datasheet register — the one job mono genuinely earns ──
+     Small technical key/value pairs and inline numerals: spec tables, product
+     counts, gallery locations, dates. Deliberately NOT used for display-scale
+     numbers — .display's tracking-[-0.02em] and 1.08 line-height are tuned for
+     Inter, and tabular-nums alone already stops count-up reflow. Eyebrows stay
+     tracked sans (that migration off mono was deliberate).
+
+     Declared after .display so the mono family wins if the two are combined. */
+  .spec-key {
+    @apply font-mono text-[11px] uppercase tracking-[0.08em] text-muted;
+  }
+  .spec-val {
+    @apply font-mono text-[12px] tabular-nums text-ink;
+  }
+  .num {
+    @apply font-mono tabular-nums;
   }
 
   /* ── Industrial motifs ─────────────────────────────────── */
@@ -111,7 +231,7 @@
     background-size: 26px 26px;
   }
 
-  /* Restrained caution / hazard cue in safety orange */
+  /* Restrained caution / hazard cue in logo gold */
   .hazard-stripe {
     background-image: repeating-linear-gradient(
       -45deg,
@@ -178,13 +298,13 @@
     @apply rounded bg-ink/5 px-1.5 py-0.5 font-mono text-[0.85em] text-ink;
   }
   .prose-tech pre {
-    @apply overflow-x-auto rounded-lg bg-steel p-4 font-mono text-sm text-white/90;
+    @apply overflow-x-auto rounded-none bg-steel p-4 font-mono text-sm text-white/90;
   }
   .prose-tech pre code {
     @apply bg-transparent p-0 text-inherit;
   }
   .prose-tech img {
-    @apply rounded-lg border border-line;
+    @apply rounded-none border border-line;
   }
   .prose-tech hr {
     @apply my-10 border-line;

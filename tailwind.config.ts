@@ -8,16 +8,18 @@ export default <Config>{
     './app.vue'
   ],
   darkMode: 'class',
+  future: {
+    // Gates every hover: / group-hover: utility behind
+    // @media (hover: hover) and (pointer: fine). Touch devices fire :hover on
+    // tap and leave elements stuck in the hovered state until the user taps
+    // somewhere else — this fixes all of them at once.
+    hoverOnlyWhenSupported: true,
+  },
   theme: {
     extend: {
       colors: {
         // ── Steel: the single dark anchor (footer) ──
         steel: {
-          DEFAULT: 'rgb(var(--steel) / <alpha-value>)',
-          soft: 'rgb(var(--steel-soft) / <alpha-value>)',
-        },
-        // Back-compat alias — retired "void" band name now maps to steel
-        void: {
           DEFAULT: 'rgb(var(--steel) / <alpha-value>)',
           soft: 'rgb(var(--steel-soft) / <alpha-value>)',
         },
@@ -29,18 +31,13 @@ export default <Config>{
         ink: 'rgb(var(--ink) / <alpha-value>)',
         muted: 'rgb(var(--muted) / <alpha-value>)',
         line: 'rgb(var(--line) / <alpha-value>)',
-        // ── Safety-orange accent ──
+        // ── Logo-gold accent (CTAs + status only, ~5% of canvas) ──
         accent: {
           DEFAULT: 'rgb(var(--accent) / <alpha-value>)',
           glow: 'rgb(var(--accent-glow) / <alpha-value>)',
         },
         // ── Operational signal green (status only) ──
         signal: {
-          DEFAULT: 'rgb(var(--signal) / <alpha-value>)',
-          glow: 'rgb(var(--signal-glow) / <alpha-value>)',
-        },
-        // Back-compat alias — old "jade" status green
-        jade: {
           DEFAULT: 'rgb(var(--signal) / <alpha-value>)',
           glow: 'rgb(var(--signal-glow) / <alpha-value>)',
         },
@@ -52,15 +49,24 @@ export default <Config>{
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
         display: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
-        // mono retained for code samples only — never for UI labels
+        // mono: datasheet keys/values, numerals, and code samples.
+        // Never prose, never eyebrows (.eyebrow is tracked sans by design).
         mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
+      // Hard 0px geometry across the public surface. Pinned explicitly rather
+      // than derived from --radius: calc(0rem - 3px) is invalid CSS and would
+      // silently drop the declaration. `full` is retained because status dots
+      // and signal indicators are circles by nature, not rounded UI corners.
       borderRadius: {
-        sm: 'calc(var(--radius) - 3px)',
-        md: 'calc(var(--radius) - 2px)',
-        lg: 'var(--radius)',
-        xl: 'calc(var(--radius) + 4px)',
-        '2xl': 'calc(var(--radius) + 10px)',
+        none: '0',
+        DEFAULT: '0',
+        sm: '0',
+        md: '0',
+        lg: '0',
+        xl: '0',
+        '2xl': '0',
+        '3xl': '0',
+        full: '9999px',
       },
       keyframes: {
         'fade-up': {
@@ -75,6 +81,11 @@ export default <Config>{
         'belt-travel': {
           to: { strokeDashoffset: '-7.85' },
         },
+        // Track is duplicated exactly once, so -50% is one full seam-free cycle
+        marquee: {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(-50%)' },
+        },
       },
       animation: {
         'fade-up': 'fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both',
@@ -82,6 +93,8 @@ export default <Config>{
         rise: 'fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both',
         'pulse-glow': 'pulse-glow 2.4s ease-in-out infinite',
         'belt-travel': 'belt-travel 4.5s linear infinite',
+        // linear is required — constant motion with any easing visibly pulses
+        marquee: 'marquee 42s linear infinite',
       },
     }
   },
