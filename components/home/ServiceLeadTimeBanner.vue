@@ -69,8 +69,17 @@ const { root } = useRevealOnScroll({ stagger: 45 })
            production room. It proves "tim kami datang ke lokasi Anda" and
            food-grade capability in a single frame, which no other photo in the
            client's set does.
-           Right is the finished product wrapped on a pallet — the literal end
-           of the 2–3 day promise.
+           Right is sidewall-cleated belt coiled in the workshop — the product,
+           ready. It replaced a shot of rolls shrink-wrapped on a pallet, which
+           at 576px read as a tangle of plastic film rather than as belt: the
+           subject was legible only at full size, which is not the size anyone
+           sees it. This one survives the shrink, and the repeated cleats give
+           it a rhythm that holds up small.
+           The pairing is deliberate — people on the left, product on the right.
+           A running food line was the other finalist and told a tidier story,
+           but it put a customer's branded packaging in frame without permission
+           to imply the account, and two food-plant photos side by side is one
+           subject twice.
            Only the first shows below sm. At 360px a two-up would give each
            image about 180px of width, and two people at that size are unreadable
            smudges; one legible photograph beats two illegible ones.
@@ -87,10 +96,10 @@ const { root } = useRevealOnScroll({ stagger: 45 })
           class="h-[200px] w-full object-cover md:h-[280px]"
         />
         <img
-          src="/images/belt-rolls.webp"
+          src="/images/belt-cleated.webp"
           alt=""
-          width="1600"
-          height="531"
+          width="1200"
+          height="582"
           loading="lazy"
           decoding="async"
           class="hidden h-[200px] w-full object-cover sm:block md:h-[280px]"
