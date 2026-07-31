@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import { homepageConfig, whyChooseUsItems } from '~/data/homepage'
-import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
 import { waLink } from '~/utils/whatsapp'
 
 const { get } = useApi()
-
-// Mission band is inline in this page rather than a component, so it needs its
-// own reveal root.
-const { root: missionRoot } = useRevealOnScroll()
 
 const hpData = homepageConfig
 
@@ -17,8 +12,8 @@ const heroProps = computed(() => ({
   subheadline: hpData.hero.subheadline,
   primaryCTA: hpData.hero.primaryCTA,
   // Built here rather than stored as a static path so the prefilled message
-  // tells sales the lead came from the hero, not one of the eight other wa.me
-  // links on this page.
+  // tells sales the lead came from the hero, not one of the other wa.me links
+  // on this page.
   primaryLink: waLink({ halaman: 'Hero — Beranda' }),
   primaryWhatsApp: true,
   secondaryCTA: hpData.hero.secondaryCTA,
@@ -32,43 +27,33 @@ const ctaProps = computed(() => ({
   buttonLink: hpData.cta.buttonLink,
 }))
 
-const mission = computed(() => hpData.company.description)
-
-// Product categories, industries, articles, gallery — from backend
+// Two fetches, down from four.
+//
+// /industri and /artikel were both fetched on every homepage load to feed
+// IndustriesSection and LatestArticlesSection, which are gone — see the
+// template for why. Dropping them halves the requests this page makes on a
+// mid-range Android, which is the device that matters here.
 const { data: productRes, error: productErr } = await useAsyncData('homepage-products', () =>
   get<any[]>('/produk')
-)
-const { data: industryRes, error: industryErr } = await useAsyncData('homepage-industries', () =>
-  get<any[]>('/industri')
-)
-const { data: articleRes, error: articleErr } = await useAsyncData('homepage-articles', () =>
-  get<any[]>('/artikel')
 )
 const { data: galleryRes } = await useAsyncData('homepage-gallery', () =>
   get<any[]>('/galeri')
 )
 
 const products = computed(() => productRes.value?.data ?? [])
-const industries = computed(() => industryRes.value?.data ?? [])
-const allArticles = computed(() => articleRes.value?.data ?? [])
 const galleries = computed(() => galleryRes.value?.data ?? [])
 
 // Gallery drives a decorative proof strip only, so its failure must not
 // escalate to the page-level error state — ProofMarquee self-hides when empty.
-const hasApiError = computed(() => productErr.value || industryErr.value || articleErr.value)
+const hasApiError = computed(() => !!productErr.value)
 
 // If SSR payload is empty (backend unreachable), show skeleton while client
 // re-fetches. Set isLoading on server too so the SSR HTML already has skeleton
 // instead of a brief error flash before hydration.
-const emptyPayload = !productRes.value?.data?.length && !industryRes.value?.data?.length && !articleRes.value?.data?.length
+const emptyPayload = !productRes.value?.data?.length
 const isLoading = ref(hasApiError.value && emptyPayload)
 
-const REFRESH_KEYS = [
-  'homepage-products',
-  'homepage-industries',
-  'homepage-articles',
-  'homepage-gallery',
-] as const
+const REFRESH_KEYS = ['homepage-products', 'homepage-gallery'] as const
 
 async function retry() {
   isLoading.value = true
@@ -103,34 +88,11 @@ const catItems = computed(() => {
   return [...map.values()]
 })
 
-const industryItems = computed(() =>
-  industries.value.map((i: any) => ({
-    name: i.name,
-    description: i.description,
-    slug: i.slug,
-  }))
-)
-
 const galleryItems = computed(() =>
   galleries.value.map((g: any) => ({
     caption: g.caption ?? '',
     location: g.location ?? null,
   }))
-)
-
-const latestArticles = computed(() =>
-  [...allArticles.value]
-    .sort((a: any, b: any) => b.publishedAt.localeCompare(a.publishedAt))
-    .slice(0, 6)
-    .map((a: any) => ({
-      slug: a.slug,
-      title: a.title,
-      excerpt: a.excerpt,
-      tag: a.tag ?? '',
-      image: a.image ?? null,
-      publishedAt: a.publishedAt,
-      author: a.author ?? '',
-    }))
 )
 
 useSeoMeta({
@@ -158,9 +120,22 @@ useSeoMeta({
     </div>
   </div>
 
-  <!-- Content — tonal rhythm is deliberate: steel at ~25%, gold at ~55%,
-       steel again at the footer. Six consecutive paper sections inside the
-       .frame rails read as monotonous without those two anchors. -->
+  <!-- Eleven sections down to seven.
+       Cut, and why:
+       - IndustriesSection: its cells linked nowhere and hid their descriptions
+         in a `title` tooltip, which is invisible on touch and unreachable by
+         keyboard. There is no /industri/:slug route to link them to. The data
+         deserves better than deletion — every industri row already carries a
+         curated productSlugs list that nothing on the site reads — so this is
+         deferred to a real industry route, not a verdict on the content.
+       - The inline Mission band: generic copy that restated tentang-kami and
+         linked to it, occupying a full cream cell to do so.
+       - LatestArticlesSection: a genuine SEO asset sitting in conversion space.
+         The articles keep /artikel and stay in the sitemap; they just stop
+         competing with the catalog for a buyer whose line is down.
+
+       Tonal rhythm is deliberate: steel at the katalog, gold at the service
+       band, steel again at the footer. -->
   <template v-else>
     <ProofMarquee :items="galleryItems" />
     <ProofStrip />
@@ -177,22 +152,8 @@ useSeoMeta({
 
     <WhyChooseUsSection :items="whyChooseUsItems" />
 
-    <!-- Mission band (cream cell) -->
-    <section ref="missionRoot" class="bg-paper">
-      <div class="frame border-b border-line">
-        <div data-reveal-item class="bg-paper-soft px-6 py-20 text-center md:py-28">
-          <p class="display mx-auto max-w-3xl text-2xl leading-snug text-ink md:text-[2.4rem]">
-            {{ mission }}
-          </p>
-          <div class="mt-10 flex justify-center">
-            <UiButton href="/tentang-kami" variant="outline">Selengkapnya</UiButton>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <IndustriesSection v-if="industryItems.length" :industries="industryItems" />
-    <LatestArticlesSection v-if="latestArticles.length" :articles="latestArticles" />
+    <!-- Hidden until the marketplace URLs are filled in; see data/contact.ts. -->
+    <MarketplaceBand />
   </template>
 
   <CTASection v-bind="ctaProps" />
