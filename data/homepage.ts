@@ -1,13 +1,23 @@
 // ponytail: static homepage config — was content/config/homepage.yml, move to backend if it changes often
 export const homepageConfig = {
   hero: {
-    headline: 'Solusi Belt & Roller Conveyor untuk Bisnis Anda',
+    // Leads with the one differentiator the client puts in writing — "lead time
+    // pengerjaan produk hanya 2-3 hari" (company profile, p5). The previous
+    // headline, "Solusi Belt & Roller Conveyor untuk Bisnis Anda", was
+    // interchangeable with every competitor and answered no question the buyer
+    // arrived with. He arrives because a conveyor stopped this morning.
+    headline: 'Conveyor berhenti? Sambung lagi dalam 2–3 hari.',
+    // Substrings rendered in logo gold. Lives here so a copy edit and its
+    // highlight move together — this used to be a HIGHLIGHTS const inside
+    // HeroSection, so changing the headline silently killed the gold.
+    headlineHighlights: ['2–3 hari'],
     subheadline:
-      'CV Bintang Berjaya Satu — Supplier belt conveyor, roller, dan komponen industri berkualitas dengan layanan teknis profesional di seluruh Indonesia.',
-    primaryCTA: 'Lihat Produk',
-    primaryLink: '/produk/belt-conveyor',
-    secondaryCTA: 'Hubungi Kami',
-    secondaryLink: '/kontak',
+      'Penyambungan hot joint & cold joint di pabrik Anda atau di workshop kami. Belt conveyor, roller, dan komponen industri — CV Bintang Berjaya Satu, Jakarta Timur.',
+    // primaryLink is built in pages/index.vue with waLink() so the prefilled
+    // message carries which CTA fired. It is deliberately not a static path.
+    primaryCTA: 'Chat WhatsApp',
+    secondaryCTA: 'Lihat Produk',
+    secondaryLink: '/produk/belt-conveyor',
   },
   company: {
     companyName: 'CV Bintang Berjaya Satu',

@@ -1,20 +1,30 @@
 <script setup lang="ts">
-const props = defineProps<{
-  headline: string
-  subheadline: string
-  primaryCTA: string
-  primaryLink: string
-  secondaryCTA?: string
-  secondaryLink?: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    headline: string
+    /** Substrings of `headline` to render in logo gold. */
+    highlights?: string[]
+    subheadline: string
+    primaryCTA: string
+    primaryLink: string
+    /** Renders the WhatsApp glyph inside the primary CTA. */
+    primaryWhatsApp?: boolean
+    secondaryCTA?: string
+    secondaryLink?: string
+  }>(),
+  { highlights: () => [], primaryWhatsApp: false },
+)
 
 // Split the headline so chosen words render in logo gold (partial-word
 // highlight). Case-insensitive, longest phrases first.
-const HIGHLIGHTS = ['Bisnis Anda', 'Conveyor']
-
+//
+// The phrases used to be a HIGHLIGHTS const right here, hardcoded to
+// ['Bisnis Anda', 'Conveyor'] — so editing the headline in data/homepage.ts
+// silently dropped the gold with nothing to warn you. They now travel with the
+// copy they annotate.
 const headlineParts = computed(() => {
   let parts: { text: string; hl: boolean }[] = [{ text: props.headline, hl: false }]
-  for (const phrase of HIGHLIGHTS) {
+  for (const phrase of props.highlights) {
     const re = new RegExp(`(${phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'i')
     parts = parts.flatMap((p) => {
       if (p.hl) return [p]
@@ -55,12 +65,21 @@ const headlineParts = computed(() => {
           {{ subheadline }}
         </p>
 
-        <div class="mt-8 flex flex-col items-center gap-3 sm:flex-row">
-          <UiButton :href="primaryLink">{{ primaryCTA }}</UiButton>
+        <!-- On a 360px phone these stack, and the first one gets the thumb.
+             That slot belongs to WhatsApp: the buyer arriving here has a line
+             down and wants a person, not a catalog. `block` on mobile so the
+             tap target spans the column instead of sitting centred and narrow. -->
+        <div class="mt-8 flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center">
+          <UiButton :href="primaryLink" :block="true" class="sm:!w-auto">
+            <UiWhatsAppIcon v-if="primaryWhatsApp" class="h-4 w-4" />
+            {{ primaryCTA }}
+          </UiButton>
           <UiButton
             v-if="secondaryCTA && secondaryLink"
             :href="secondaryLink"
             variant="outline"
+            :block="true"
+            class="sm:!w-auto"
           >
             {{ secondaryCTA }}
           </UiButton>

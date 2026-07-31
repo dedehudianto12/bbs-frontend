@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { homepageConfig, whyChooseUsItems } from '~/data/homepage'
 import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
+import { waLink } from '~/utils/whatsapp'
 
 const { get } = useApi()
 
@@ -12,9 +13,14 @@ const hpData = homepageConfig
 
 const heroProps = computed(() => ({
   headline: hpData.hero.headline,
+  highlights: hpData.hero.headlineHighlights,
   subheadline: hpData.hero.subheadline,
   primaryCTA: hpData.hero.primaryCTA,
-  primaryLink: hpData.hero.primaryLink,
+  // Built here rather than stored as a static path so the prefilled message
+  // tells sales the lead came from the hero, not one of the eight other wa.me
+  // links on this page.
+  primaryLink: waLink({ halaman: 'Hero — Beranda' }),
+  primaryWhatsApp: true,
   secondaryCTA: hpData.hero.secondaryCTA,
   secondaryLink: hpData.hero.secondaryLink,
 }))
