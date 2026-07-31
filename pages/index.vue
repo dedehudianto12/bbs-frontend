@@ -167,18 +167,13 @@ useSeoMeta({
 
     <ProductCategoriesSection v-if="catItems.length" :items="catItems" />
 
-    <LeadTimeBanner
+    <!-- "2–3 days" and "we come to you nationwide" are one thought, and used to
+         be two consecutive sections opening on the same sentence. -->
+    <ServiceLeadTimeBanner
       v-if="hpData.leadTime"
       :days="hpData.leadTime.days"
-      :headline="hpData.leadTime.headline"
-      :description="hpData.leadTime.description"
       :steps="hpData.leadTime.steps"
     />
-
-    <!-- Directly after LeadTimeBanner: "2–3 days" and "we come to you
-         nationwide" are the same thought, and the gold band closes it before
-         the page pivots to trust. -->
-    <ServiceBanner />
 
     <WhyChooseUsSection :items="whyChooseUsItems" />
 

@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
 
-const props = defineProps<{
+defineProps<{
   items: { title: string; description: string }[]
 }>()
 
-// items + one CTA cell, padded so the hairline grid fills evenly at 3 cols.
-const fillerCount = computed(() => {
-  const cells = props.items.length + 1
-  return (3 - (cells % 3)) % 3
-})
+// Four items across four columns, so the row closes on its own.
+//
+// This used to be a 3-column grid holding the four values plus a "Butuh bantuan
+// memilih?" CTA cell plus up to two invisible filler cells, purely to keep the
+// hairline grid rectangular. The CTA was doing no work — CTASection sits two
+// screens below saying the same thing, the navbar and the floating button both
+// offer WhatsApp, and it displaced a value the client actually published. With
+// the filler machinery gone the section is one clean strip.
 
 const { root } = useRevealOnScroll({ stagger: 45 })
 </script>
@@ -25,35 +28,17 @@ const { root } = useRevealOnScroll({ stagger: 45 })
         />
       </div>
 
-      <div class="grid grid-cols-1 gap-px bg-line sm:grid-cols-2 lg:grid-cols-3">
+      <div class="grid grid-cols-1 gap-px bg-line sm:grid-cols-2 lg:grid-cols-4">
         <div
           v-for="(item, i) in items"
           :key="item.title"
           data-reveal-item
-          class="bg-paper p-7 md:p-9"
+          class="bg-paper p-6 md:p-7"
         >
           <span class="num text-sm font-semibold text-accent">{{ String(i + 1).padStart(2, '0') }}</span>
-          <h3 class="mt-5 text-lg font-semibold text-ink">{{ item.title }}</h3>
+          <h3 class="mt-5 text-[17px] font-semibold leading-snug text-ink">{{ item.title }}</h3>
           <p class="mt-2 text-sm leading-relaxed text-muted">{{ item.description }}</p>
         </div>
-
-        <!-- CTA cell -->
-        <NuxtLink
-          to="/kontak"
-          data-reveal-item
-          class="group flex flex-col justify-between bg-paper p-7 transition-colors duration-150 hover:bg-paper-soft active:bg-paper-soft md:p-9"
-        >
-          <span class="text-lg leading-none text-accent">→</span>
-          <div>
-            <h3 class="text-lg font-semibold text-ink">Butuh bantuan memilih?</h3>
-            <p class="mt-2 text-sm text-muted transition-colors group-hover:text-accent">
-              Konsultasi gratis dengan tim kami
-            </p>
-          </div>
-        </NuxtLink>
-
-        <!-- fillers to keep the hairline grid even -->
-        <div v-for="n in fillerCount" :key="`f-${n}`" class="hidden bg-paper lg:block" aria-hidden="true" />
       </div>
     </div>
   </section>
