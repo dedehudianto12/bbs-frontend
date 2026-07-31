@@ -75,9 +75,29 @@ const { root } = useRevealOnScroll({ stagger: 45 })
 <template>
   <section ref="root" class="bg-steel">
     <div class="frame frame-dark blueprint-grid-steel">
-      <!-- section tag row -->
-      <div class="border-b border-white/10 px-6 py-3 md:px-10">
+      <!-- Section tag row. The "Semua produk" link lives here rather than
+           relying on the gold CTA cell at the end of the rail: below lg the
+           cells are a horizontal track, and a buyer who never swipes to the end
+           would otherwise have no way out of this band. Same pattern as
+           ProofMarquee — a static link that never moves under the thumb. -->
+      <div class="flex items-center justify-between gap-4 border-b border-white/10 px-6 py-3 md:px-10">
         <span class="eyebrow text-accent">Katalog</span>
+        <NuxtLink
+          to="/produk/belt-conveyor"
+          class="cat-all inline-flex items-center gap-1.5 text-[12px] font-semibold text-white/70 lg:hidden"
+        >
+          Semua produk
+          <svg
+            class="cat-arrow h-3 w-3"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            aria-hidden="true"
+          >
+            <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </NuxtLink>
       </div>
 
       <!-- section header -->
@@ -89,15 +109,32 @@ const { root } = useRevealOnScroll({ stagger: 45 })
         </p>
       </div>
 
-      <!-- 3-column card grid; gap-px + bg-white/10 makes the gutters read as
-           1px structural hairlines rather than empty space -->
-      <div class="grid gap-px bg-white/10 sm:grid-cols-2 lg:grid-cols-3">
+      <!-- Two layouts, one DOM.
+           At lg+ this is the 3-column grid it has always been; gap-px over
+           bg-white/10 makes the gutters read as 1px structural hairlines rather
+           than empty space.
+           Below lg it becomes a swipeable rail. That grid never existed on a
+           phone — it collapsed to one column, so the section was nine
+           full-width stacked cells and well over 1500px of scrolling on the
+           360px Android that is the primary device here. The rail costs nothing
+           structurally, because gap-px keeps producing hairlines horizontally.
+           Native overflow + scroll-snap, no JavaScript: it runs on the
+           compositor, survives a dead JS bundle, and every card stays in the
+           DOM for crawlers and keyboard users. No auto-advance — nothing moves
+           that the user did not move.
+           data-reveal-item sits on this container rather than on each card. Per
+           card it would break the rail: cards scrolled off to the right are
+           clipped, so IntersectionObserver never fires for them and they would
+           sit at opacity 0 until swiped to, fading in under the thumb. -->
+      <div
+        data-reveal-item
+        class="flex snap-x snap-mandatory gap-px overflow-x-auto overscroll-x-contain bg-white/10 cat-rail lg:grid lg:snap-none lg:grid-cols-3 lg:overflow-visible"
+      >
         <NuxtLink
           v-for="card in cards"
           :key="card.cat"
           :to="card.href"
-          data-reveal-item
-          class="cat-cell group flex flex-col bg-steel px-6 py-8 md:px-8 md:py-10"
+          class="cat-cell group flex w-[78%] shrink-0 snap-start flex-col bg-steel px-6 py-8 sm:w-[46%] md:w-[38%] md:px-8 md:py-10 lg:w-auto"
         >
           <ProductIcon
             :name="card.icon"
@@ -139,11 +176,15 @@ const { root } = useRevealOnScroll({ stagger: 45 })
           </span>
         </NuxtLink>
 
-        <!-- 9th cell: closes the 3×3 grid and is the only accent on the band -->
+        <!-- 9th cell: closes the 3×3 grid at lg+ and is the only accent on the
+             band. Kept last in the DOM at every width — reordering it to the
+             front of the rail with CSS `order` would put it first visually but
+             still last in tab order, and a focus ring jumping to the far end of
+             a track is worse than a swipe. The header link covers the early
+             exit on mobile instead. -->
         <NuxtLink
           to="/produk/belt-conveyor"
-          data-reveal-item
-          class="cat-cell cat-cell--cta group flex flex-col justify-between bg-accent px-6 py-8 md:px-8 md:py-10"
+          class="cat-cell cat-cell--cta group flex w-[78%] shrink-0 snap-start flex-col justify-between bg-accent px-6 py-8 sm:w-[46%] md:w-[38%] md:px-8 md:py-10 lg:w-auto"
         >
           <span class="eyebrow text-ink/60">Semua kategori</span>
           <span class="display mt-6 text-xl text-ink md:text-[1.4rem]">
@@ -177,6 +218,37 @@ const { root } = useRevealOnScroll({ stagger: 45 })
 </template>
 
 <style scoped>
+/* The rail's affordance is the peeking next card, not a scrollbar: cards are
+   78% wide below sm so roughly a fifth of the following one is always visible,
+   which tells the thumb to swipe far more reliably than an arrow does. The
+   native bar is hidden because in this range the device is overwhelmingly
+   touch, where the bar is an overlay that never appears anyway, and on a narrow
+   desktop window a chunky bar under the steel band reads as a rendering fault.
+   Scrolling itself is untouched — wheel, trackpad, keyboard and screen-reader
+   navigation all still work. */
+.cat-rail {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.cat-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-all {
+  transition: color 140ms ease;
+}
+.cat-all:active {
+  color: rgb(255 255 255 / 0.9);
+}
+@media (hover: hover) and (pointer: fine) {
+  .cat-all:hover {
+    color: rgb(var(--accent));
+  }
+  .cat-all:hover .cat-arrow {
+    transform: translateX(2px);
+  }
+}
+
 /* Explicit properties only, never `transition: all`. Sheet metal does not
    lift or cast soft shadows, so hover darkens/lifts the surface and the
    hairline instead of translating the cell. */
