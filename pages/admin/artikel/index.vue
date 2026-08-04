@@ -1,12 +1,26 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'admin', middleware: 'auth' })
+import { watchDebounced } from '@vueuse/core'
 const { get, del } = useAdminApi()
 const search = ref(''); const filterTag = ref(''); const sort = ref('desc'); const page = ref(1); const limit = 10
 const { data: tagRes } = await useAsyncData('admin-tags', () => get<any[]>('/artikel'), { server: false })
 const tags = computed(() => [...new Set(((tagRes.value?.data ?? []) as any[]).map((a:any)=>a.tag).filter(Boolean))])
 const params = computed(() => { const p = new URLSearchParams({ page: String(page.value), limit: String(limit), sort: sort.value }); if (search.value) p.set('search', search.value); if (filterTag.value) p.set('tag', filterTag.value); return p.toString() })
-const { data: res, refresh } = await useAsyncData('admin-artikel', () => get<any>(`/admin/artikel?${params.value}`), { server: false })
-watch([search, filterTag, sort, page], () => refresh(), { immediate: true })
+const { data: res, refresh, status, error: fetchErr } = await useAsyncData('admin-artikel', () => get<any>(`/admin/artikel?${params.value}`), { server: false })
+// Search is debounced: the watcher used to fire a request on every keystroke,
+// so typing "conveyor" queued eight of them and the last response to arrive won
+// — not necessarily the last one sent. The other controls are discrete clicks
+// and still apply immediately.
+watchDebounced(search, () => {
+  // Resetting the page already triggers the watcher below; refreshing here too
+  // would issue the same request twice.
+  if (page.value !== 1) page.value = 1
+  else refresh()
+}, { debounce: 350 })
+watch([filterTag, sort, page], () => refresh())
+
+const loading = computed(() => status.value === 'pending')
+const failed = computed(() => !!fetchErr.value || res.value?.error != null)
 const items = computed(() => res.value?.data?.items ?? []); const total = computed(() => res.value?.data?.total ?? 0); const totalPages = computed(() => Math.ceil(total.value / limit))
 function goTo(p: number) { page.value = Math.max(1, Math.min(p, totalPages.value)) }
 function toggleSort() { sort.value = sort.value === 'desc' ? 'asc' : 'desc'; page.value = 1 }
@@ -37,11 +51,11 @@ async function handleDelete(id: string, title: string) { if (!await confirm({ ti
             <td class="text-muted"><span v-if="a.tag" class="rounded bg-paper-soft px-2 py-0.5 text-[11px] font-medium">#{{ a.tag }}</span></td>
             <td class="text-muted">{{ a.author }}</td>
             <td>
-              <NuxtLink :to="`/admin/artikel/${a.id}`" title="Edit" class="mr-2 inline-block cursor-pointer rounded border-none bg-transparent p-1 text-muted"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></NuxtLink>
-              <button title="Hapus" class="cursor-pointer rounded border-none bg-transparent p-1 text-muted" @click="handleDelete(a.id,a.title)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
+              <NuxtLink :to="`/admin/artikel/${a.id}`" title="Edit" class="mr-2 inline-block cursor-pointer rounded border-none bg-transparent p-1 text-muted"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></NuxtLink>
+              <button title="Hapus" aria-label="Hapus" class="cursor-pointer rounded border-none bg-transparent p-1 text-muted" @click="handleDelete(a.id,a.title)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
             </td>
           </tr>
-          <tr v-if="!items.length"><td colspan="4" class="px-4 py-[60px] text-center text-muted">Belum ada artikel.</td></tr>
+          <AdminTableState :colspan="4" :loading="loading" :failed="failed" :empty="!items.length" empty-text="Belum ada artikel." @retry="refresh()" />
         </tbody>
       </table>
     </div>

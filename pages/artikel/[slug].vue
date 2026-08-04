@@ -1,13 +1,21 @@
 <script setup lang="ts">
+import { sanitizeHtml } from '~/utils/richtext'
 const route = useRoute()
 const slug = route.params.slug as string
 const { get } = useApi()
 
 const { data: articleRes, error: articleErr } = await useAsyncData(`artikel-${slug}`, () =>
-  get<any[]>(`/artikel/${slug}`)
+  get<any>(`/artikel/${slug}`)
 )
 
 const article = computed(() => articleRes.value?.data ?? null)
+
+// Article bodies are Tiptap HTML from the admin panel and go straight into a
+// v-html binding. Sanitised so the sink cannot execute script, whatever ends up
+// in the column. See utils/richtext.ts.
+const contentHtml = computed(() =>
+  sanitizeHtml(((article.value as any)?.content ?? '') as string),
+)
 
 // Related articles — same tag, exclude current
 const { data: allArticleRes } = await useAsyncData('artikel-related', () =>
@@ -72,7 +80,7 @@ useSeoMeta({
       </time>
     </div>
 
-    <div class="prose-tech mt-10 max-w-none" v-html="article.content" />
+    <div class="prose-tech mt-10 max-w-none" v-html="contentHtml" />
 
     <!-- Related articles -->
     <div v-if="relatedArticles.length" class="mt-20 border-t border-line pt-12">

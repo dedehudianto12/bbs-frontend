@@ -1,4 +1,4 @@
-// ponytail: static homepage config — was content/config/homepage.yml, move to backend if it changes often
+// static homepage config — was content/config/homepage.yml, move to backend if it changes often
 export const homepageConfig = {
   hero: {
     // Leads with the one differentiator the client puts in writing — "lead time
@@ -74,11 +74,17 @@ export const homepageConfig = {
     // where you can see what a joint actually is.
     photo: {
       src: '/images/hero-site-joint.webp',
-      alt: 'Dua teknisi BBS menyambung belt conveyor PVC biru dengan mesin press portable di dalam ruang produksi food-grade',
-      // Short enough to clear the detail plate at the same corner. The plant's
-      // city is already two lines up in the eyebrow; what the caption has to
-      // say is what you are looking at.
-      caption: 'Penyambungan onsite · lini food-grade',
+      alt: 'Dua teknisi BBS menyambung belt conveyor PVC biru dengan mesin press portable di dalam ruang produksi pangan',
+      // Must set on one line inside the caption box, which is half the figure
+      // width minus padding — about 147px at 360px, or roughly 19 characters of
+      // tracked 11px mono. The previous caption ran to 37 characters (~277px)
+      // and was clipped on the primary target device.
+      //
+      // "food-grade" also came off nothing but the look of the photograph. That
+      // is a facility classification, not something you can read from an image,
+      // so it is gone from the alt text too — "ruang produksi pangan" says what
+      // is actually visible without implying a certification.
+      caption: 'Penyambungan onsite',
     },
     detail: {
       src: '/images/hero-splice-detail.webp',

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'admin', middleware: 'auth' })
+import { IMAGE_ACCEPT } from '~/composables/useImageUpload'
 import { industrySchema } from '~/utils/validation'
 const route = useRoute(); const router = useRouter(); const { get, post, put } = useAdminApi()
 const toast = useToast()
-const { imageFile, imagePreview, existingUrl, onFileChange, reset } = useImageUpload()
+const { imageFile, imagePreview, existingUrl, error: uploadError, onFileChange, reset } = useImageUpload()
 const isEdit = computed(() => route.params.id !== 'baru')
 const form = reactive({ name:'',slug:'',description:'',productSlugs:'' })
 const saving = ref(false); const error = ref(''); const fieldErrors = ref<Record<string,string>>({})
@@ -34,7 +35,7 @@ function generateSlug(){form.slug=form.name.toLowerCase().replace(/[^a-z0-9]+/g,
       <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Nama</span><input v-model="form.name" @blur="!isEdit&&!form.slug&&generateSlug()" class="mt-1.5 block w-full rounded-md border border-line px-3.5 py-2.5 text-sm font-sans outline-none box-border" /><span v-if="fieldErrors.name" class="mt-1 block text-[11px] text-red-600">{{ fieldErrors.name }}</span></label>
       <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Slug</span><input v-model="form.slug" class="mt-1.5 block w-full rounded-md border border-line px-3.5 py-2.5 font-mono text-sm outline-none box-border" /><span v-if="fieldErrors.slug" class="mt-1 block text-[11px] text-red-600">{{ fieldErrors.slug }}</span></label>
       <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Deskripsi</span><textarea v-model="form.description" rows="3" class="mt-1.5 block w-full resize-y rounded-md border border-line px-3.5 py-2.5 text-sm font-sans outline-none box-border" /></label>
-      <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Gambar</span><input type="file" accept="image/jpeg,image/png,image/webp,image/gif" @change="onFileChange" class="mt-1.5 block w-full text-sm text-muted file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-accent file:px-3.5 file:py-2 file:text-[13px] file:font-semibold file:text-white" /><img v-if="imagePreview" :src="imagePreview" class="mt-2 h-[120px] rounded border border-line object-cover" /></label>
+      <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Gambar</span><input type="file" :accept="IMAGE_ACCEPT" @change="onFileChange" class="mt-1.5 block w-full text-sm text-muted file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-accent file:px-3.5 file:py-2 file:text-[13px] file:font-semibold file:text-white" /><img v-if="imagePreview" :src="imagePreview" alt="Pratinjau gambar yang dipilih" class="mt-2 h-[120px] rounded border border-line object-cover" /><span v-if="uploadError" class="mt-1 block text-[11px] text-red-600">{{ uploadError }}</span></label>
       <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Product Slugs (pisahkan koma)</span><input v-model="form.productSlugs" class="mt-1.5 block w-full rounded-md border border-line px-3.5 py-2.5 text-sm font-sans outline-none box-border" /></label>
       <button type="submit" :disabled="saving" class="mt-2 cursor-pointer rounded-md border-none bg-accent px-6 py-3 text-sm font-semibold tracking-[0.01em] text-white">{{ saving?'Menyimpan...':'Simpan' }}</button>
     </form></div>

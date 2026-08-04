@@ -1,6 +1,9 @@
-import { defineSitemapEventHandler } from '#imports'
+// `defineSitemapEventHandler` is registered as a server auto-import by
+// @nuxtjs/sitemap. Importing it explicitly from '#imports' typechecked as a
+// missing export because the module registers it directly rather than
+// re-exporting it there; the auto-import resolves at build time.
 
-// ponytail: sitemap URLs from backend API
+// sitemap URLs from backend API
 export default defineSitemapEventHandler(async () => {
   const config = useRuntimeConfig()
   const baseURL = config.public.apiBase as string

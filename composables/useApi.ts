@@ -1,4 +1,4 @@
-// ponytail: thin wrapper around $fetch w/ base URL from runtimeConfig
+// thin wrapper around $fetch w/ base URL from runtimeConfig
 export function useApi() {
   const config = useRuntimeConfig()
   const baseURL = config.public.apiBase as string

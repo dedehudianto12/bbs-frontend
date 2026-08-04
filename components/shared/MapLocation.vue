@@ -20,9 +20,20 @@ const props = withDefaults(
 const mapContainer = ref<HTMLDivElement>()
 let map: any = null
 
+// `onMounted` is async and awaits the leaflet chunk, but `onBeforeUnmount` runs
+// synchronously — so navigating away during that import (100–400ms on 4G) had
+// the teardown see `map === null` and do nothing, then the continuation resumed
+// and built a map on a container already detached from the document. Leaflet
+// registers its own window resize/orientationchange handlers and keeps a tile
+// pool alive, none of which was ever released. Every such visit stacked another
+// instance for the life of the tab. This flag lets the resumed continuation
+// notice it lost the race and bail.
+let disposed = false
+
 onMounted(async () => {
   if (!mapContainer.value) return
   const L = await import('leaflet')
+  if (disposed || !mapContainer.value) return
 
   map = L.map(mapContainer.value, {
     center: [props.lat, props.lng],
@@ -47,7 +58,9 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
+  disposed = true
   map?.remove()
+  map = null
 })
 </script>
 

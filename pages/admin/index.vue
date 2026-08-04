@@ -132,7 +132,7 @@ function timeAgo(iso: string): string {
         <div :class="`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${card.color}`" />
         <!-- icon -->
         <div class="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-paper-soft">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-muted">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-muted" aria-hidden="true">
             <path :d="card.icon" />
           </svg>
         </div>
@@ -154,7 +154,7 @@ function timeAgo(iso: string): string {
           class="flex items-start gap-3 rounded-lg border border-line bg-white p-4 text-inherit no-underline transition-all duration-150 hover:border-accent/40 hover:bg-accent/5"
         >
           <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-accent/10 text-accent">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path :d="action.icon" />
             </svg>
           </div>

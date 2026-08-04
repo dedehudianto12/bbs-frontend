@@ -1,0 +1,15 @@
+# Cloudflare Pages configuration.
+#
+# The build previously warned "[cloudflare] Node.js compatibility is not
+# enabled" on every run. Nitro's cloudflare-pages preset emits a worker that
+# relies on Node built-ins, so without the nodejs_compat flag the deployment can
+# fail at request time rather than at build time — the worst place to find out.
+#
+# Setting it here rather than only in the dashboard keeps the flag in version
+# control, so a new Pages project (or a rebuilt one) cannot lose it silently.
+name = "bbs-frontend"
+compatibility_date = "2025-07-15"
+compatibility_flags = ["nodejs_compat"]
+
+# Nitro's cloudflare-pages preset writes the deployable site to dist/.
+pages_build_output_dir = "dist"

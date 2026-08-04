@@ -9,9 +9,14 @@ withDefaults(defineProps<{ to?: string; invert?: boolean }>(), { to: '/', invert
     :class="invert ? 'brightness-0 invert' : ''"
     aria-label="BBS Conveyor — Beranda"
   >
+    <!-- Intrinsic size reserves the box before the SVG arrives; without it the
+         navbar reflowed on first paint. The link already carries the accessible
+         name, so the image itself is decorative here. -->
     <img
       src="/bbs-logo.svg"
-      alt="BBS Conveyor"
+      alt=""
+      width="120"
+      height="32"
       class="h-8 w-auto"
     />
   </NuxtLink>

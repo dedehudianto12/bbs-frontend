@@ -1,17 +1,33 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'admin', middleware: 'auth' })
+import { IMAGE_ACCEPT } from '~/composables/useImageUpload'
 import { productSchema } from '~/utils/validation'
+import { watchDebounced } from '@vueuse/core'
+import { sanitizeHtml } from '~/utils/richtext'
 const { get, del, post, put } = useAdminApi()
-const { imageFile, imagePreview, existingUrl, onFileChange, reset } = useImageUpload()
+const { imageFile, imagePreview, existingUrl, error: uploadError, onFileChange, reset } = useImageUpload()
 
 const { data: catRes } = await useAsyncData('admin-cats', () => get<any[]>('/admin/kategori'), { server: false })
 const allCategories = computed(() => (catRes.value?.data ?? []) as { slug:string; label:string; group:string }[])
 
 const search = ref(''); const filterGroup = ref(''); const sort = ref('desc'); const page = ref(1); const limit = 10
 const params = computed(() => { const p = new URLSearchParams({ page: String(page.value), limit: String(limit), sort: sort.value }); if (search.value) p.set('search', search.value); if (filterGroup.value) p.set('group', filterGroup.value); return p.toString() })
-const { data: res, refresh } = await useAsyncData('admin-produk', () => get<any>(`/admin/produk?${params.value}`), { server: false })
+const { data: res, refresh, status, error: fetchErr } = await useAsyncData('admin-produk', () => get<any>(`/admin/produk?${params.value}`), { server: false })
 
-watch([search, filterGroup, sort, page], () => refresh(), { immediate: true })
+// Search is debounced: the watcher used to fire a request on every keystroke,
+// so typing "conveyor" queued eight of them and the last response to arrive won
+// — not necessarily the last one sent. The other controls are discrete clicks
+// and still apply immediately.
+watchDebounced(search, () => {
+  // Resetting the page already triggers the watcher below; refreshing here too
+  // would issue the same request twice.
+  if (page.value !== 1) page.value = 1
+  else refresh()
+}, { debounce: 350 })
+watch([filterGroup, sort, page], () => refresh())
+
+const loading = computed(() => status.value === 'pending')
+const failed = computed(() => !!fetchErr.value || res.value?.error != null)
 const items = computed(() => res.value?.data?.items ?? []); const total = computed(() => res.value?.data?.total ?? 0); const totalPages = computed(() => Math.ceil(total.value / limit))
 function goTo(p: number) { page.value = Math.max(1, Math.min(p, totalPages.value)) }
 function toggleSort() { sort.value = sort.value === 'desc' ? 'asc' : 'desc'; page.value = 1 }
@@ -21,6 +37,10 @@ async function handleDelete(id: string, name: string) { if (!await confirm({ tit
 
 const modalOpen = ref(false); const modalTitle = ref(''); const editId = ref<string|null>(null)
 const form = reactive({ name:'',group:'belt-conveyor',kategori:'',description:'',detail:'',specs:'{}' })
+// The live preview is sanitised with exactly the same allow-list the public
+// pages use, so what the editor shows here is what a visitor will actually
+// get — a preview that renders markup the site then strips is a lie.
+const detailPreview = computed(() => sanitizeHtml(form.detail || ''))
 const saving = ref(false); const error = ref(''); const fieldErrors = ref<Record<string,string>>({})
 
 const categoryOptions = computed(() => allCategories.value.filter(c => c.group === form.group))
@@ -78,11 +98,11 @@ async function save(){
             <td class="text-muted">{{ p.group }}</td>
             <td class="text-muted">{{ p.category }}</td>
             <td>
-              <button @click="openEdit(p.id)" title="Edit" class="mr-2 cursor-pointer rounded border-none bg-transparent p-1 text-muted"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-              <button title="Hapus" class="cursor-pointer rounded border-none bg-transparent p-1 text-muted" @click="handleDelete(p.id,p.name)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
+              <button @click="openEdit(p.id)" title="Edit" aria-label="Edit" class="mr-2 cursor-pointer rounded border-none bg-transparent p-1 text-muted"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button title="Hapus" aria-label="Hapus" class="cursor-pointer rounded border-none bg-transparent p-1 text-muted" @click="handleDelete(p.id,p.name)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
             </td>
           </tr>
-          <tr v-if="!items.length"><td colspan="4" class="px-4 py-[60px] text-center text-muted">Belum ada produk.</td></tr>
+          <AdminTableState :colspan="4" :loading="loading" :failed="failed" :empty="!items.length" empty-text="Belum ada produk." @retry="refresh()" />
         </tbody>
       </table>
     </div>
@@ -121,7 +141,7 @@ async function save(){
         </div>
         <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Deskripsi Singkat</span><textarea v-model="form.description" rows="2" class="mt-1.5 block w-full resize-y rounded-md border border-line px-3.5 py-2.5 text-sm font-sans outline-none box-border" /></label>
         <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Detail</span><TiptapEditor v-model="form.detail" /></label>
-        <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Gambar</span><input type="file" accept="image/jpeg,image/png,image/webp,image/gif" @change="onFileChange" class="mt-1.5 block w-full text-sm text-muted file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-accent file:px-3.5 file:py-2 file:text-[13px] file:font-semibold file:text-white" /><img v-if="imagePreview" :src="imagePreview" class="mt-2 h-[120px] rounded border border-line object-cover" /></label>
+        <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Gambar</span><input type="file" :accept="IMAGE_ACCEPT" @change="onFileChange" class="mt-1.5 block w-full text-sm text-muted file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-accent file:px-3.5 file:py-2 file:text-[13px] file:font-semibold file:text-white" /><img v-if="imagePreview" :src="imagePreview" alt="Pratinjau gambar yang dipilih" class="mt-2 h-[120px] rounded border border-line object-cover" /><span v-if="uploadError" class="mt-1 block text-[11px] text-red-600">{{ uploadError }}</span></label>
         <label class="block"><span class="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Spesifikasi Teknis</span><SpecsEditor v-model="form.specs" class="mt-1.5" /></label>
         <button type="submit" :disabled="saving" class="mt-2 cursor-pointer rounded-md border-none bg-accent px-6 py-3 text-sm font-semibold tracking-[0.01em] text-white">{{ saving?'Menyimpan...':'Simpan' }}</button>
       </form>
@@ -163,7 +183,7 @@ async function save(){
 
               <!-- Detail content -->
               <div v-if="form.detail" class="prose-tech mt-4">
-                <div v-html="form.detail" />
+                <div v-html="detailPreview" />
               </div>
             </div>
           </div>

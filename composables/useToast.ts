@@ -18,8 +18,9 @@ export function useToast() {
 
   function dismiss(id: number) {
     const idx = toasts.value.findIndex(t => t.id === id)
-    if (idx === -1) return
-    toasts.value[idx] = { ...toasts.value[idx], leaving: true }
+    const current = toasts.value[idx]
+    if (!current) return
+    toasts.value[idx] = { ...current, leaving: true }
     setTimeout(() => {
       toasts.value = toasts.value.filter(t => t.id !== id)
     }, 260)

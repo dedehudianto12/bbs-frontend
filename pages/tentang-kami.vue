@@ -432,6 +432,8 @@ useSeoMeta({
             <img
               :src="doc.preview"
               :alt="`Pratinjau ${doc.title}`"
+              width="1240"
+              height="1754"
               loading="lazy"
               decoding="async"
               class="aspect-[3/4] w-full object-cover object-top"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// ponytail: OG image disabled — nuxt-og-image@6.7.4 resolveComponentName bug
+// OG image disabled — nuxt-og-image@6.7.4 resolveComponentName bug
 // defineOgImage({
 //   component: 'NuxtSeo',
 //   title: '%s',

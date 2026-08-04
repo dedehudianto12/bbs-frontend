@@ -39,7 +39,12 @@ const ICONS: Record<string, Icon> = {
   generic: { paths: ['M4.5 4.5h15v15h-15Z'], dots: [[12, 12, 2]] },
 }
 
-const icon = computed(() => ICONS[props.name] ?? ICONS.generic)
+// `ICONS.generic` is itself an indexed access and so is `Icon | undefined` to
+// the compiler, which made the whole fallback optional and every `icon.paths`
+// read below an error. Hoisting the fallback to a named constant gives it a
+// concrete type and guarantees the computed can never be undefined.
+const GENERIC: Icon = { paths: ['M4.5 4.5h15v15h-15Z'], dots: [[12, 12, 2]] }
+const icon = computed<Icon>(() => ICONS[props.name] ?? GENERIC)
 </script>
 
 <template>

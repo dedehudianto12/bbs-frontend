@@ -139,7 +139,12 @@ export const JOINT_METHODS = [
     specs: [
       { key: 'Kekuatan', value: 'Sesuai spesifikasi adhesive' },
       { key: 'Aplikasi', value: 'Belt PVC dan PU' },
-      { key: 'Sektor', value: 'Pangan, farmasi, waktu henti singkat' },
+      // Not "Pangan, farmasi". The source (seed.sql, Cold Splicing) says only
+      // "cocok untuk belt PVC/PU dan aplikasi dengan downtime terbatas" — food
+      // and pharmaceutical were extrapolated from the belt material, and those
+      // are the two sectors where naming a splicing method carries regulatory
+      // weight we cannot vouch for.
+      { key: 'Sektor', value: 'Aplikasi dengan waktu henti terbatas' },
     ],
     photo: '/images/jasa-coldjoint.webp',
     alt: 'Sambungan belt PVC hijau dijepit dengan binder clip di meja kerja sebelum direkatkan',

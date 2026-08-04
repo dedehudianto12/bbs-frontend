@@ -28,6 +28,7 @@ const categoryLink = computed(() => {
     : '/produk/lainnya'
 })
 
+import { sanitizeHtml } from '~/utils/richtext'
 import { waLink } from '~/utils/whatsapp'
 
 const waHref = computed(() =>
@@ -42,6 +43,12 @@ const heroTheme = computed(() => {
   for (const ch of slug) h = (h * 31 + ch.charCodeAt(0)) >>> 0
   return h
 })
+
+// `detail` is Tiptap HTML from the admin panel, rendered through v-html.
+// Sanitised at the boundary — see utils/richtext.ts.
+const detailHtml = computed(() =>
+  sanitizeHtml(((product.value as any)?.detail ?? '') as string),
+)
 
 // Related products — same category, exclude current
 const { data: allProductRes } = await useAsyncData('produk-related', () =>
@@ -153,7 +160,7 @@ useSeoMeta({
         <!-- Detail Produk -->
         <div v-if="product.detail" class="mt-8 border-t border-line pt-6">
           <h2 class="display text-lg text-ink">Detail Produk</h2>
-          <div class="prose-tech mt-4" v-html="product.detail" />
+          <div class="prose-tech mt-4" v-html="detailHtml" />
         </div>
       </div>
     </div>

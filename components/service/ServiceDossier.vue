@@ -12,8 +12,9 @@ import { waLink } from '~/utils/whatsapp'
 // product names. So each one gets a full row, opens with the complaint it
 // answers, and prints its method as a datasheet — the register of a work order.
 //
-// ServiceCard is left in place; /jasa is its only consumer today, but it is a
-// generic card and deleting it belongs to whoever removes the last call site.
+// ServiceCard was deleted when this landed — /jasa was its only consumer, and a
+// generic card component with no call sites is just a second answer to a
+// question the codebase has already answered.
 
 const props = defineProps<{
   /** 1-based, printed. Sequence on the page, not a ranking. */

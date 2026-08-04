@@ -372,9 +372,6 @@ function splitHighlights(line: string) {
   left: 50%;
   padding: 0.75rem 1rem;
   text-align: right;
-  /* One line or nothing. Wrapped, a 11px tracked mono caption stops reading as
-     a caption and starts reading as a second paragraph. */
-  white-space: nowrap;
   color: rgba(255, 255, 255, 0.7) !important;
   /* Scrim rather than a solid plate: the caption has to stay legible over a
      photograph whose bottom-right corner is a bright blue belt, without
@@ -384,6 +381,22 @@ function splitHighlights(line: string) {
     rgb(var(--ink) / 0.88),
     rgb(var(--ink) / 0) 72%
   );
+}
+
+/* One line or nothing — wrapped, an 11px tracked mono caption stops reading as
+   a caption and starts reading as a second paragraph.
+
+   But only from 640px up. `white-space: nowrap` applied at every width, and at
+   360px the caption box is half the figure minus padding (~147px): anything
+   longer than about 19 characters overflowed leftward under `text-align: right`
+   and was silently clipped by the figure's `overflow: hidden` — across the
+   detail plate that `left: 50%` above exists to avoid. Below sm the caption is
+   allowed to wrap, so a caption that outgrows the box degrades to two lines
+   instead of losing its end. */
+@media (min-width: 640px) {
+  .hero-caption {
+    white-space: nowrap;
+  }
 }
 
 /* ── Rail ───────────────────────────────────────────────────────────── */

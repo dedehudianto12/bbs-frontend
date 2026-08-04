@@ -1,18 +1,27 @@
 <script setup lang="ts">
-// Product-forward hero — a precise engineering side-elevation of a belt
-// conveyor: head/tail pulleys, belt envelope, idlers, A-frame supports and
-// carried load, annotated with dimension lines and a travel arrow. Draws in
-// with the shared rise/belt-travel motion; collapses under
-// prefers-reduced-motion.
+// A precise engineering side-elevation of a belt conveyor: head/tail pulleys,
+// belt envelope, gravity rollers, A-frame supports and carried load, annotated
+// with leader-line callouts, dimension lines and a travel arrow. Draws in with
+// the shared rise/belt-travel motion; collapses under prefers-reduced-motion.
 //
-// The three spec callouts that used to hang off the belt — "LEBAR s/d 3000 mm",
-// "ROLLER Ø25–76", "PVC · PU FOOD-GRADE" — are gone. Two of them contradicted
-// the catalog this same site publishes: the widest belt on /produk is 2000 mm,
-// and roller diameters run 40–150 mm, not 25–76. A buyer who reads a limit here
-// and finds a different one on the product page has caught us exaggerating in
-// the first ten seconds, which costs more than the labels were worth. BBS
-// fabricates to order, so there is no fixed limit to state. The drawing carries
-// the hero on its own.
+// Lives at the head of /produk/belt-conveyor, not on the homepage — this is
+// where someone is actually trying to work out which part they need, so the
+// part names earn their space here.
+//
+// The drawing carries part names only — no figures. It sits at the head of
+// /produk/belt-conveyor, directly above the product grid, so any dimension
+// printed here is read against the cards below it. A "LEBAR s/d 3000 mm" and a
+// "Ø25–76 mm" callout used to live here and contradicted that grid on the same
+// screen: the catalog's widest belt is 2000 mm, and neither roller figure
+// appears in it at all. Both are gone. If BBS wants dimensions on the drawing,
+// they have to come from the catalog the page already publishes — otherwise the
+// two halves of one screen disagree and the drawing is the half that is wrong.
+//
+// The material line is limited to what the catalog actually stocks (PVC,
+// polyurethane, rubber); "modular" and "wiremesh" were listed here but appear
+// on no product.
+//
+// Part names stay in English — the trade terms Indonesian conveyor catalogs use.
 const RISE = [0, 80, 150, 220, 300, 360]
 </script>
 
@@ -23,7 +32,7 @@ const RISE = [0, 80, 150, 220, 300, 360]
       class="h-auto w-full"
       fill="none"
       role="img"
-      aria-label="Diagram teknis belt conveyor: pulley, belt, roller, dan rangka penyangga"
+      aria-label="Diagram teknis belt conveyor: belt PVC, PU atau rubber, roller penggerak, roller gravitasi, dan kaki penyetel pada rangka penyangga"
     >
       <!-- ground line -->
       <g class="animate-rise motion-reduce:animate-none" :style="{ animationDelay: `${RISE[0]}ms` }">
@@ -82,9 +91,6 @@ const RISE = [0, 80, 150, 220, 300, 360]
         <path d="M106 232v34M654 232v34" stroke="rgb(var(--accent) / 0.55)" stroke-width="1.2" stroke-dasharray="3 4" />
         <path d="M106 258h548" stroke="rgb(var(--accent))" stroke-width="1.4" />
         <path d="M106 258l10-5m-10 5 10 5M654 258l-10-5m10 5-10 5" stroke="rgb(var(--accent))" stroke-width="1.4" stroke-linecap="round" />
-        <rect x="342" y="248" width="76" height="20" rx="3" fill="rgb(var(--paper))" />
-        <text x="380" y="262" text-anchor="middle" font-size="12" font-weight="600" letter-spacing="0.08em"
-          fill="rgb(var(--accent))" class="tabular-nums">MODULAR</text>
       </g>
 
       <!-- width dimension (left) -->
@@ -93,6 +99,37 @@ const RISE = [0, 80, 150, 220, 300, 360]
         <path d="M70 142v68" />
         <path d="M70 142l-5 10m5-10 5 10M70 210l-5-10m5 10 5-10" stroke-linecap="round" />
         <path d="M64 142h12M64 210h12" />
+      </g>
+
+      <!-- part callouts — leader lines out to the four named assemblies.
+           Text sits in the clear margins (above the load, below the ground
+           line) so no leader has to cross the drawing to reach its label. -->
+      <g class="animate-rise motion-reduce:animate-none" :style="{ animationDelay: `${RISE[5]}ms` }">
+        <g stroke="rgb(var(--ink) / 0.45)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+          <!-- belt: down-right onto the carrying surface -->
+          <path d="M112 58 168 138" />
+          <path d="M168 138l-2-10m2 10-8-6" />
+          <!-- drive roller: down-left onto the head pulley -->
+          <path d="M700 86 638 158" />
+          <path d="M638 158l9-5m-9 5 3-9" />
+          <!-- gravity roller: up-left onto the return-run idlers -->
+          <path d="M466 222 437 210" />
+          <path d="M437 210l6 6m-6-6h9" />
+          <!-- adjuster foot: out to both A-frame feet -->
+          <path d="M340 306 280 290M420 306 482 290" />
+          <path d="M280 290l7 6m-7-6 9-1M482 290l-7 6m7-6-9-1" />
+        </g>
+
+        <g font-weight="600" letter-spacing="0.1em" fill="rgb(var(--ink) / 0.75)">
+          <text x="48" y="36" font-size="11">BELT CONVEYOR</text>
+          <text x="748" y="76" font-size="11" text-anchor="end">DRIVE ROLLER</text>
+          <text x="390" y="227" font-size="11" text-anchor="middle">GRAVITY ROLLER</text>
+          <text x="380" y="320" font-size="11" text-anchor="middle">ADJUSTER FOOT</text>
+        </g>
+
+        <g font-weight="600" letter-spacing="0.06em" fill="rgb(var(--accent))">
+          <text x="48" y="52" font-size="10">PVC · PU · RUBBER</text>
+        </g>
       </g>
 
     </svg>

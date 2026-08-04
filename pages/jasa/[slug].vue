@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { SERVICE_DOSSIERS, SERVICE_ORDER } from '~/data/services'
-import { isHtml, parseBlocks } from '~/utils/richtext'
+import { isHtml, parseBlocks, sanitizeHtml } from '~/utils/richtext'
 import { waLink } from '~/utils/whatsapp'
 
 // The service sheet: the listing row opened out.
@@ -24,8 +24,30 @@ const { get } = useApi()
 const { data: serviceRes, error: serviceErr } = await useAsyncData(
   () => `jasa-${slug.value}`,
   () => get<any>(`/jasa/${slug.value}`),
-  { watch: [slug] },
 )
+
+// `get` is a bare $fetch, which *throws* on a non-2xx response — so an unknown
+// slug lands in serviceErr, not in a `data: null` body. Two things followed from
+// that and both were wrong. The in-page "Jasa tidak ditemukan" branch was
+// unreachable, and a visitor to a mistyped URL got "Tidak dapat menghubungi
+// server" with a retry button that could never succeed. And the route answered
+// **200** for a page that does not exist, which is a soft 404: Google will
+// happily index it.
+//
+// Raising it as a real error hands the route to error.vue with a 404 status.
+// Only a genuine 404 is converted — a 500 or a dead connection stays in
+// serviceErr and keeps the retryable in-page error state, because those *are*
+// worth retrying.
+const notFound = computed(
+  () => errorStatus(serviceErr.value) === 404 || (!serviceErr.value && !serviceRes.value?.data),
+)
+if (notFound.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Jasa tidak ditemukan',
+    fatal: true,
+  })
+}
 
 // Shares its key with the listing page, so arriving from /jasa costs nothing.
 const { data: listRes } = await useAsyncData('jasa-listing', () => get<any[]>('/jasa'))
@@ -42,6 +64,9 @@ const num = computed(() => {
 const body = computed(() => service.value?.fullDescription ?? '')
 const bodyIsHtml = computed(() => isHtml(body.value))
 const bodyBlocks = computed(() => (bodyIsHtml.value ? [] : parseBlocks(body.value)))
+// Only the HTML branch reaches a v-html sink; the plain-text branch renders as
+// real elements and needs no cleaning.
+const bodyHtml = computed(() => (bodyIsHtml.value ? sanitizeHtml(body.value) : ''))
 
 const others = computed(() =>
   (listRes.value?.data ?? [])
@@ -67,7 +92,23 @@ useSeoMeta({
 
 <template>
   <!-- ══ ERROR ═══════════════════════════════════════════════════════════ -->
-  <div v-if="serviceErr" class="bg-paper">
+  <!-- `notFound` first: a 404 arrives as a thrown error, so testing serviceErr
+       ahead of it sent a mistyped slug to the "cannot reach the server" branch
+       and offered a retry that could never succeed. The setup-time createError
+       handles a fresh load; this ordering covers client-side navigation to a
+       bad slug, where the component is reused and setup does not re-run. -->
+  <div v-if="notFound" class="bg-paper">
+    <div class="frame py-24 text-center">
+      <p class="eyebrow text-muted">404</p>
+      <h1 class="mt-4 text-3xl font-semibold tracking-[-0.02em] text-ink">Jasa tidak ditemukan</h1>
+      <p class="mx-auto mt-4 max-w-md leading-relaxed text-muted">
+        Halaman layanan yang Anda cari tidak ada atau sudah dipindahkan.
+      </p>
+      <UiButton to="/jasa" class="mt-8">Lihat semua layanan</UiButton>
+    </div>
+  </div>
+
+  <div v-else-if="serviceErr" class="bg-paper">
     <section class="frame border-b border-line px-5 py-24 text-center md:px-8 md:py-32">
       <p class="spec-key !text-accent">Gagal memuat</p>
       <h1 class="display mt-5 text-3xl text-ink md:text-4xl">Tidak dapat menghubungi server</h1>
@@ -182,7 +223,7 @@ useSeoMeta({
           </div>
 
           <!-- Rows edited through the Tiptap admin arrive as real HTML. -->
-          <div v-else class="prose-tech mt-7 max-w-none" v-html="body" />
+          <div v-else class="prose-tech mt-7 max-w-none" v-html="bodyHtml" />
         </div>
 
         <aside class="lg:col-span-4 lg:col-start-9">

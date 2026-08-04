@@ -1,6 +1,6 @@
 import { waLink } from '~/utils/whatsapp'
 
-// ponytail: static nav — was content/config/navigation.yml, move to backend if it changes often
+// static nav — was content/config/navigation.yml, move to backend if it changes often
 //
 // Artikel + Galeri are grouped under "Wawasan" rather than sitting at the top
 // level: logo + 7 links + WhatsApp icon-button + CTA collides below ~1100px.

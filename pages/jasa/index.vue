@@ -27,9 +27,21 @@ import { prettyPhone, waLink } from '~/utils/whatsapp'
 
 const { get } = useApi()
 
-const { data: serviceRes, error: serviceErr } = await useAsyncData('jasa-listing', () =>
-  get<any[]>('/jasa'),
+const { data: serviceRes, error: serviceErr, refresh: refreshServices } = await useAsyncData(
+  'jasa-listing',
+  () => get<any[]>('/jasa'),
 )
+
+// This route is prerendered (nitro.prerender.routes), so the fetch above runs
+// on the build machine and its result — including a failure — is baked into
+// static HTML. Without this retry, an API that was briefly unreachable during a
+// deploy shipped a page reading "Daftar layanan tidak dapat dimuat" to every
+// visitor until someone noticed and redeployed, and the build that produced it
+// exited 0. Re-running the request once on the client turns a permanent broken
+// page into a flicker. Mirrors the same guard on pages/index.vue.
+onMounted(() => {
+  if (serviceErr.value || !services.value.length) refreshServices()
+})
 
 // The API is the source of truth for which services exist and what they are
 // called; data/services.ts supplies the plate and the datasheet. A row the
@@ -122,7 +134,9 @@ useSeoMeta({
               <UiWhatsAppIcon class="h-4 w-4" />
               Konsultasi Gratis
             </UiButton>
-            <UiButton href="#layanan" variant="outline">Lihat 4 Layanan</UiButton>
+            <!-- Derived, not typed. The list comes from the API, so a fifth
+                 service added in admin used to make this button lie silently. -->
+            <UiButton href="#layanan" variant="outline">Lihat {{ services.length }} Layanan</UiButton>
           </div>
         </div>
 

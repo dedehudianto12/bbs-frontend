@@ -29,6 +29,7 @@ import { prettyPhone, waLink } from '~/utils/whatsapp'
 const { root: channelRoot } = useRevealOnScroll({ stagger: 70 })
 const { root: placeRoot } = useRevealOnScroll({ stagger: 80 })
 
+const waHref1 = waLink({ halaman: 'Kontak — masthead' }, 1)
 const phone1 = prettyPhone(contactInfo.waSales1)
 const phone2 = prettyPhone(contactInfo.waSales2)
 const week = contactInfo.jamMingguan
@@ -135,15 +136,22 @@ const clockText = (m: number) => `${pad(Math.floor(m / 60))}:${pad(m % 60)}`
 const status = computed(() => {
   if (!now.value) return null
   const { day, minutes } = now.value
+  // Indexed access is `T | undefined` under the strict tsconfig, and `day` came
+  // from an external formatter rather than a literal — so it is checked rather
+  // than asserted.
   const today = week[day]
-  const open =
-    today.buka !== null && today.tutup !== null && minutes >= today.buka && minutes < today.tutup
+  if (!today) return null
 
-  if (open) {
+  if (
+    today.buka !== null &&
+    today.tutup !== null &&
+    minutes >= today.buka &&
+    minutes < today.tutup
+  ) {
     return {
       open: true,
       label: 'Sedang buka',
-      detail: `Tutup pukul ${clockText(today.tutup as number)} WIB`,
+      detail: `Tutup pukul ${clockText(today.tutup)} WIB`,
     }
   }
 
@@ -151,7 +159,7 @@ const status = computed(() => {
   // steps covers the week; the eighth would be today again.
   for (let i = 0; i < 7; i++) {
     const d = week[(day + i) % 7]
-    if (d.buka === null) continue
+    if (!d || d.buka === null) continue
     if (i === 0 && minutes >= d.buka) continue // already past today's window
     // "Buka" rather than "Buka lagi": before 08:00 on a working day it has not
     // opened yet, and "lagi" would be describing a reopening that never happened.
@@ -285,7 +293,7 @@ useSeoMeta({
             </div>
 
             <div class="flex flex-col gap-3 sm:flex-row">
-              <UiButton :href="CHANNELS[0].href" :block="true" class="sm:!w-auto">
+              <UiButton :href="waHref1" :block="true" class="sm:!w-auto">
                 <UiWhatsAppIcon class="h-4 w-4" />
                 Hubungi via WhatsApp
               </UiButton>
@@ -522,14 +530,18 @@ useSeoMeta({
 }
 
 /* ── Status dot ─────────────────────────────────────────────────────────
-   The only circle on a page of hard 0px geometry, which is why it reads as an
-   indicator rather than as a rounded corner someone forgot. */
+   Square, not round. This carried `border-radius: 9999px` on the argument that
+   the one circle on a page of hard 0px geometry reads as an indicator — but the
+   geometry rule is pinned to 0 across the whole public surface, focus rings
+   included, and HeroSection's own rail comment rejects exactly this exception
+   for exactly this reason. A square marker in --signal reads as an indicator
+   *because* everything around it is square; it does not need a radius to be
+   legible, and the system does not survive one-off exemptions. */
 .kontak-dot {
   position: relative;
   width: 0.625rem;
   height: 0.625rem;
   flex-shrink: 0;
-  border-radius: 9999px;
 }
 .kontak-dot-on {
   background: rgb(var(--signal));
@@ -543,7 +555,6 @@ useSeoMeta({
   content: '';
   position: absolute;
   inset: -0.3rem;
-  border-radius: 9999px;
   background: rgb(var(--signal) / 0.25);
   animation: kontak-halo 2.6s var(--ease-out) infinite;
 }
@@ -726,7 +737,18 @@ useSeoMeta({
   text-underline-offset: 4px;
   transition: text-decoration-color 140ms ease, color 140ms ease;
 }
-.kontak-link:hover {
+/* Gated, like every other hover rule in this file. Ungated, a tap on the email
+   address on Android leaves it stuck gold — touch fires :hover and never clears
+   it. The .about-link this claims to match is gated too; this rule was the one
+   that missed. */
+@media (hover: hover) and (pointer: fine) {
+  .kontak-link:hover {
+    color: rgb(var(--accent));
+    text-decoration-color: rgb(var(--accent));
+  }
+}
+/* Touch gets its feedback here instead. */
+.kontak-link:active {
   color: rgb(var(--accent));
   text-decoration-color: rgb(var(--accent));
 }
