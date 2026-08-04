@@ -8,6 +8,7 @@
 //   theme: '#1A1A18',
 //   colorMode: 'light',
 // })
+// test
 </script>
 
 <template>
