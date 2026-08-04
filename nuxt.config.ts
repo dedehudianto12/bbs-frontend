@@ -84,7 +84,10 @@ const SECURITY_HEADERS = {
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: "2025-07-15",
+  // Kept in lockstep with compatibility_date in wrangler.toml — this one picks
+  // which polyfills Nitro bundles, that one picks what the Worker runtime
+  // provides. See the note there for why the date cannot go below 2025-09-15.
+  compatibilityDate: "2025-09-15",
   // Nuxt 4 defaults srcDir to `app/`; keep the existing flat root layout
   // (pages/, components/, layouts/, assets/, app.vue all live at the root)
   // so the `~`/`@` aliases resolve to the project root as they did on Nuxt 3.

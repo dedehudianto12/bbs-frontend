@@ -8,7 +8,18 @@
 # Setting it here rather than only in the dashboard keeps the flag in version
 # control, so a new Pages project (or a rebuilt one) cannot lose it silently.
 name = "bbs-frontend"
-compatibility_date = "2025-07-15"
+# 2025-09-15 is not cosmetic: it is the date `enable_nodejs_process_v2` became
+# default. Before it, `nodejs_compat` gives the *minimal* process shim — a class
+# whose `get stdout()` reads a `#t` private field — and consola reads
+# `process.stdout?.isTTY` at module scope while the Worker is still starting up.
+# Cloudflare's deploy step re-bundles _worker.js and drops `import "node:process"`
+# as side-effect-free, so that accessor runs against an object that never got
+# constructed and the upload fails with "Cannot read private member #t from an
+# object whose class did not declare it". On or after this date the runtime
+# supplies a real process implementation and the shim is not used at all.
+# Must stay >= the compatibilityDate in nuxt.config.ts, which decides what Nitro
+# bundles; the two disagreeing is what produced the mismatch in the first place.
+compatibility_date = "2025-09-15"
 compatibility_flags = ["nodejs_compat"]
 
 # Nitro's cloudflare-pages preset writes the deployable site to dist/.
