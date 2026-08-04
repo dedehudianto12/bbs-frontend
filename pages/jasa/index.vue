@@ -110,20 +110,32 @@ useSeoMeta({
 <template>
   <div class="bg-paper">
     <!-- ══ MASTHEAD ══════════════════════════════════════════════════════
-         The title block against one photograph of a job starting: an engineer
-         with a clipboard, under the customer's own conveyor gallery, talking to
-         the customer's own crew. It is the only frame in the set with both
-         sides of the transaction in it, which is exactly what a services page
-         has to establish before it lists anything. -->
+         The title block against one photograph of the work itself: two
+         technicians feeding a blue belt through the portable press on the
+         customer's own production floor. A services page has to establish that
+         we have done this before it lists anything, and the frame does it in
+         less time than the paragraph beside it takes to read. -->
     <section class="frame border-b border-line">
       <div class="grid lg:grid-cols-12">
-        <div class="px-5 pb-12 pt-12 md:px-8 md:pb-14 md:pt-16 lg:col-span-6 lg:pr-10">
-          <p class="eyebrow text-accent">Layanan</p>
-          <h1 class="display jasa-h1 mt-6 text-ink">
+        <!-- Seven columns, and centred in the row rather than sitting at its
+             top. The copy is what sets the masthead's height; the plate beside
+             it fills whatever that comes to. -->
+        <div
+          class="flex flex-col justify-center px-5 pb-12 pt-12 md:px-8 md:pb-14 md:pt-16 lg:col-span-7 lg:pr-14"
+        >
+          <!-- The same rule the three sections below open with, so the masthead
+               is the first instance of the page's mark rather than a different
+               device that happens to sit above them. -->
+          <div class="flex items-center gap-4 md:gap-6">
+            <p class="eyebrow shrink-0 text-accent">Layanan</p>
+            <span class="h-px flex-1 bg-ink/[0.18]" aria-hidden="true" />
+          </div>
+
+          <h1 class="display jasa-h1 mt-7 text-ink">
             Layanan teknis untuk<br class="hidden sm:inline" />
             conveyor Anda
           </h1>
-          <p class="mt-7 max-w-md text-lg leading-relaxed text-muted">
+          <p class="mt-7 max-w-lg text-lg leading-relaxed text-muted">
             Penyambungan, perbaikan, pemasangan profile guide, dan penanganan jalur
             miring. Seluruh pekerjaan dilakukan di pabrik Anda atau di workshop kami di
             Pulo Gebang, dan setiap penyambungan bergaransi.
@@ -142,8 +154,15 @@ useSeoMeta({
 
         <!-- Runs to the frame's edge and to the full height of the title block:
              a photograph inside the same padding as the text would read as an
-             illustration of the copy rather than as the page's ground. -->
-        <figure class="relative border-t border-line lg:col-span-6 lg:border-l lg:border-t-0">
+             illustration of the copy rather than as the page's ground.
+             The source is a 900×1200 portrait, and it used to be handed the
+             half-width column with `aspect-auto h-full` — a percentage height
+             against an indefinite parent, which resolves to auto, so the frame
+             fell back to its own 3:4 and dictated a 767px row off a 460px block
+             of copy. It now fills the row instead of setting it: the plate is
+             the five-column cell, floored at 28rem, and the photograph is laid
+             absolutely inside it so it contributes no height of its own. -->
+        <figure class="jasa-plate border-t border-line lg:col-span-5 lg:border-l lg:border-t-0">
           <img
             src="/images/jasa-site-splice.webp"
             alt="Dua teknisi BBS Conveyor menyambung belt biru dengan mesin press portabel di lantai produksi pelanggan"
@@ -151,7 +170,7 @@ useSeoMeta({
             height="1200"
             fetchpriority="high"
             decoding="async"
-            class="aspect-[3/2] h-full w-full object-cover lg:aspect-auto lg:min-h-[26rem]"
+            class="jasa-plate-img"
           />
           <!-- Short enough to set on one line at 360px: a caption that wraps
                inside its own scrim reads as a caption that overflowed. -->
@@ -404,6 +423,45 @@ useSeoMeta({
   font-size: clamp(2rem, 5vw, 3rem);
   line-height: 1.04;
   letter-spacing: -0.03em;
+}
+
+/* ── Masthead plate ──────────────────────────────────────────────────
+   Below the desktop grid the photograph is a band under the copy: 3:2, wide
+   enough to read the press and the belt, short enough that the scope datasheet
+   is still reachable on a 667px screen.
+   At lg it stops having an aspect of its own. The cell is stretched by the grid
+   to whatever the copy column comes to, and 28rem is only a floor — a masthead
+   shorter than that reads as a header strip, not a title page. */
+.jasa-plate {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+}
+@media (min-width: 1024px) {
+  .jasa-plate {
+    aspect-ratio: auto;
+    min-height: 28rem;
+  }
+}
+
+.jasa-plate-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* The two technicians and the press bar sit in the middle third of the
+     portrait source. Anchoring above centre keeps them in frame as the cell
+     goes from 3:2 on a phone to near-square on the desktop grid — the same
+     anchor the home hero uses on the same subject. */
+  object-position: 50% 42%;
+}
+@media (min-width: 1024px) {
+  /* Taken out of flow so the photograph contributes no intrinsic height to the
+     row: the copy sets the masthead's height, the plate follows it. */
+  .jasa-plate-img {
+    position: absolute;
+    inset: 0;
+  }
 }
 
 /* Plate captions — same treatment as the About page's, so a photograph is
