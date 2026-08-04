@@ -6,7 +6,13 @@ export const homepageConfig = {
     // headline, "Solusi Belt & Roller Conveyor untuk Bisnis Anda", was
     // interchangeable with every competitor and answered no question the buyer
     // arrived with. He arrives because a conveyor stopped this morning.
-    headline: 'Conveyor berhenti? Sambung lagi dalam 2–3 hari.',
+    //
+    // The `\n` are hard breaks, not formatting noise. Left to wrap on its own
+    // at display size this set as four lines with "Conveyor" orphaned alone on
+    // the first — the claim broken in half by whatever width the box happened
+    // to be. Three lines of 17 / 16 / 15 characters, ending on the figure,
+    // which is the strongest last line available.
+    headline: 'Penyambungan belt\nconveyor selesai\ndalam 2–3 hari.',
     // Substrings rendered in logo gold. Lives here so a copy edit and its
     // highlight move together — this used to be a HIGHLIGHTS const inside
     // HeroSection, so changing the headline silently killed the gold.
@@ -16,30 +22,68 @@ export const homepageConfig = {
     // how much of it there is.
     headlineHighlights: ['2–3'],
     subheadline:
-      'Penyambungan hot joint & cold joint di pabrik Anda atau di workshop kami. Belt conveyor, roller, dan komponen industri — CV Bintang Berjaya Satu, Jakarta Timur.',
+      'Kami melayani penyambungan hot joint dan cold joint di pabrik Anda maupun di workshop kami, serta menyediakan belt conveyor, roller, dan komponen industri. CV Bintang Berjaya Satu, Jakarta Timur.',
     // primaryLink is built in pages/index.vue with waLink() so the prefilled
     // message carries which CTA fired. It is deliberately not a static path.
-    primaryCTA: 'Chat WhatsApp',
-    secondaryCTA: 'Lihat Produk',
+    primaryCTA: 'Hubungi via WhatsApp',
+    secondaryCTA: 'Lihat Katalog Produk',
     secondaryLink: '/produk/belt-conveyor',
-    // The datasheet block that counterweights the headline, moved up out of
-    // the old standalone ProofStrip section. It belongs beside the claim it
-    // supports: the headline asserts 2–3 hari and nothing backed that up until
-    // the reader scrolled. Values are shortened from the ProofStrip wording so
-    // they set on one line in a narrow column.
+    // The datasheet under the CTAs.
+    //
+    // "Lead time — 2–3 hari" used to lead this list and is now gone from it:
+    // the rail across the foot of the hero *is* the lead time, drawn stop by
+    // stop, and printing the same claim again in 12px mono two inches away is
+    // the argument repeating itself rather than supporting itself.
     //
     // Every line is quotable from the client's company profile (bbsconveyor.com,
-    // Dec 2024) — lead time and the splicing guarantee from its values page,
-    // hot/cold joint and the onsite-or-workshop split from its services page,
-    // the sectors from its numbered list. The industries row names sectors
-    // rather than counting them: the source lists eight and then adds "industri
-    // lainnya", so any total would be a guess.
+    // Dec 2024) — hot/cold joint and the onsite-or-workshop split from its
+    // services page, the sectors from its numbered list. The industries row
+    // names sectors rather than counting them: the source lists eight and then
+    // adds "industri lainnya", so any total would be a guess.
     facts: [
-      { key: 'Lead time', value: '2–3 hari' },
-      { key: 'Sambungan', value: 'Hot & cold joint' },
-      { key: 'Lokasi', value: 'Pabrik Anda / workshop kami' },
-      { key: 'Industri', value: 'Manufaktur, food, farmasi, tambang' },
+      { key: 'Metode sambungan', value: 'Hot joint dan cold joint' },
+      { key: 'Lokasi pengerjaan', value: 'Pabrik Anda atau workshop kami' },
+      { key: 'Sektor industri', value: 'Manufaktur, pangan, farmasi, pertambangan' },
     ],
+
+    // The 2–3 hari promise, drawn instead of asserted.
+    //
+    // A buyer does not believe a number in a spec row; he believes a sequence
+    // he can picture happening to his own line. Four stops, each one a thing
+    // somebody physically does, the last one gold because it is the only one he
+    // actually wants. Day marks are relative ("H+1") rather than absolute
+    // because the clock starts when he calls, not on a calendar we control.
+    timeline: [
+      { mark: 'H+0', label: 'Survei dan pengukuran di lokasi' },
+      { mark: 'H+1', label: 'Pemotongan dan persiapan sambungan' },
+      { mark: 'H+2', label: 'Proses press: hot atau cold joint' },
+      { mark: 'H+2–3', label: 'Conveyor kembali beroperasi' },
+    ],
+
+    // The first photographs on this site of the work actually being done.
+    // Both are the client's own, from the site-activity set.
+    //
+    // The wide plate is an on-site joint inside a food-grade production line:
+    // two technicians in coveralls and hairnets, a portable press clamped over
+    // a blue PVC belt. It carries three claims at once that no studio cutout
+    // could — that the work happens in the customer's plant, that the crew is
+    // dressed for a food facility, and that there are real people behind it.
+    //
+    // The inset is the same job at arm's length: the finger splice cut, clipped
+    // and squared before it goes under heat. It is the only frame in the set
+    // where you can see what a joint actually is.
+    photo: {
+      src: '/images/hero-site-joint.webp',
+      alt: 'Dua teknisi BBS menyambung belt conveyor PVC biru dengan mesin press portable di dalam ruang produksi food-grade',
+      // Short enough to clear the detail plate at the same corner. The plant's
+      // city is already two lines up in the eyebrow; what the caption has to
+      // say is what you are looking at.
+      caption: 'Penyambungan onsite · lini food-grade',
+    },
+    detail: {
+      src: '/images/hero-splice-detail.webp',
+      alt: 'Detail sambungan finger splice pada belt PVC hijau, dijepit sebelum proses press',
+    },
   },
   company: {
     companyName: 'CV Bintang Berjaya Satu',
@@ -58,34 +102,34 @@ export const homepageConfig = {
       {
         icon: 'mutu',
         title: 'Produk Bermerek',
-        description: 'Merek terkemuka, dengan jaminan mutu.',
+        description: 'Produk dari merek terkemuka dengan jaminan mutu.',
       },
       {
         icon: 'harga',
         title: 'Harga Kompetitif',
-        description: 'Harga bersaing, tanpa menurunkan standar.',
+        description: 'Harga bersaing tanpa menurunkan standar kualitas.',
       },
       {
         icon: 'garansi',
         title: 'Garansi Pengerjaan',
-        description: 'Penyambungan dan instalasi bergaransi.',
+        description: 'Setiap penyambungan dan instalasi kami jamin.',
       },
       {
         icon: 'respons',
         title: 'Respons Cepat',
-        description: 'Dijawab dalam hitungan jam, bukan hari.',
+        description: 'Setiap permintaan ditanggapi dalam hitungan jam.',
       },
     ],
   },
   leadTime: {
     days: '2–3',
-    headline: 'Pengerjaan cepat tanpa mengorbankan kualitas',
+    headline: 'Pengerjaan cepat dengan standar kualitas yang terjaga',
     description:
-      'Kami memahami urgensi industri — conveyor yang berhenti berarti produksi yang terhenti. Setiap produk dikerjakan dengan standar tinggi dan dikirim tepat waktu.',
+      'Conveyor yang berhenti berarti produksi yang terhenti. Karena itu setiap pekerjaan kami selesaikan sesuai jadwal, dengan pemeriksaan mutu pada setiap tahapnya.',
     steps: [
-      { label: 'Konsultasi', detail: 'Tim kami memahami kebutuhan Anda dan memberikan rekomendasi produk yang tepat.' },
-      { label: 'Fabrikasi & Persiapan', detail: 'Produk disiapkan dengan pengecekan kualitas menyeluruh sebelum dikirim.' },
-      { label: 'Siap Dikirim / Dipasang', detail: 'Pengiriman ke seluruh Indonesia atau instalasi onsite oleh teknisi kami.' },
+      { label: 'Konsultasi', detail: 'Tim kami mengidentifikasi kebutuhan Anda dan menyusun rekomendasi produk yang sesuai.' },
+      { label: 'Fabrikasi dan Persiapan', detail: 'Produk disiapkan dan melalui pemeriksaan kualitas menyeluruh sebelum dikirim.' },
+      { label: 'Pengiriman dan Instalasi', detail: 'Pengiriman ke seluruh Indonesia, atau instalasi di lokasi oleh teknisi kami.' },
     ],
   },
   // No `statistics` block. "14 tahun / 500 proyek / 120 klien / 25 teknisi"
@@ -97,16 +141,16 @@ export const homepageConfig = {
   // your plant or our workshop. Any number added here must come from the
   // backend or from the client in writing.
   cta: {
-    headline: 'Butuh Solusi Conveyor?',
+    headline: 'Konsultasikan Kebutuhan Conveyor Anda',
     description:
-      'Konsultasikan kebutuhan industri Anda dengan tim kami. Gratis dan tanpa komitmen.',
+      'Tim teknis kami siap membantu menentukan produk dan metode penanganan yang sesuai. Konsultasi tidak dipungut biaya dan tanpa ikatan.',
     buttonText: 'Hubungi Kami',
     buttonLink: '/kontak',
   },
   seo: {
-    title: 'BBS Conveyor — Solusi Belt & Roller Conveyor Industri',
+    title: 'BBS Conveyor — Solusi Belt dan Roller Conveyor Industri',
     description:
-      'Supplier belt conveyor, roller, dan komponen industri berkualitas. CV Bintang Berjaya Satu — melayani konsultasi, instalasi, dan perbaikan di seluruh Indonesia.',
+      'Supplier belt conveyor, roller, dan komponen industri. CV Bintang Berjaya Satu melayani konsultasi, instalasi, penyambungan, dan perbaikan di seluruh Indonesia.',
     ogImage: '/images/og-home.webp',
   },
 }

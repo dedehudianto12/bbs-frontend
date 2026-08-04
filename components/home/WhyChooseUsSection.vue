@@ -27,7 +27,7 @@ const { root } = useRevealOnScroll({ stagger: 45 })
            source for. -->
       <div class="border-b border-line px-6 py-12 md:px-10 md:py-14">
         <SectionTitle
-          eyebrow="Kenapa BBS Conveyor"
+          eyebrow="Mengapa BBS Conveyor"
           title="Mitra terpercaya untuk conveyor industri"
         />
       </div>

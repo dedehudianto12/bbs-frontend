@@ -61,7 +61,7 @@ const salesLinks = [
           </div>
           <div>
             <p class="text-[13px] font-semibold text-white">BBS Conveyor</p>
-            <p class="text-[11px] text-white/70">Balas dalam hitungan menit</p>
+            <p class="text-[11px] text-white/70">Ditanggapi dalam hitungan jam</p>
           </div>
         </div>
 
@@ -95,7 +95,7 @@ const salesLinks = [
       class="wa-fab flex h-14 w-14 items-center justify-center rounded-none"
       :class="isOpen ? 'rotate-45 bg-[#075e54]' : 'bg-[#25D366]'"
       :aria-expanded="isOpen"
-      aria-label="Chat via WhatsApp"
+      aria-label="Hubungi kami via WhatsApp"
       @click="toggle"
     >
       <UiWhatsAppIcon v-if="!isOpen" class="h-7 w-7 text-white" />

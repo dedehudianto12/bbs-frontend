@@ -38,17 +38,18 @@ const { root } = useRevealOnScroll({ stagger: 45 })
   <section ref="root" class="bg-accent">
     <div class="frame border-b border-ink/20 border-x-ink/20">
       <div class="px-6 py-12 md:px-10 md:py-16">
-        <span class="eyebrow text-ink/55">Layanan &amp; Lead Time</span>
+        <span class="eyebrow text-ink/55">Layanan dan Lead Time</span>
 
         <h2 class="display mt-5 max-w-3xl text-[1.75rem] text-ink md:text-[2.4rem]">
-          Onsite joint &amp; reparasi — tim kami datang ke lokasi Anda, di
-          seluruh Indonesia.
+          Penyambungan dan reparasi di lokasi Anda, menjangkau seluruh
+          Indonesia.
         </h2>
 
         <p class="mt-5 max-w-xl text-[15px] leading-relaxed text-ink/70">
           Conveyor yang berhenti berarti produksi yang terhenti. Tim teknisi kami
-          melakukan inspeksi dan penyambungan langsung di lokasi — hot joint,
-          cold joint, dan perbaikan struktur — atau dikerjakan di workshop kami.
+          melaksanakan inspeksi dan penyambungan langsung di lokasi, meliputi hot
+          joint, cold joint, dan perbaikan struktur, atau mengerjakannya di workshop
+          kami.
         </p>
 
         <div class="mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
@@ -64,11 +65,18 @@ const { root } = useRevealOnScroll({ stagger: 45 })
 
       <!-- Two photographs, because this band makes two claims and each one
            answers a different half.
-           Left is onsite work: two technicians in coveralls, hairnets and masks
-           running a portable splicing press on a food-grade belt inside a clean
-           production room. It proves "tim kami datang ke lokasi Anda" and
-           food-grade capability in a single frame, which no other photo in the
-           client's set does.
+           Left is a survey at the customer's plant: a BBS engineer in a hard hat
+           measuring an installed incline conveyor, tape in one hand and clipboard
+           in the other. It answers "tim kami datang ke lokasi Anda" as literally
+           as a photograph can, and the hard hat and clipboard are doing the real
+           work in it — this band is asking an industrial buyer to let strangers
+           into his plant, and what he is buying is a crew that turns up dressed
+           for it.
+           It replaced the food-grade splicing shot, which was the better single
+           image but became the hero's main plate: the same photograph twice on
+           one page reads as a company with one job to its name. The two now
+           divide the copy's own claim between them — "inspeksi" here, the joint
+           itself up in the hero.
            Right is sidewall-cleated belt coiled in the workshop — the product,
            ready. It replaced a shot of rolls shrink-wrapped on a pallet, which
            at 576px read as a tangle of plastic film rather than as belt: the
@@ -87,10 +95,10 @@ const { root } = useRevealOnScroll({ stagger: 45 })
            empty alt because the copy above already says what they show. -->
       <div class="grid grid-cols-1 gap-px border-t border-ink/20 bg-ink/20 sm:grid-cols-2">
         <img
-          src="/images/onsite-joint.webp"
+          src="/images/onsite-survey.webp"
           alt=""
-          width="1200"
-          height="800"
+          width="1400"
+          height="700"
           loading="lazy"
           decoding="async"
           class="h-[200px] w-full object-cover md:h-[280px]"

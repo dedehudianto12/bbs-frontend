@@ -1,11 +1,21 @@
 <script setup lang="ts">
 import 'leaflet/dist/leaflet.css'
 
-const props = defineProps<{
-  lat: number
-  lng: number
-  label: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    lat: number
+    lng: number
+    label: string
+    /** Shape of the map viewport. Override where the slot is not 4:3. */
+    ratioClass?: string
+    /**
+     * Own hairline. Off when the map sits in a `gap-px bg-line` grid, which
+     * paints the seam itself — a border there reads as a 2px double rule.
+     */
+    bordered?: boolean
+  }>(),
+  { ratioClass: 'aspect-[4/3]', bordered: true },
+)
 
 const mapContainer = ref<HTMLDivElement>()
 let map: any = null
@@ -42,7 +52,10 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="relative z-0 overflow-hidden rounded-none border border-line">
-    <div ref="mapContainer" class="aspect-[4/3] w-full" />
+  <div
+    class="relative z-0 overflow-hidden rounded-none"
+    :class="bordered ? 'border border-line' : ''"
+  >
+    <div ref="mapContainer" class="w-full" :class="ratioClass" />
   </div>
 </template>

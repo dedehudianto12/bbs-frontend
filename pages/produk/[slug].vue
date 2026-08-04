@@ -174,7 +174,7 @@ useSeoMeta({
   <!-- Not found -->
   <div v-else class="container-tech py-24 md:py-32 text-center">
     <h1 class="display text-3xl text-ink md:text-4xl">Produk Tidak Ditemukan</h1>
-    <p class="mt-4 text-muted">Produk yang Anda cari tidak tersedia.</p>
+    <p class="mt-4 text-muted">Produk yang Anda cari tidak tersedia atau telah dihapus.</p>
     <div class="mt-8 flex justify-center">
       <UiButton href="/produk/belt-conveyor" variant="ghost">
         Kembali ke Produk

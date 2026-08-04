@@ -11,6 +11,25 @@ export const contactInfo = {
   // jamOperasional at runtime, so editing one does not silently truncate the
   // other.
   jamSingkat: 'Sen–Jum 08:00–17:00 WIB',
+
+  // The same hours a third time, structured. The kontak page draws a week strip
+  // from these and works out whether anyone is at the desk right now, neither of
+  // which can be done safely by parsing jamOperasional — that string is prose,
+  // and one edit to its dash or its comma would silently break the schedule
+  // rather than fail loudly. Same reasoning as jamSingkat above: three fields,
+  // one fact, and they are edited together or not at all.
+  //
+  // Minutes from midnight, Asia/Jakarta. `tutup: null` means closed all day.
+  jamMingguan: [
+    { hari: 'Senin', ringkas: 'Sen', buka: 480, tutup: 1020 },
+    { hari: 'Selasa', ringkas: 'Sel', buka: 480, tutup: 1020 },
+    { hari: 'Rabu', ringkas: 'Rab', buka: 480, tutup: 1020 },
+    { hari: 'Kamis', ringkas: 'Kam', buka: 480, tutup: 1020 },
+    { hari: 'Jumat', ringkas: 'Jum', buka: 480, tutup: 1020 },
+    { hari: 'Sabtu', ringkas: 'Sab', buka: 480, tutup: 720 },
+    { hari: 'Minggu', ringkas: 'Min', buka: null, tutup: null },
+  ],
+
   waLabel1: 'Chat Sales 1',
   waLabel2: 'Chat Sales 2',
 

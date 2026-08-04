@@ -42,7 +42,7 @@ const allTags = computed(() => {
 
 useSeoMeta({
   title: 'Artikel — BBS Conveyor',
-  description: 'Tips, panduan, dan informasi seputar belt conveyor, roller, dan komponen industri dari BBS Conveyor.'
+  description: 'Panduan teknis dan informasi seputar belt conveyor, roller, dan komponen industri dari BBS Conveyor.'
 })
 </script>
 
@@ -51,7 +51,7 @@ useSeoMeta({
     <PageHero
       eyebrow="Blog"
       title="Artikel"
-      description="Tips, panduan, dan informasi seputar belt conveyor dan komponen industri."
+      description="Panduan teknis dan informasi seputar belt conveyor serta komponen industri."
     />
 
     <div v-if="articleErr" class="container-tech py-16 md:py-24">

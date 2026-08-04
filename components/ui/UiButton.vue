@@ -13,7 +13,7 @@ const props = withDefaults(
   defineProps<{
     /** Omit for a <button>. Internal path → NuxtLink. http/mailto/tel → <a target=_blank>. */
     href?: string
-    variant?: 'accent' | 'ink' | 'outline' | 'ghost'
+    variant?: 'accent' | 'ink' | 'outline' | 'outline-invert' | 'ghost'
     size?: 'sm' | 'md'
     block?: boolean
     /** Force an external <a> for a path that doesn't look external. */
@@ -26,12 +26,23 @@ const isExternal = computed(
   () => props.external || /^(https?:|mailto:|tel:)/.test(props.href ?? ''),
 )
 
+// A bare `#id` is a jump within the page the reader is already on. It is
+// neither external (no target=_blank) nor a route change — handing it to
+// NuxtLink makes the router resolve a location for a scroll, and a full
+// navigation is not what the reader asked for.
+const isAnchor = computed(() => (props.href ?? '').startsWith('#'))
+
 const VARIANTS = {
   accent: 'bg-accent text-white hover:bg-accent-glow',
   // For use on the gold band, where `accent` would be invisible
   ink: 'bg-ink text-white hover:bg-steel',
   outline:
     'border border-line bg-white text-ink hover:border-ink hover:bg-paper-soft',
+  // The same secondary button on a dark ground. `outline` there would be a
+  // white slab beside the gold CTA and would out-shout it — the secondary
+  // action has to recede, which on steel means a hairline, not a fill.
+  'outline-invert':
+    'border border-white/25 bg-transparent text-white hover:border-white hover:bg-white/10',
   ghost: 'text-ink hover:bg-ink/5',
 } as const
 
@@ -56,6 +67,10 @@ const classes = computed(() => [
     rel="noopener noreferrer"
     :class="classes"
   >
+    <slot />
+  </a>
+
+  <a v-else-if="href && isAnchor" :href="href" :class="classes">
     <slot />
   </a>
 

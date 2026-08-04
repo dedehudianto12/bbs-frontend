@@ -42,7 +42,7 @@ useSeoMeta({
     <PageHero
       eyebrow="Katalog Produk"
       title="Produk Lainnya"
-      description="Komponen conveyor pendukung untuk melengkapi sistem material handling Anda."
+      description="Komponen pendukung untuk melengkapi sistem material handling Anda."
     />
 
     <div v-if="productErr" class="container-tech py-12">

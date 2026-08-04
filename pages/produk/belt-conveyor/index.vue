@@ -43,7 +43,7 @@ useSeoMeta({
     <PageHero
       eyebrow="Katalog Produk"
       title="Belt Conveyor"
-      description="Pilih dari berbagai jenis belt conveyor untuk aplikasi industri Anda."
+      description="Berbagai jenis belt conveyor untuk kebutuhan aplikasi industri Anda."
     />
 
     <!-- HeroBlueprint's new home. It held the homepage hero until a real

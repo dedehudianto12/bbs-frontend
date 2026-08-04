@@ -34,13 +34,19 @@ function dismiss() {
       v-if="visible"
       class="relative isolate border-b border-line bg-paper-soft text-ink"
     >
-      <div class="flex items-center gap-3 px-4 py-2 md:px-6">
+      <!-- Inside .frame like every other band on the page. This bar used to run
+           full-bleed with its own px-4, so its text began roughly 190px to the
+           left of the navbar's and the hero's — the one row on the site that
+           ignored the framed column, sitting directly above the row that
+           announces it. Borders match too, so the frame's side rules now run
+           unbroken from the very top of the document. -->
+      <div class="frame flex items-center gap-3 px-5 py-2 md:px-8">
         <NuxtLink
           to="/kontak"
           class="group flex min-w-0 items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-ink/75"
         >
           <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
-          <span class="truncate">Konsultasi &amp; survei lokasi gratis — hubungi tim kami</span>
+          <span class="truncate">Konsultasi dan survei lokasi tanpa biaya — hubungi tim kami</span>
           <span class="grid h-4 w-5 shrink-0 place-items-center rounded-none bg-accent/15 text-[10px] text-accent transition-transform duration-150 group-hover:translate-x-0.5">→</span>
         </NuxtLink>
         <button

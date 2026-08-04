@@ -21,14 +21,14 @@ const props = defineProps<{
 // One positioning line per category. Deliberately claim-free — no dimensions,
 // no grades, no certifications. Anything numeric must come from the backend.
 const BLURB: Record<string, string> = {
-  'pvc belt': 'Belt serbaguna untuk lini produksi',
-  'pu': 'Higienis & tahan minyak untuk proses presisi',
-  'flat belt': 'Transmisi daya & transport yang mulus',
-  'rubber belt': 'Tenaga besar untuk beban berat',
+  'pvc belt': 'Belt serbaguna untuk lini produksi umum',
+  'pu': 'Higienis dan tahan minyak untuk proses presisi',
+  'flat belt': 'Transmisi daya dan perpindahan material yang halus',
+  'rubber belt': 'Daya tahan tinggi untuk beban berat',
   'timing belt': 'Gerak sinkron tanpa slip',
-  'fastener': 'Sambungan belt cepat & kuat',
-  'cleat': 'Bawa material menanjak tanpa tumpah',
-  'gravity roll': 'Handling efisien tanpa daya',
+  'fastener': 'Sambungan belt yang cepat dan kuat',
+  'cleat': 'Menahan material pada jalur menanjak',
+  'gravity roll': 'Penanganan material tanpa sumber daya',
 }
 
 const FALLBACK_BLURB = 'Komponen conveyor industri'
@@ -122,8 +122,8 @@ const { root } = useRevealOnScroll({ stagger: 45 })
         <div class="h-1 w-14 bg-accent" aria-hidden="true" />
         <h2 class="display mt-6 text-4xl text-ink md:text-[3.25rem]">Katalog Produk</h2>
         <p class="mt-5 max-w-md leading-relaxed text-muted">
-          Belt conveyor dan komponen material handling untuk lini produksi yang
-          kritis — dipilih dan diuji untuk kebutuhan industri Indonesia.
+          Belt conveyor dan komponen material handling untuk lini produksi kritis,
+          dipilih dan diuji sesuai kebutuhan industri di Indonesia.
         </p>
       </div>
 
@@ -242,7 +242,7 @@ const { root } = useRevealOnScroll({ stagger: 45 })
           </span>
 
           <span class="mt-auto border-t border-ink/20 pt-4 md:pt-5">
-            <span class="spec-key !text-ink/60">Belt conveyor &amp; lainnya</span>
+            <span class="spec-key !text-ink/60">Belt conveyor dan komponen lainnya</span>
           </span>
         </NuxtLink>
 

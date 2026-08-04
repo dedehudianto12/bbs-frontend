@@ -19,6 +19,9 @@ const heroProps = computed(() => ({
   secondaryCTA: hpData.hero.secondaryCTA,
   secondaryLink: hpData.hero.secondaryLink,
   facts: hpData.hero.facts,
+  timeline: hpData.hero.timeline,
+  photo: hpData.hero.photo,
+  detail: hpData.hero.detail,
 }))
 
 const ctaProps = computed(() => ({

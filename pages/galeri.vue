@@ -29,8 +29,8 @@ useSeoMeta({
   <div>
     <PageHero
       eyebrow="Galeri"
-      title="Galeri Proyek Kami"
-      description="Dokumentasi hasil kerja kami di berbagai proyek dan lokasi di Indonesia."
+      title="Galeri Proyek"
+      description="Dokumentasi pengerjaan kami pada berbagai proyek dan lokasi di seluruh Indonesia."
     />
 
     <div class="container-tech py-16 md:py-24">
