@@ -1,6 +1,12 @@
 <script setup lang="ts">
+// Imported by name rather than auto-imported: @vueuse/nuxt is not among this
+// project's modules, so @vueuse/core composables are ordinary imports here.
+import { useDocumentVisibility, usePreferredReducedMotion } from '@vueuse/core'
 import { contactInfo } from '~/data/contact'
 import { prettyPhone } from '~/utils/whatsapp'
+
+/** One frame of the plate. Ordered to match `timeline` stop for stop. */
+type Frame = { src: string; alt: string; caption: string; focus?: string }
 
 const props = withDefaults(
   defineProps<{
@@ -19,8 +25,13 @@ const props = withDefaults(
     facts?: { key: string; value: string }[]
     /** The job, stop by stop — rendered as the rail across the hero's foot. */
     timeline?: { mark: string; label: string }[]
-    photo: { src: string; alt: string; caption: string }
-    /** Small overlaid plate: the detail the wide shot cannot show. */
+    /**
+     * The plate, one frame per timeline stop. Frames beyond `timeline.length`
+     * still play; stops beyond `frames.length` simply never light. Keeping the
+     * two the same length is the intended use and is asserted in dev below.
+     */
+    frames: Frame[]
+    /** Small overlaid plate: the detail the wide shots cannot show. */
     detail?: { src: string; alt: string }
   }>(),
   {
@@ -32,7 +43,18 @@ const props = withDefaults(
   },
 )
 
-const phone = prettyPhone(contactInfo.waSales1)
+// The rail is the sequence's progress indicator, so a mismatch means the gold
+// node stops tracking the photograph and the whole device quietly stops
+// working — visible only to someone watching the hero for eight seconds.
+// Cheap to state, expensive to notice.
+if (import.meta.dev && props.timeline.length && props.frames.length !== props.timeline.length) {
+  console.warn(
+    `[HeroSection] ${props.frames.length} frames against ${props.timeline.length} timeline stops — ` +
+      'the rail can only track the plate while the two match.',
+  )
+}
+
+const phone = prettyPhone(contactInfo.waUtama)
 
 // Where the headline breaks is a design decision, not a consequence of the
 // viewport. Left to wrap on its own at display size it produced a one-word
@@ -64,6 +86,106 @@ function splitHighlights(line: string) {
     })
   }
   return parts
+}
+
+// ── The sequence ──────────────────────────────────────────────────────────
+//
+// Four photographs on the plate, one per stop on the rail, advancing in the
+// order the job runs. The rail is not a caption for the sequence — it is the
+// sequence's transport: the gold node marks which frame is showing, the line
+// under the active stop fills as its hold runs down, and clicking a stop jumps
+// to that frame.
+//
+// 4.2s per frame. Under about 3s a viewer who starts reading the headline
+// misses two frames entirely; over about 6s the rail's fill stops reading as
+// progress and starts reading as a stuck animation. The whole loop is 16.8s,
+// which is roughly how long the hero holds attention before the first scroll.
+const HOLD_MS = 4200
+const HOLD_S = HOLD_MS / 1000
+// The same curve as --ease-out in main.css. Motion takes it as coefficients;
+// the token is a CSS string, and there is no way to hand one to the other, so
+// this is the one place the two representations have to be kept in step.
+const EASE_OUT = [0.22, 1, 0.36, 1] as const
+const CROSSFADE_S = 0.9
+
+const active = ref(0)
+const frameCount = computed(() => props.frames.length)
+const activeFrame = computed(() => props.frames[active.value] ?? props.frames[0])
+
+// Autoplay is off on the server and stays off until hydration, so the SSR HTML
+// is a single still frame — the thing the crawler indexes and the thing the
+// LCP measurement lands on.
+const mounted = ref(false)
+const paused = ref(false)
+const hovering = ref(false)
+const reducedMotion = usePreferredReducedMotion()
+const visibility = useDocumentVisibility()
+
+// How far the active frame drifts across its hold. Motion honours a reduced-
+// motion preference by collapsing a transition's *duration*, not by dropping
+// its target — so with the drift left at 1.055 unconditionally, a reduced-
+// motion visitor got the frame snapped straight to the end of the movement and
+// held there: a permanently 5.5%-tighter, slightly softer crop than the one
+// everyone else starts from. The preference has to be spent on the target.
+const drift = computed(() => (reducedMotion.value === 'reduce' ? 1 : 1.055))
+
+const playing = computed(
+  () =>
+    mounted.value &&
+    frameCount.value > 1 &&
+    reducedMotion.value !== 'reduce' &&
+    !paused.value &&
+    !hovering.value &&
+    // A hero cycling in a background tab is four image decodes a minute on a
+    // phone that is doing something else.
+    visibility.value === 'visible',
+)
+
+// Frames are added to the DOM one ahead of the one showing rather than all at
+// once. Mounting all four at hydration queues ~600KB of decode on a mid-range
+// Android before it has finished laying out the page; this way the browser
+// fetches the next frame during the current one's 4.2s hold, which is far more
+// time than it needs. After one full loop everything is mounted.
+//
+// The bound is a high-water mark rather than `active + 1` directly, and that
+// distinction is the whole point: read straight off `active`, jumping back to
+// an earlier stop drops the later frames' `src` again, and an <img> that loses
+// its src is torn down and re-decoded when it comes back. Clicking backwards
+// along the rail made the sequence stutter for exactly as long as it took to
+// re-decode a frame the browser already had.
+const loadedTo = ref(1)
+watch(active, (i) => {
+  loadedTo.value = Math.max(loadedTo.value, i + 1)
+})
+
+function isMounted(i: number) {
+  return i === 0 || (mounted.value && i <= loadedTo.value)
+}
+
+let timer: ReturnType<typeof setTimeout> | undefined
+function stopTimer() {
+  if (timer) clearTimeout(timer)
+  timer = undefined
+}
+
+// Watching `active` as well as `playing` is what makes a manual jump restart
+// the hold rather than inheriting the remainder of the previous frame's — a
+// click that gives you 300ms of the photograph you asked for is a bug.
+watch([playing, active], () => {
+  stopTimer()
+  if (!playing.value) return
+  timer = setTimeout(() => {
+    active.value = (active.value + 1) % frameCount.value
+  }, HOLD_MS)
+})
+
+onMounted(() => {
+  mounted.value = true
+})
+onBeforeUnmount(stopTimer)
+
+function go(i: number) {
+  active.value = i
 }
 </script>
 
@@ -167,16 +289,64 @@ function splitHighlights(line: string) {
              floating inside a bordered box with a white halo on all four sides,
              occupying about 60% of the cell's width; a small object centred in
              a large box is the exact arrangement that reads unfinished. -->
-        <figure class="hero-figure lg:col-span-5">
-          <img
-            :src="photo.src"
-            :alt="photo.alt"
+        <figure
+          class="hero-figure lg:col-span-5"
+          @mouseenter="hovering = true"
+          @mouseleave="hovering = false"
+        >
+          <!-- The frames are stacked and cross-faded rather than swapped,
+               because a swap on a plate this size is a flash: at 34rem tall
+               there is no amount of easing that hides one photograph being
+               replaced by another in a single frame. Each one also drifts a
+               little wider across its hold, so the still that is showing is
+               never quite still — the movement is under 6% over four seconds,
+               which reads as the camera breathing rather than as a zoom. -->
+          <Motion
+            v-for="(frame, i) in frames"
+            v-show="isMounted(i)"
+            :key="frame.src"
+            as="img"
+            :src="isMounted(i) ? frame.src : undefined"
+            :alt="frame.alt"
             width="1120"
             height="1829"
-            fetchpriority="high"
+            :fetchpriority="i === 0 ? 'high' : 'auto'"
             decoding="async"
             class="hero-photo"
+            :style="{ objectPosition: frame.focus ?? '50% 42%' }"
+            :initial="{ opacity: i === 0 ? 1 : 0, scale: 1 }"
+            :animate="i === active ? { opacity: 1, scale: drift } : { opacity: 0, scale: 1 }"
+            :transition="
+              i === active
+                ? {
+                    opacity: { duration: CROSSFADE_S, ease: EASE_OUT },
+                    scale: { duration: HOLD_S + CROSSFADE_S, ease: 'linear' },
+                  }
+                : {
+                    opacity: { duration: CROSSFADE_S, ease: EASE_OUT },
+                    // The outgoing frame's drift is not eased back — it is
+                    // reset instantly, but only once the fade has finished
+                    // hiding it. Animating it back would pull the whole plate
+                    // sideways underneath the incoming photograph.
+                    scale: { duration: 0, delay: CROSSFADE_S },
+                  }
+            "
           />
+
+          <!-- WCAG 2.2.2: content that updates on its own needs a way to stop
+               it, and hover is not one — it does not exist on the phone this
+               site is mostly read on. Square, because nothing in this system
+               has a radius. -->
+          <button
+            v-if="frames.length > 1"
+            type="button"
+            class="hero-toggle"
+            :aria-label="paused ? 'Lanjutkan pergantian foto' : 'Hentikan pergantian foto'"
+            @click="paused = !paused"
+          >
+            <span v-if="paused" class="hero-toggle-play" aria-hidden="true" />
+            <span v-else class="hero-toggle-pause" aria-hidden="true" />
+          </button>
 
           <!-- The detail the wide shot cannot carry: the finger splice itself,
                clipped and squared up before it goes under heat. Overlapping the
@@ -196,7 +366,23 @@ function splitHighlights(line: string) {
             class="hero-detail"
           />
 
-          <figcaption class="hero-caption spec-key">{{ photo.caption }}</figcaption>
+          <!-- The caption names the frame, so it has to change with it. It is
+               keyed on the caption text rather than the index so Vue replaces
+               the node — a text swap in place would read as a typo correcting
+               itself. `aria-live` is deliberately absent: a screen reader
+               announcing a new caption every four seconds while the user is
+               trying to read the headline is an interruption, and the same
+               information is already in each frame's alt text and on the
+               rail's stops. -->
+          <Transition name="cap">
+            <figcaption
+              v-if="activeFrame"
+              :key="activeFrame.caption"
+              class="hero-caption spec-key"
+            >
+              {{ activeFrame.caption }}
+            </figcaption>
+          </Transition>
         </figure>
       </div>
 
@@ -210,17 +396,50 @@ function splitHighlights(line: string) {
            circle on the rail would be the one radius on the page. -->
       <div v-if="timeline.length" class="hero-rail">
         <ol class="grid flex-1 grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4 sm:gap-x-4">
+          <!-- Each stop is a button, not because the hero needed controls but
+               because the rail is now the only thing that says which
+               photograph you are looking at — and a state indicator you cannot
+               operate is a worse deal than one you can. It also gives the
+               sequence keyboard access, which hover-to-pause alone never
+               would. -->
           <li
             v-for="(step, i) in timeline"
             :key="step.mark"
             class="hero-step"
+            :class="{ 'is-active': i === active, 'is-done': i < active }"
             :style="{ '--d': `${700 + i * 90}ms` }"
           >
             <span class="hero-node" aria-hidden="true" />
-            <span class="hero-mark spec-key block !text-white/40">{{ step.mark }}</span>
-            <span class="hero-step-label mt-1.5 block text-[13px] leading-snug text-white/75">
-              {{ step.label }}
-            </span>
+            <!-- The fill runs the length of the active stop's rule over that
+                 frame's hold, so the rail reads as a progress bar for the
+                 photograph above it. Keyed on `active` and `playing` together:
+                 without the remount Motion sees the same target value and
+                 leaves the previous run in place, and the bar stops tracking
+                 the moment anyone pauses. -->
+            <Motion
+              :key="`${active}-${playing}`"
+              class="hero-step-fill"
+              aria-hidden="true"
+              :initial="{ scaleX: i < active ? 1 : 0 }"
+              :animate="{ scaleX: i <= active ? 1 : 0 }"
+              :transition="
+                i === active && playing
+                  ? { duration: HOLD_S, ease: 'linear' }
+                  : { duration: 0.32, ease: EASE_OUT }
+              "
+            />
+            <button
+              type="button"
+              class="hero-step-btn"
+              :aria-current="i === active ? 'true' : undefined"
+              @click="go(i)"
+            >
+              <span class="hero-mark spec-key block !text-white/40">{{ step.mark }}</span>
+              <span class="hero-step-label mt-1.5 block text-[13px] leading-snug text-white/75">
+                {{ step.label }}
+              </span>
+              <span class="sr-only">— tampilkan foto tahap ini</span>
+            </button>
           </li>
         </ol>
 
@@ -230,7 +449,7 @@ function splitHighlights(line: string) {
              there because someone whose line stopped at 07:00 wants to know
              whether anyone will actually answer. -->
         <div class="hero-contact">
-          <a :href="`tel:+${contactInfo.waSales1}`" class="hero-tel num text-[15px] font-semibold text-white">
+          <a :href="`tel:+${contactInfo.waUtama}`" class="hero-tel num text-[15px] font-semibold text-white">
             {{ phone }}
           </a>
           <span class="spec-key mt-1 block !text-white/40">{{ contactInfo.jamSingkat }}</span>
@@ -327,13 +546,79 @@ function splitHighlights(line: string) {
     border-left: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
+/* The four frames occupy the same cell, stacked. `position: absolute` rather
+   than a grid stack because the figure is already the positioning context for
+   the inset and the caption, and one mechanism holding all three is easier to
+   reason about than two.
+   Each frame's object-position is set inline from its own `focus` — see the
+   note in data/homepage.ts for why a shared anchor does not work across four
+   photographs that were not composed alike.
+   `will-change` is stated because these are large plates being scaled
+   continuously; without it Safari re-rasterises the layer on every frame. */
 .hero-photo {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* The two technicians and the press bar sit in the middle third; anchoring
-     there keeps them in frame at every aspect the cell takes. */
-  object-position: 50% 42%;
+  will-change: transform, opacity;
+}
+
+/* ── Sequence control ───────────────────────────────────────────────────
+   Deliberately quiet — it is a legal requirement and an escape hatch, not a
+   feature anyone came here for. It lifts to full contrast on hover and focus,
+   and its hit area is 44px even though the glyph inside is 10px. */
+.hero-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgb(var(--ink) / 0.35);
+  transition:
+    color 140ms var(--ease-out),
+    background-color 140ms var(--ease-out);
+}
+.hero-toggle:focus-visible {
+  color: #fff;
+  background: rgb(var(--ink) / 0.75);
+}
+@media (hover: hover) and (pointer: fine) {
+  .hero-toggle:hover {
+    color: #fff;
+    background: rgb(var(--ink) / 0.75);
+  }
+}
+.hero-toggle-pause {
+  width: 9px;
+  height: 11px;
+  border-left: 3px solid currentColor;
+  border-right: 3px solid currentColor;
+}
+.hero-toggle-play {
+  width: 0;
+  height: 0;
+  border-left: 10px solid currentColor;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+}
+
+/* ── Caption ──
+   Cross-faded rather than swapped: at 11px the text is small enough that a
+   hard replace registers as a glitch instead of a change. */
+.cap-enter-active,
+.cap-leave-active {
+  transition: opacity 320ms var(--ease-out);
+}
+.cap-enter-from,
+.cap-leave-to {
+  opacity: 0;
+}
+.cap-leave-active {
+  position: absolute;
 }
 
 .hero-detail {
@@ -435,25 +720,85 @@ function splitHighlights(line: string) {
   background: rgba(255, 255, 255, 0.16);
   transform-origin: left center;
 }
+/* The gold running over the grey. Drawn as a second rule on top of the one
+   above rather than by animating that one's colour, so a stop already passed
+   can stay filled while the current one is still drawing. */
+.hero-step-fill {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: rgb(var(--accent) / 0.7);
+  transform-origin: left center;
+}
+
 .hero-node {
   position: absolute;
   top: -3px;
   left: 0;
   width: 7px;
   height: 7px;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.28);
+  transition:
+    background-color 240ms var(--ease-out),
+    width 240ms var(--ease-out),
+    height 240ms var(--ease-out),
+    top 240ms var(--ease-out);
 }
-/* The stop the buyer actually came for. Gold on the node and full white on the
-   label — the only two places on the rail that get either. */
-.hero-step:last-child .hero-node {
+/* A stop the sequence has already been through. Brighter than pending, but
+   still not gold — gold on the rail means "this is what you are looking at",
+   and it can only mean one thing at a time. */
+.hero-step.is-done .hero-node {
+  background: rgba(255, 255, 255, 0.55);
+}
+/* The stop showing on the plate above. The only gold on the rail. */
+.hero-step.is-active .hero-node {
   background: rgb(var(--accent));
   width: 9px;
   height: 9px;
   top: -4px;
 }
-.hero-step:last-child .hero-step-label {
+.hero-step .hero-step-label {
+  transition:
+    color 240ms var(--ease-out),
+    font-weight 240ms var(--ease-out);
+}
+.hero-step.is-active .hero-step-label {
   color: #fff;
   font-weight: 500;
+}
+/* The last stop keeps a brighter label at all times — it is the one the buyer
+   actually came for, and it should not go dim just because the sequence has
+   moved on. */
+.hero-step:last-child .hero-step-label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* The button carries no chrome: the node, the mark and the label already draw
+   the stop, and a bordered control around each would turn a timeline into a
+   toolbar. The whole stop is the hit area, top rule to the foot of the label,
+   which on a phone is comfortably over 44px tall. */
+.hero-step-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding-bottom: 0.25rem;
+  cursor: pointer;
+}
+.hero-step-btn:focus-visible {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 4px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .hero-step-btn:hover .hero-step-label {
+    color: #fff;
+  }
+  .hero-step-btn:hover ~ .hero-node,
+  .hero-step:hover .hero-node {
+    background: rgba(255, 255, 255, 0.7);
+  }
+  .hero-step.is-active:hover .hero-node {
+    background: rgb(var(--accent));
+  }
 }
 
 .hero-contact {
@@ -497,9 +842,13 @@ function splitHighlights(line: string) {
     animation-delay: var(--d, 0ms);
   }
 
-  .hero-photo {
-    animation: hero-plate 900ms var(--ease-out) both;
-  }
+  /* The plate's own entrance is gone from CSS. Motion writes `transform` and
+     `opacity` inline on every frame to run the drift and the cross-fade, and a
+     keyframe animation on the same two properties wins over the inline style
+     for as long as it is running — so the settle-in played, then handed a
+     visibly different scale back to Motion at the 900ms mark. The frames now
+     enter through Motion's own `initial`, which is the same mechanism that
+     will be moving them a second later. */
 
   .hero-detail {
     animation: hero-in 560ms var(--ease-out) both;
@@ -526,19 +875,6 @@ function splitHighlights(line: string) {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-/* The photograph settles rather than slides: a plate this size moving
-   laterally would drag the whole composition with it. */
-@keyframes hero-plate {
-  from {
-    opacity: 0;
-    transform: scale(1.06);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
   }
 }
 

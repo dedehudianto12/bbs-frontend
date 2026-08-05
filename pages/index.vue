@@ -20,7 +20,7 @@ const heroProps = computed(() => ({
   secondaryLink: hpData.hero.secondaryLink,
   facts: hpData.hero.facts,
   timeline: hpData.hero.timeline,
-  photo: hpData.hero.photo,
+  frames: hpData.hero.frames,
   detail: hpData.hero.detail,
 }))
 

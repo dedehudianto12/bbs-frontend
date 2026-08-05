@@ -65,29 +65,42 @@ const { root } = useRevealOnScroll({ stagger: 45 })
 
       <!-- Two photographs, because this band makes two claims and each one
            answers a different half.
-           Left is a survey at the customer's plant: a BBS engineer in a hard hat
-           measuring an installed incline conveyor, tape in one hand and clipboard
-           in the other. It answers "tim kami datang ke lokasi Anda" as literally
-           as a photograph can, and the hard hat and clipboard are doing the real
-           work in it — this band is asking an industrial buyer to let strangers
-           into his plant, and what he is buying is a crew that turns up dressed
-           for it.
-           It replaced the food-grade splicing shot, which was the better single
-           image but became the hero's main plate: the same photograph twice on
-           one page reads as a company with one job to its name. The two now
-           divide the copy's own claim between them — "inspeksi" here, the joint
-           itself up in the hero.
-           Right is sidewall-cleated belt coiled in the workshop — the product,
-           ready. It replaced a shot of rolls shrink-wrapped on a pallet, which
-           at 576px read as a tangle of plastic film rather than as belt: the
-           subject was legible only at full size, which is not the size anyone
-           sees it. This one survives the shrink, and the repeated cleats give
-           it a rhythm that holds up small.
-           The pairing is deliberate — people on the left, product on the right.
+           Left is a BBS technician on the walkway of an installed line inside a
+           customer's plant — hard hat, coverall, the conveyor running away from
+           him into the room. It answers "tim kami datang ke lokasi Anda" as
+           literally as a photograph can, and the PPE is doing the real work in
+           it: this band is asking an industrial buyer to let strangers into his
+           plant, and what he is buying is a crew that turns up dressed for it.
+           The room is doing the second job. A buyer reads the calibre of the
+           facility we are standing in as the calibre of client we keep, and
+           this one is bright, modern and orderly.
+           It replaced a survey shot — the same engineer measuring an incline
+           conveyor with a tape — for the reason the previous note in this spot
+           gave for its own swap, which the hero then broke. The hero's first
+           frame is now a hard hat and a clipboard against a conveyor, and the
+           survey shot was a hard hat and a clipboard against a conveyor: same
+           gesture, same subject, two hundred pixels apart. The claim is split
+           between them again — the survey up in the hero at H+0, the finished
+           line in service down here.
+           Right is the same cleated belt, but installed and running on an
+           incline in the customer's bay rather than coiled in our workshop.
+           It replaced the coil shot, which had itself replaced rolls
+           shrink-wrapped on a pallet — that one read at 576px as a tangle of
+           plastic film rather than as belt, legible only at full size, which is
+           not the size anyone sees it at. What carried the coil forward was the
+           rhythm of the repeated cleats, and this frame keeps it exactly: the
+           cleats march away into perspective and hold their shape all the way
+           down to the 200px band on a phone.
+           What it adds is the topic. This band's last step is "Pengiriman dan
+           Instalasi" and the coil could not show it — a product photographed in
+           our own workshop is inventory, and the claim being made here is
+           service. Both photographs are now on a customer's site.
+           The pairing survives that change: people on the left, the conveyor
+           itself on the right, the copy's two halves divided between them.
            A running food line was the other finalist and told a tidier story,
            but it put a customer's branded packaging in frame without permission
-           to imply the account, and two food-plant photos side by side is one
-           subject twice.
+           to imply the account, and it is also what the hero's last frame
+           already shows.
            Only the first shows below sm. At 360px a two-up would give each
            image about 180px of width, and two people at that size are unreadable
            smudges; one legible photograph beats two illegible ones.
@@ -95,7 +108,7 @@ const { root } = useRevealOnScroll({ stagger: 45 })
            empty alt because the copy above already says what they show. -->
       <div class="grid grid-cols-1 gap-px border-t border-ink/20 bg-ink/20 sm:grid-cols-2">
         <img
-          src="/images/onsite-survey.webp"
+          src="/images/onsite-line.webp"
           alt=""
           width="1400"
           height="700"
@@ -104,10 +117,10 @@ const { root } = useRevealOnScroll({ stagger: 45 })
           class="h-[200px] w-full object-cover md:h-[280px]"
         />
         <img
-          src="/images/belt-cleated.webp"
+          src="/images/onsite-instalasi.webp"
           alt=""
-          width="1200"
-          height="582"
+          width="1400"
+          height="700"
           loading="lazy"
           decoding="async"
           class="hidden h-[200px] w-full object-cover sm:block md:h-[280px]"

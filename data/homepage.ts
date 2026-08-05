@@ -60,35 +60,76 @@ export const homepageConfig = {
       { mark: 'H+2–3', label: 'Conveyor kembali beroperasi' },
     ],
 
-    // The first photographs on this site of the work actually being done.
-    // Both are the client's own, from the site-activity set.
+    // ── The plate: one frame per stop on the rail ──────────────────────────
     //
-    // The wide plate is an on-site joint inside a food-grade production line:
-    // two technicians in coveralls and hairnets, a portable press clamped over
-    // a blue PVC belt. It carries three claims at once that no studio cutout
-    // could — that the work happens in the customer's plant, that the crew is
-    // dressed for a food facility, and that there are real people behind it.
+    // This was a single still — an on-site joint in a food plant — and it was
+    // the right photograph for a hero that had nothing else to say. But the
+    // rail directly beneath it already narrates four stops, and printing one
+    // fixed image above a four-stop sequence means three of those stops are
+    // asserted in 13px type and only one is shown. The plate now carries all
+    // four, in order, and the rail tracks it.
     //
-    // The inset is the same job at arm's length: the finger splice cut, clipped
-    // and squared before it goes under heat. It is the only frame in the set
-    // where you can see what a joint actually is.
-    photo: {
-      src: '/images/hero-site-joint.webp',
-      alt: 'Dua teknisi BBS menyambung belt conveyor PVC biru dengan mesin press portable di dalam ruang produksi pangan',
-      // Must set on one line inside the caption box, which is half the figure
-      // width minus padding — about 147px at 360px, or roughly 19 characters of
-      // tracked 11px mono. The previous caption ran to 37 characters (~277px)
-      // and was clipped on the primary target device.
-      //
-      // "food-grade" also came off nothing but the look of the photograph. That
-      // is a facility classification, not something you can read from an image,
-      // so it is gone from the alt text too — "ruang produksi pangan" says what
-      // is actually visible without implying a certification.
-      caption: 'Penyambungan onsite',
-    },
+    // The four are ordered as the job actually runs, and each was chosen for
+    // what it proves rather than for how it looks:
+    //
+    //   H+0   a surveyor in hard hat and hi-vis with a clipboard against a
+    //         running plant conveyor — the claim that we come to the site
+    //   H+1   two hands cutting the finger splice, clips holding the lay
+    //   H+2   the belt under the press bar, hoses live
+    //   H+2–3 a food-grade line back in service, the fresh joint visible
+    //         running away down the blue belt
+    //
+    // `focus` is the object-position for that frame. The four photographs are
+    // not composed alike — the surveyor sits high in his frame, the press sits
+    // low in its — so a single anchor that suits one crops the subject out of
+    // another as the cell changes shape. Each frame carries its own.
+    //
+    // All four are the client's own, cropped from the 2254×2994 exports in the
+    // site-activity set with the "property of CV Bintang Berjaya Satu" strip
+    // (rows 2836+) removed.
+    frames: [
+      {
+        src: '/images/hero/hero-1-survei.webp',
+        alt: 'Teknisi BBS mengenakan helm dan rompi keselamatan memeriksa belt conveyor di area pabrik sambil mencatat hasil pengukuran',
+        // Captions must set on one line inside the caption box — half the
+        // figure width minus padding, about 147px at 360px, or roughly 19
+        // characters of tracked 11px mono. Anything longer is clipped on the
+        // primary target device, so none of the four exceeds it.
+        caption: 'Survei di lokasi',
+        focus: '58% 38%',
+      },
+      {
+        src: '/images/hero/hero-2-finger.webp',
+        alt: 'Tangan teknisi memotong pola finger splice pada belt PVC hijau yang dijepit rapi sebelum disambung',
+        caption: 'Potong finger',
+        focus: '50% 45%',
+      },
+      {
+        src: '/images/hero/hero-3-press.webp',
+        // The press frame is anchored high on purpose: the machine, the hoses
+        // and the belt entering the bar all sit in the top two-thirds, and
+        // that is the whole content of the shot.
+        alt: 'Belt conveyor hijau masuk ke mesin press sambungan panas dengan selang hidrolik terpasang di workshop BBS',
+        caption: 'Proses press',
+        focus: '50% 30%',
+      },
+      {
+        src: '/images/hero/hero-4-jalan.webp',
+        alt: 'Belt conveyor PVC biru kembali beroperasi di ruang produksi pangan dengan sambungan baru terlihat rapi',
+        caption: 'Conveyor beroperasi',
+        focus: '50% 46%',
+      },
+    ],
+
+    // The inset holds still while the plate moves. It is the one thing in the
+    // hero the wide shots cannot carry at any crop: the finger splice itself,
+    // squared up on the press bed, at the scale where you can count the teeth.
+    // Keeping it fixed also gives the eye somewhere to rest — four frames
+    // changing behind a fifth that also changed would read as a slideshow
+    // rather than as one job progressing.
     detail: {
-      src: '/images/hero-splice-detail.webp',
-      alt: 'Detail sambungan finger splice pada belt PVC hijau, dijepit sebelum proses press',
+      src: '/images/hero/hero-detail-finger.webp',
+      alt: 'Detail pola finger splice pada belt conveyor, tersusun rapat di atas landasan mesin press',
     },
   },
   company: {

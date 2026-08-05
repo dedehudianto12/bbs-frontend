@@ -117,6 +117,13 @@ export default defineNuxtConfig({
   modules: [
     "@nuxtjs/tailwindcss",
     "@nuxtjs/seo",
+    // Motion for Vue — the Vue port of Framer Motion. Used in exactly one
+    // place: the hero's four-frame sequence (components/home/HeroSection.vue).
+    // Auto-imports <Motion> and tree-shakes to the features actually
+    // referenced, so the copy reveals elsewhere on the page stay on the CSS
+    // keyframes they were already tuned for rather than being rewritten to
+    // justify the dependency.
+    "motion-v/nuxt",
   ],
 
   css: ["~/assets/css/main.css"],
@@ -216,7 +223,7 @@ export default defineNuxtConfig({
       contactPoint: {
         contactType: "Sales",
         telephone: "+6281287859061",
-        email: "sales@bbsconveyor.com",
+        email: "bbsconveyor@yahoo.com",
       },
       address: {
         addressLocality: "Jakarta Timur",
