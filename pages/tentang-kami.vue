@@ -121,7 +121,7 @@ const DOKUMEN = [
 ]
 
 useSeoMeta({
-  title: 'Tentang Kami — BBS Conveyor',
+  title: 'Tentang Kami',
   description:
     'CV Bintang Berjaya Satu (BBS Conveyor) — supplier belt conveyor, roller, dan komponen industri terpercaya. Kantor dan workshop di Pulo Gebang, Cakung, Jakarta Timur.',
 })

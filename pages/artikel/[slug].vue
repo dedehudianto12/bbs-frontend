@@ -10,6 +10,21 @@ const { data: articleRes, error: articleErr } = await useAsyncData(`artikel-${sl
 
 const article = computed(() => articleRes.value?.data ?? null)
 
+// An unknown slug throws out of `get` into articleErr rather than arriving as
+// `data: null`, so it rendered the retryable "Gagal Memuat" state with HTTP 200
+// — a soft 404. Only a real 404 is converted; transport failures keep the retry
+// path. Same treatment as pages/produk/[slug].vue.
+const notFound = computed(
+  () => errorStatus(articleErr.value) === 404 || (!articleErr.value && !articleRes.value?.data),
+)
+if (notFound.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Artikel tidak ditemukan',
+    fatal: true,
+  })
+}
+
 // Article bodies are Tiptap HTML from the admin panel and go straight into a
 // v-html binding. Sanitised so the sink cannot execute script, whatever ends up
 // in the column. See utils/richtext.ts.
@@ -40,13 +55,15 @@ const relatedArticles = computed(() => {
 })
 
 useSeoMeta({
-  title: article.value ? `${(article.value as any).title} — BBS Conveyor` : 'Artikel Tidak Ditemukan — BBS Conveyor',
+  title: article.value ? `${(article.value as any).title}` : 'Artikel Tidak Ditemukan',
   description: (article.value as any)?.excerpt ?? ''
 })
 </script>
 
 <template>
-  <div v-if="articleErr" class="container-tech py-24 md:py-32 text-center">
+  <!-- `notFound` excluded: a 404 must not land in the retryable server-error
+       state. Covers client-side navigation, where setup does not re-run. -->
+  <div v-if="!notFound && articleErr" class="container-tech py-24 md:py-32 text-center">
     <h1 class="display text-3xl text-ink md:text-4xl">Gagal Memuat</h1>
     <p class="mt-4 text-muted">Tidak dapat menghubungi server. Periksa koneksi Anda.</p>
     <div class="mt-8 flex justify-center">

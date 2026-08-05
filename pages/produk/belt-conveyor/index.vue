@@ -33,7 +33,7 @@ function onFilterChange(subcat: string) {
 }
 
 useSeoMeta({
-  title: 'Belt Conveyor — BBS Conveyor',
+  title: 'Belt Conveyor',
   description: 'PVC Belt, PU, Flat Belt, dan Rubber Belt berkualitas untuk kebutuhan industri Anda.'
 })
 </script>

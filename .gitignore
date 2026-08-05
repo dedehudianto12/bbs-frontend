@@ -30,3 +30,6 @@ claude_logs
 
 #Vercel
 .vercel
+
+# wrangler local dev state
+.wrangler

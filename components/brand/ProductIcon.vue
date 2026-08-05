@@ -35,6 +35,16 @@ const ICONS: Record<string, Icon> = {
   },
   // roller over a frame line
   'gravity-roll': { paths: ['M4 20.5h16'], rings: [[12, 11, 7]], dots: [[12, 11, 1.6]] },
+  // interlocking plastic segments — modular belt
+  'modular-belt': {
+    paths: ['M2.5 8.5h19v7h-19Z', 'M9 8.5v7M15 8.5v7', 'M2.5 12h19'],
+  },
+  // trapezoidal cross-section — V-belt on a pulley
+  'v-belt': { paths: ['M4.5 6.5h15l-3.5 11h-8Z', 'M4.5 10.5h15'] },
+  // woven grid — open mesh / net dryer
+  'open-mesh': {
+    paths: ['M3.5 6.5h17v11h-17Z', 'M9.2 6.5v11M14.8 6.5v11', 'M3.5 10.2h17M3.5 13.8h17'],
+  },
   // generic component
   generic: { paths: ['M4.5 4.5h15v15h-15Z'], dots: [[12, 12, 2]] },
 }

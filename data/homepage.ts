@@ -154,7 +154,7 @@ export const homepageConfig = {
     buttonLink: '/kontak',
   },
   seo: {
-    title: 'BBS Conveyor — Solusi Belt dan Roller Conveyor Industri',
+    title: 'Solusi Belt dan Roller Conveyor Industri',
     description:
       'Supplier belt conveyor, roller, dan komponen industri. CV Bintang Berjaya Satu melayani konsultasi, instalasi, penyambungan, dan perbaikan di seluruh Indonesia.',
     ogImage: '/images/og-home.webp',

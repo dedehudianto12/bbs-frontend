@@ -46,7 +46,7 @@ function onFilterChange(newSubcat: string) {
 }
 
 useSeoMeta({
-  title: `${currentLabel.value} — Produk Lainnya — BBS Conveyor`,
+  title: `${currentLabel.value} — Produk Lainnya`,
   description: `${currentLabel.value} berkualitas untuk kebutuhan industri. Tersedia dari BBS Conveyor.`
 })
 </script>

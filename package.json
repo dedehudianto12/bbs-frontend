@@ -19,9 +19,9 @@
     "@tiptap/starter-kit": "^3.29.0",
     "@tiptap/vue-3": "^3.29.0",
     "@vueuse/core": "^14.3.0",
-    "isomorphic-dompurify": "^3.21.0",
     "leaflet": "^1.9.4",
     "nuxt": "^4.5.0",
+    "xss": "^1.0.15",
     "zod": "^4.4.3"
   },
   "devDependencies": {

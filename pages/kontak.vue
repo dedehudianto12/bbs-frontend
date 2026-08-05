@@ -223,7 +223,7 @@ const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURICom
 )}`
 
 useSeoMeta({
-  title: 'Hubungi Kami — BBS Conveyor',
+  title: 'Hubungi Kami',
   description:
     'Hubungi BBS Conveyor untuk konsultasi belt conveyor, roller, dan komponen industri. Dua nomor WhatsApp, email, dan alamat kantor dan workshop di Pulo Gebang, Cakung, Jakarta Timur.',
 })

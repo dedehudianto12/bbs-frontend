@@ -53,6 +53,7 @@ if (notFound.value) {
 const { data: listRes } = await useAsyncData('jasa-listing', () => get<any[]>('/jasa'))
 
 const service = computed(() => serviceRes.value?.data ?? null)
+
 const dossier = computed(() => SERVICE_DOSSIERS[slug.value])
 
 /** Sequence number, matching the listing. Unknown slugs get no number rather than a wrong one. */
@@ -84,8 +85,8 @@ const { root: bodyRoot } = useRevealOnScroll({ stagger: 60 })
 useSeoMeta({
   title: () =>
     service.value
-      ? `${service.value.name} — Jasa Belt Conveyor — BBS Conveyor`
-      : 'Jasa Tidak Ditemukan — BBS Conveyor',
+      ? `${service.value.name} — Jasa Belt Conveyor`
+      : 'Jasa Tidak Ditemukan',
   description: () => service.value?.shortDescription ?? '',
 })
 </script>

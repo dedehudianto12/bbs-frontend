@@ -32,7 +32,7 @@ function onFilterChange(subcat: string) {
 }
 
 useSeoMeta({
-  title: 'Produk Lainnya — BBS Conveyor',
+  title: 'Produk Lainnya',
   description: 'Timing Belt, Fastener, Cleat, Gravity Roll, dan komponen conveyor pendukung berkualitas.'
 })
 </script>

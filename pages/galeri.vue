@@ -20,7 +20,7 @@ const galleryItems = computed(() =>
 )
 
 useSeoMeta({
-  title: 'Galeri Proyek — BBS Conveyor',
+  title: 'Galeri Proyek',
   description: 'Dokumentasi proyek instalasi belt conveyor, roller, dan jasa onsite joint oleh BBS Conveyor.'
 })
 </script>

@@ -101,7 +101,7 @@ const BRIEF = [
 ]
 
 useSeoMeta({
-  title: 'Jasa Belt Conveyor — Onsite Joint, Reparasi, Cleat dan Guide — BBS Conveyor',
+  title: 'Jasa Belt Conveyor — Onsite Joint, Reparasi, Cleat dan Guide',
   description:
     'Penyambungan belt conveyor hot joint dan cold joint di pabrik Anda atau di workshop kami di Pulo Gebang. Melayani reparasi, pemasangan profile guide, dan incline cleated belt. CV Bintang Berjaya Satu.',
 })

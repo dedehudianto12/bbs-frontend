@@ -41,7 +41,7 @@ const allTags = computed(() => {
 })
 
 useSeoMeta({
-  title: 'Artikel — BBS Conveyor',
+  title: 'Artikel',
   description: 'Panduan teknis dan informasi seputar belt conveyor, roller, dan komponen industri dari BBS Conveyor.'
 })
 </script>

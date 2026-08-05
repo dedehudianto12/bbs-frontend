@@ -57,6 +57,26 @@ if (isDeployableBuild && process.env.ALLOW_LOCALHOST_API !== "1") {
   }
 }
 
+// ── Which domain this build belongs to ──────────────────────────────────────
+//
+// This was hardcoded to bbsconveyor.com, which is correct only while that is
+// the site's one and only home. It drives the canonical tag, og:url, the
+// sitemap's <loc> entries and the Sitemap: line in robots.txt — so deploying
+// this same bundle to a second domain without changing it publishes a site
+// whose every page tells Google "do not index me, index bbsconveyor.com
+// instead". The pages would be crawled and then dropped, and nothing in the
+// build output or the browser would look wrong.
+//
+// Set NUXT_SITE_URL per Cloudflare Pages project. The default keeps the
+// existing deployment working unchanged.
+const SITE_URL = process.env.NUXT_SITE_URL || "https://bbsconveyor.com";
+
+if (isDeployableBuild) {
+  // Echoed because the failure mode above is silent: the only way to catch a
+  // build canonicalised to the wrong domain is to see which one it used.
+  console.log(`[seo] canonical origin for this build: ${SITE_URL}`);
+}
+
 const CSP = [
   "default-src 'self'",
   // 'unsafe-inline' is required: Nuxt inlines the hydration payload as a
@@ -130,11 +150,29 @@ export default defineNuxtConfig({
 
   // ── Site identity (digunakan oleh semua sub-module SEO) ──
   site: {
-    url: "https://bbsconveyor.com",
+    url: SITE_URL,
     name: "BBS Conveyor",
     description:
       "CV Bintang Berjaya Satu — Solusi Belt & Roller Conveyor Industri",
     defaultLocale: "id",
+    // Cloudflare Pages serves prerendered pages at the trailing-slash form and
+    // 308s the bare path to it. The sitemap and the canonical tag were both
+    // emitting the bare form, so every URL we submitted to Google was a
+    // redirect, landing on a page whose canonical pointed back at the URL that
+    // redirects. Declaring it here makes canonical, sitemap and hosting agree.
+    trailingSlash: true,
+    // The staging deployment served `index, follow` and an allow-all
+    // robots.txt, so a preview build was a crawlable duplicate of the live
+    // site. Setting NUXT_SITE_INDEXABLE=false on Cloudflare Pages' *preview*
+    // environment flips @nuxtjs/robots to noindex/nofollow plus a Disallow-all
+    // robots.txt for those builds only.
+    //
+    // This covers branch previews. It does NOT cover the project's own
+    // *.pages.dev hostname, which serves the production build: that one has to
+    // be handled in Cloudflare (restrict access to the pages.dev subdomain, or
+    // put Access in front of it) because prerendered files are served straight
+    // from the CDN and never reach the Worker where a host check could run.
+    indexable: process.env.NUXT_SITE_INDEXABLE !== "false",
   },
 
   // ── OG Image auto-generate ──
@@ -169,7 +207,10 @@ export default defineNuxtConfig({
       alternateName: "BBS Conveyor",
       description:
         "Supplier belt conveyor, roller, dan komponen industri terpercaya di Indonesia.",
-      url: "https://bbsconveyor.com",
+      // Follows the deployment. The @id references in the emitted graph are
+      // built from this, so a hardcoded value on a second domain produces JSON-LD
+      // that claims to describe a page on a host it is not served from.
+      url: SITE_URL,
       logo: "/bbs-logo.svg",
       sameAs: ["https://wa.me/6281287859061"],
       contactPoint: {
@@ -193,6 +234,34 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
+    // ── Pages whose content lives in the API are never prerendered ──────────
+    //
+    // /produk/belt-conveyor and /produk/lainnya used to be in the prerender
+    // list below, so Cloudflare served a static HTML file built from whatever
+    // the API returned at *deploy* time. A product added or edited in the admin
+    // panel never appeared there — while /produk/belt-conveyor/pvc-belt, which
+    // fetches the identical endpoint but rendered in the Worker, showed it
+    // immediately. Same fetch, same data source; only the timing differed. That
+    // asymmetry is what made it look like the listing page was reading from
+    // somewhere else.
+    //
+    // Every route below renders per request in the Worker instead, so the
+    // public site always matches the admin panel. It is still server-rendered
+    // HTML — crawlers and the initial paint are unaffected, only TTFB moves
+    // from CDN-static to a Worker round trip.
+    //
+    // Stated as route rules rather than only by shortening prerender.routes,
+    // because the link crawler can reach a page on its own: whoever turns
+    // crawlLinks back on must not be able to silently re-freeze these.
+    "/": { prerender: false },
+    "/produk/**": { prerender: false },
+    "/artikel/**": { prerender: false },
+    "/jasa/**": { prerender: false },
+    "/galeri": { prerender: false },
+    // The sitemap's URLs come from the API too (server/routes/__sitemap__/
+    // urls.ts), so a prerendered sitemap lists the products that existed at the
+    // last deploy and omits everything added since.
+    "/sitemap.xml": { prerender: false },
     // The admin panel is a private SPA. Rendering it on the server bought
     // nothing — the auth guard is client-only by necessity (the session cookie
     // is not readable during SSR), so every admin URL used to stream a full
@@ -223,16 +292,24 @@ export default defineNuxtConfig({
       '/api': { target: 'http://localhost:8080/api', changeOrigin: true },
     },
     prerender: {
-      routes: [
-        "/",
-        "/produk/belt-conveyor",
-        "/produk/lainnya",
-        "/jasa",
-        "/artikel",
-        "/tentang-kami",
-        "/kontak",
-        "/galeri",
-      ],
+      // Crawling existed to reach the product, article and service detail
+      // pages, and those are precisely the pages that must no longer be frozen
+      // at build time; the route rules above refuse them now, so all the
+      // crawler can do is walk links that lead nowhere.
+      //
+      // It also decides the sitemap. @nuxtjs/sitemap hooks itself into the
+      // prerender pass whenever prerender.routes is non-empty AND crawlLinks is
+      // on, and writes a static dist/sitemap.xml. Since those URLs come from
+      // the API (server/routes/__sitemap__/urls.ts), that would freeze the
+      // product list all over again in the one file Google reads — and the
+      // `/sitemap.xml` route rule above does not prevent it, the module
+      // prerenders it through its own hook. Turning this off is what keeps the
+      // sitemap generated per request, listing what the admin panel holds now.
+      crawlLinks: false,
+      ignore: ["/admin"],
+      // The only two pages whose content is hardcoded in the repo. Everything
+      // else reads the API and is served by the Worker.
+      routes: ["/tentang-kami", "/kontak"],
     },
   },
 

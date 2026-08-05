@@ -46,7 +46,7 @@ function onFilterChange(newSubcat: string) {
 }
 
 useSeoMeta({
-  title: `${currentLabel.value} — Belt Conveyor — BBS Conveyor`,
+  title: `${currentLabel.value} — Belt Conveyor`,
   description: `Belt conveyor ${currentLabel.value} berkualitas untuk kebutuhan industri. Tersedia dari BBS Conveyor.`
 })
 </script>

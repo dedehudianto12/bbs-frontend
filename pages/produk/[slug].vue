@@ -9,6 +9,26 @@ const { data: productRes, error: productErr } = await useAsyncData(`product-${sl
 
 const product = computed(() => productRes.value?.data ?? null)
 
+// `get` is a bare $fetch and throws on a non-2xx, so an unknown slug lands in
+// productErr rather than as `data: null`. That made the "Produk Tidak Ditemukan"
+// branch below unreachable — a mistyped URL rendered "Tidak dapat menghubungi
+// server" with a retry button that could never succeed — and the route answered
+// **200** for a page that does not exist, which is a soft 404 Google will index.
+//
+// Only a genuine 404 is converted; a 500 or a dead connection stays in
+// productErr and keeps the retryable error state, because those are worth
+// retrying. Same treatment as pages/jasa/[slug].vue.
+const notFound = computed(
+  () => errorStatus(productErr.value) === 404 || (!productErr.value && !productRes.value?.data),
+)
+if (notFound.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Produk tidak ditemukan',
+    fatal: true,
+  })
+}
+
 const specEntries = computed<[string, string][]>(() => {
   const s = product.value?.specs
   if (!s) return []
@@ -85,14 +105,18 @@ const breadcrumbItems = computed(() => {
 
 useSeoMeta({
   title: product.value
-    ? `${product.value.name} — BBS Conveyor`
-    : 'Produk Tidak Ditemukan — BBS Conveyor',
+    ? `${product.value.name}`
+    : 'Produk Tidak Ditemukan',
   description: product.value?.description ?? ''
 })
 </script>
 
 <template>
-  <div v-if="productErr" class="container-tech py-24 md:py-32 text-center">
+  <!-- `notFound` is excluded here so a 404 falls through to the "Produk Tidak
+       Ditemukan" branch at the bottom rather than the retryable server-error
+       state. The setup-time createError covers a fresh load; this covers
+       client-side navigation to a bad slug, where setup does not re-run. -->
+  <div v-if="!notFound && productErr" class="container-tech py-24 md:py-32 text-center">
     <h1 class="display text-3xl text-ink md:text-4xl">Gagal Memuat</h1>
     <p class="mt-4 text-muted">Tidak dapat menghubungi server.</p>
     <div class="mt-8 flex justify-center">

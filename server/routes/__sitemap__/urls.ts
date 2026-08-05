@@ -27,11 +27,24 @@ export default defineSitemapEventHandler(async () => {
 
   const urls: { loc: string; lastmod?: string }[] = []
 
+  // Category pages are derived from the products that sit in them, so a naive
+  // push emitted /produk/belt-conveyor/pvc-belt once per PVC product — 24
+  // product rows produced 24 category entries for 8 categories. The sitemap
+  // deduplicates on output so this was never wrong, only noisy; collecting them
+  // here keeps the newest lastmod of the group rather than whichever product
+  // happened to be iterated last.
+  const categories = new Map<string, string | undefined>()
+
   for (const p of products) {
     const group = p.group === 'belt-conveyor' ? 'belt-conveyor' : 'lainnya'
     urls.push({ loc: `/produk/${p.slug}`, lastmod: p.updatedAt })
-    urls.push({ loc: `/produk/${group}/${(p.category as string).toLowerCase().replace(/\s+/g, '-')}`, lastmod: p.updatedAt })
+
+    const loc = `/produk/${group}/${(p.category as string).toLowerCase().replace(/\s+/g, '-')}`
+    const seen = categories.get(loc)
+    if (!seen || (p.updatedAt && p.updatedAt > seen)) categories.set(loc, p.updatedAt)
   }
+
+  for (const [loc, lastmod] of categories) urls.push({ loc, lastmod })
 
   for (const a of articles) {
     urls.push({ loc: `/artikel/${a.slug}`, lastmod: a.updatedAt ?? a.publishedAt })
