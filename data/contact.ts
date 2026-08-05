@@ -1,9 +1,25 @@
 // Single source for contact info — used across kontak page, product detail,
 // CTA section, navbar, and footer. Change here, updates everywhere.
 export const contactInfo = {
-  waSales1: '6281287859061',
-  waSales2: '6282110227634',
-  email: 'sales@bbsconveyor.com',
+  // The one line the rest of the site publishes. Every WhatsApp link, the hero's
+  // tel:, the navbar, the footer, the floating button and both colophons resolve
+  // to this — on the client's instruction, only the Kontak page offers a choice
+  // of staff. Changing it here changes it everywhere except that page's Saluran
+  // section, which draws from salesNumbers below.
+  waUtama: '6281287859061',
+  waLabelUtama: 'Chat Sales',
+
+  // The four sales lines, in the order the client gave them (Aug 2026). Each is
+  // a different member of staff, not a fallback for the one above it. Read by
+  // pages/kontak.vue and nothing else.
+  salesNumbers: [
+    { label: 'Chat Sales 1', number: '6287758161166' },
+    { label: 'Chat Sales 2', number: '6282110227634' },
+    { label: 'Chat Sales 3', number: '6281235555847' },
+    { label: 'Chat Sales 4', number: '6281287859061' },
+  ],
+
+  email: 'bbsconveyor@yahoo.com',
   alamat: 'Jl. Pulo Bangka, RT.1/RW.9, Pulo Gebang\nKec. Cakung, Jakarta Timur\nDKI Jakarta 13950',
   jamOperasional: 'Senin – Jumat, 08:00 – 17:00 WIB\nSabtu, 08:00 – 12:00 WIB',
   // Same hours, abbreviated for the hero datasheet where the full two-line
@@ -29,9 +45,6 @@ export const contactInfo = {
     { hari: 'Sabtu', ringkas: 'Sab', buka: 480, tutup: 720 },
     { hari: 'Minggu', ringkas: 'Min', buka: null, tutup: null },
   ],
-
-  waLabel1: 'Chat Sales 1',
-  waLabel2: 'Chat Sales 2',
 
   // Marketplace storefronts, named on p12 of the client's company profile
   // (bbsconveyor.com, Dec 2024). For an Indonesian B2B buyer a shop with real

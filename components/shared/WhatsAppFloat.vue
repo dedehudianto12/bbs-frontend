@@ -28,9 +28,17 @@ function onKeydown(e: KeyboardEvent) {
 onMounted(() => window.addEventListener('keydown', onKeydown))
 onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
 
+// One line, not the four the Kontak page lists. The button is global — it sits
+// on every page — and the client wants the choice of staff offered in exactly
+// one place. Kept as a list of one rather than collapsed into a bare link so
+// the panel's markup does not have to be rewritten if a second line is ever
+// published here.
 const salesLinks = [
-  { href: waLink({ halaman: 'Tombol WhatsApp mengapung' }, 1), label: contactInfo.waLabel1, number: contactInfo.waSales1 },
-  { href: waLink({ halaman: 'Tombol WhatsApp mengapung' }, 2), label: contactInfo.waLabel2, number: contactInfo.waSales2 },
+  {
+    href: waLink({ halaman: 'Tombol WhatsApp mengapung' }),
+    label: contactInfo.waLabelUtama,
+    number: contactInfo.waUtama,
+  },
 ]
 
 </script>

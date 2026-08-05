@@ -46,8 +46,17 @@ export function prettyPhone(n: string): string {
 /**
  * Builds a wa.me deep link with the message prefilled.
  * Numbers come from data/contact.ts, which stays the single source.
+ *
+ * `sales` picks one of the four lines by position and is only for the Kontak
+ * page, the one place that publishes all four. Everywhere else omits it and
+ * gets contactInfo.waUtama — leaving it out is the correct default, not an
+ * oversight.
  */
-export function waLink(ctx: WaContext = {}, sales: 1 | 2 = 1): string {
-  const number = sales === 2 ? contactInfo.waSales2 : contactInfo.waSales1
+export function waLink(ctx: WaContext = {}, sales?: 1 | 2 | 3 | 4): string {
+  // Falls back to the main line rather than to undefined, so a call site that
+  // asks for a sales index the client has since removed still opens a chat.
+  const number =
+    (sales === undefined ? undefined : contactInfo.salesNumbers[sales - 1]?.number)
+    ?? contactInfo.waUtama
   return `https://wa.me/${number}?text=${encodeURIComponent(waMessage(ctx))}`
 }

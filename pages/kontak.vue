@@ -29,9 +29,9 @@ import { prettyPhone, waLink } from '~/utils/whatsapp'
 const { root: channelRoot } = useRevealOnScroll({ stagger: 70 })
 const { root: placeRoot } = useRevealOnScroll({ stagger: 80 })
 
-const waHref1 = waLink({ halaman: 'Kontak — masthead' }, 1)
-const phone1 = prettyPhone(contactInfo.waSales1)
-const phone2 = prettyPhone(contactInfo.waSales2)
+// The masthead button is a generic "start a chat", not a named person — the
+// choice of staff is the Saluran section's job, further down.
+const waHref1 = waLink({ halaman: 'Kontak — masthead' })
 const week = contactInfo.jamMingguan
 
 // The masthead datasheet. Every line is already published elsewhere on this
@@ -47,35 +47,31 @@ const DESK = [
   { key: 'Kantor dan workshop', value: 'Pulo Gebang, Jakarta Timur' },
 ]
 
-// ── The three channels ──────────────────────────────────────────────────────
+// ── The channels ────────────────────────────────────────────────────────────
 //
-// Sales 1 and Sales 2 are two different people, not a primary and a fallback —
-// so they are set as equals, and the note that explains the choice sits above
-// the row rather than being guessed at twice inside it. We do not know how the
-// two of them split their work and will not imply a split we cannot support.
-const CHANNELS = [
-  {
-    key: contactInfo.waLabel1,
-    value: phone1,
-    note: 'WhatsApp',
-    href: waLink({ halaman: 'Kontak — saluran' }, 1),
-    wa: true,
-  },
-  {
-    key: contactInfo.waLabel2,
-    value: phone2,
-    note: 'WhatsApp',
-    href: waLink({ halaman: 'Kontak — saluran' }, 2),
-    wa: true,
-  },
-  {
-    key: 'Email',
-    value: contactInfo.email,
-    note: 'Untuk penawaran tertulis dan lampiran dokumen',
-    href: `mailto:${contactInfo.email}`,
-    wa: false,
-  },
-]
+// The four sales lines are four different people, not a primary and three
+// fallbacks — so they are set as equals, and the note that explains the choice
+// sits above the row rather than being guessed at four times inside it. We do
+// not know how they split their work and will not imply a split we cannot
+// support.
+//
+// They are a row of their own and the email is the cell beneath, rather than
+// all five flowed through one grid: five cells in a three-up would leave a hole
+// in the second row, and the email is a different kind of channel anyway —
+// slower, written, and the one you use when there is a drawing to attach.
+const SALES = contactInfo.salesNumbers.map((s, i) => ({
+  key: s.label,
+  value: prettyPhone(s.number),
+  note: 'WhatsApp',
+  href: waLink({ halaman: 'Kontak — saluran' }, (i + 1) as 1 | 2 | 3 | 4),
+}))
+
+const EMAIL = {
+  key: 'Email',
+  value: contactInfo.email,
+  note: 'Untuk penawaran tertulis dan lampiran dokumen',
+  href: `mailto:${contactInfo.email}`,
+}
 
 // ── Live status ─────────────────────────────────────────────────────────────
 //
@@ -318,7 +314,8 @@ useSeoMeta({
     </section>
 
     <!-- ══ SALURAN ═══════════════════════════════════════════════════════
-         Three cells, each one entirely pressable. The numbers are set at a size
+         Five cells, each one entirely pressable: four sales lines in a row of
+         their own, the email full-width beneath. The numbers are set at a size
          where they can be read off a screen and dialled from another phone,
          because that is what half of these readers will do with them. -->
     <section ref="channelRoot" class="frame border-b border-line">
@@ -329,19 +326,19 @@ useSeoMeta({
           <span class="num shrink-0 text-[13px] font-semibold text-ink">03</span>
         </div>
         <p class="mt-8 max-w-xl text-base leading-relaxed text-muted">
-          Sales 1 dan Sales 2 ditangani oleh dua staf yang berbeda, bukan nomor
+          Keempat nomor di bawah ditangani oleh staf yang berbeda, bukan nomor
           cadangan. Anda dapat menghubungi salah satunya, atau melanjutkan ke nomor
           yang sebelumnya sudah Anda hubungi.
         </p>
       </div>
 
-      <div class="mt-10 grid gap-px bg-line md:grid-cols-3">
+      <div class="mt-10 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-4">
         <a
-          v-for="ch in CHANNELS"
+          v-for="ch in SALES"
           :key="ch.key"
           :href="ch.href"
-          :target="ch.wa ? '_blank' : undefined"
-          :rel="ch.wa ? 'noopener noreferrer' : undefined"
+          target="_blank"
+          rel="noopener noreferrer"
           data-reveal-item
           class="kontak-cell group flex flex-col justify-between gap-8 bg-paper px-5 py-8 md:px-8 md:py-10"
         >
@@ -350,8 +347,25 @@ useSeoMeta({
             <p class="kontak-value num mt-4 font-semibold text-ink">{{ ch.value }}</p>
           </div>
           <p class="flex items-center gap-2 text-[13px] text-muted">
-            <UiWhatsAppIcon v-if="ch.wa" class="h-4 w-4 shrink-0" />
+            <UiWhatsAppIcon class="h-4 w-4 shrink-0" />
             <span>{{ ch.note }}</span>
+            <span class="kontak-arrow ml-auto shrink-0 text-ink" aria-hidden="true">→</span>
+          </p>
+        </a>
+      </div>
+
+      <div class="grid gap-px border-t border-line bg-line">
+        <a
+          :href="EMAIL.href"
+          data-reveal-item
+          class="kontak-cell group flex flex-col justify-between gap-8 bg-paper px-5 py-8 md:px-8 md:py-10"
+        >
+          <div>
+            <p class="spec-key !text-accent">{{ EMAIL.key }}</p>
+            <p class="kontak-value num mt-4 font-semibold text-ink">{{ EMAIL.value }}</p>
+          </div>
+          <p class="flex items-center gap-2 text-[13px] text-muted">
+            <span>{{ EMAIL.note }}</span>
             <span class="kontak-arrow ml-auto shrink-0 text-ink" aria-hidden="true">→</span>
           </p>
         </a>

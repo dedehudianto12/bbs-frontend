@@ -68,8 +68,7 @@ const { root: placeRoot } = useRevealOnScroll({ stagger: 90 })
 const { root: listRoot } = useRevealOnScroll({ stagger: 60 })
 const { root: jointRoot } = useRevealOnScroll({ stagger: 90 })
 
-const phone1 = prettyPhone(contactInfo.waSales1)
-const phone2 = prettyPhone(contactInfo.waSales2)
+const phone = prettyPhone(contactInfo.waUtama)
 
 // The masthead datasheet. Every line is quotable from the service descriptions
 // in the database or from the company profile — none of it is a promise this
@@ -369,29 +368,19 @@ useSeoMeta({
             </ol>
           </div>
 
-          <!-- Two named lines rather than one anonymous button, matching the
-               About page's colophon: Sales 1 and Sales 2 are different people. -->
+          <!-- One named line rather than an anonymous button, matching the
+               About page's colophon. The four sales staff are listed on the
+               Kontak page and only there. -->
           <dl class="lg:col-span-5 lg:col-start-8">
             <div class="flex items-baseline justify-between gap-6 border-t border-line py-4">
-              <dt class="spec-key">{{ contactInfo.waLabel1 }}</dt>
+              <dt class="spec-key">{{ contactInfo.waLabelUtama }}</dt>
               <dd>
                 <a
-                  :href="waLink({ halaman: 'Jasa — brief' }, 1)"
+                  :href="waLink({ halaman: 'Jasa — brief' })"
                   target="_blank"
                   rel="noopener noreferrer"
                   class="jasa-link num text-[15px] font-semibold text-ink"
-                >{{ phone1 }}</a>
-              </dd>
-            </div>
-            <div class="flex items-baseline justify-between gap-6 border-t border-line py-4">
-              <dt class="spec-key">{{ contactInfo.waLabel2 }}</dt>
-              <dd>
-                <a
-                  :href="waLink({ halaman: 'Jasa — brief' }, 2)"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="jasa-link num text-[15px] font-semibold text-ink"
-                >{{ phone2 }}</a>
+                >{{ phone }}</a>
               </dd>
             </div>
             <div class="flex items-baseline justify-between gap-6 border-y border-line py-4">
@@ -400,7 +389,7 @@ useSeoMeta({
             </div>
 
             <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-              <UiButton :href="waLink({ halaman: 'Jasa — brief' }, 1)" :block="true" class="sm:!w-auto">
+              <UiButton :href="waLink({ halaman: 'Jasa — brief' })" :block="true" class="sm:!w-auto">
                 <UiWhatsAppIcon class="h-4 w-4" />
                 Hubungi via WhatsApp
               </UiButton>

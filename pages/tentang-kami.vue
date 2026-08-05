@@ -38,8 +38,7 @@ const { root: scopeRoot } = useRevealOnScroll({ stagger: 40 })
 const { root: placeRoot } = useRevealOnScroll({ stagger: 80 })
 const { root: docsRoot } = useRevealOnScroll({ stagger: 90 })
 
-const phone1 = prettyPhone(contactInfo.waSales1)
-const phone2 = prettyPhone(contactInfo.waSales2)
+const phone = prettyPhone(contactInfo.waUtama)
 
 // The masthead registry. Straight from the company profile — no field here is
 // an inference, which is the whole point of setting it as a registry: the form
@@ -47,7 +46,6 @@ const phone2 = prettyPhone(contactInfo.waSales2)
 const REGISTRY = [
   { key: 'Bidang', value: 'Conveyor System and Parts Solution' },
   { key: 'Dikenal sebagai', value: 'BBS Conveyor' },
-  { key: 'Pendiri', value: 'Tiga bersaudara' },
   { key: 'Kantor dan workshop', value: 'Pulo Gebang, Cakung, Jakarta Timur' },
 ]
 
@@ -474,23 +472,15 @@ useSeoMeta({
             </p>
           </div>
 
-          <!-- Two named lines rather than one button. Sales 1 and Sales 2 are
-               different people; a buyer who has already spoken to one of them
-               should not have to guess which link reaches them again. -->
+          <!-- One named line rather than an anonymous button. The four sales
+               staff are listed on the Kontak page and only there; a colophon is
+               a place to print the number, not to make the reader choose. -->
           <dl class="lg:col-span-5 lg:col-start-8">
             <div class="flex items-baseline justify-between gap-6 border-t border-line py-4">
-              <dt class="spec-key">{{ contactInfo.waLabel1 }}</dt>
+              <dt class="spec-key">{{ contactInfo.waLabelUtama }}</dt>
               <dd>
-                <a :href="waLink({ halaman: 'Tentang Kami — colophon' }, 1)" target="_blank" rel="noopener noreferrer" class="about-link num text-[15px] font-semibold text-ink">
-                  {{ phone1 }}
-                </a>
-              </dd>
-            </div>
-            <div class="flex items-baseline justify-between gap-6 border-t border-line py-4">
-              <dt class="spec-key">{{ contactInfo.waLabel2 }}</dt>
-              <dd>
-                <a :href="waLink({ halaman: 'Tentang Kami — colophon' }, 2)" target="_blank" rel="noopener noreferrer" class="about-link num text-[15px] font-semibold text-ink">
-                  {{ phone2 }}
+                <a :href="waLink({ halaman: 'Tentang Kami — colophon' })" target="_blank" rel="noopener noreferrer" class="about-link num text-[15px] font-semibold text-ink">
+                  {{ phone }}
                 </a>
               </dd>
             </div>
@@ -504,7 +494,7 @@ useSeoMeta({
             </div>
 
             <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-              <UiButton :href="waLink({ halaman: 'Tentang Kami — colophon' }, 1)" :block="true" class="sm:!w-auto">
+              <UiButton :href="waLink({ halaman: 'Tentang Kami — colophon' })" :block="true" class="sm:!w-auto">
                 <UiWhatsAppIcon class="h-4 w-4" />
                 Hubungi via WhatsApp
               </UiButton>
