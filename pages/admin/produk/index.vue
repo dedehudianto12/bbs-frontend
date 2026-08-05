@@ -4,14 +4,15 @@ import { IMAGE_ACCEPT } from '~/composables/useImageUpload'
 import { productSchema } from '~/utils/validation'
 import { watchDebounced } from '@vueuse/core'
 import { sanitizeHtml } from '~/utils/richtext'
+import { timeAgo, formatDateTime } from '~/utils/date'
 const { get, del, post, put } = useAdminApi()
 const { imageFile, imagePreview, existingUrl, error: uploadError, onFileChange, reset } = useImageUpload()
 
 const { data: catRes } = await useAsyncData('admin-cats', () => get<any[]>('/admin/kategori'), { server: false })
 const allCategories = computed(() => (catRes.value?.data ?? []) as { slug:string; label:string; group:string }[])
 
-const search = ref(''); const filterGroup = ref(''); const sort = ref('desc'); const page = ref(1); const limit = 10
-const params = computed(() => { const p = new URLSearchParams({ page: String(page.value), limit: String(limit), sort: sort.value }); if (search.value) p.set('search', search.value); if (filterGroup.value) p.set('group', filterGroup.value); return p.toString() })
+const search = ref(''); const filterGroup = ref(''); const sort = ref('desc'); const sortBy = ref<'created'|'updated'>('created'); const page = ref(1); const limit = 10
+const params = computed(() => { const p = new URLSearchParams({ page: String(page.value), limit: String(limit), sort: sort.value, sortBy: sortBy.value }); if (search.value) p.set('search', search.value); if (filterGroup.value) p.set('group', filterGroup.value); return p.toString() })
 const { data: res, refresh, status, error: fetchErr } = await useAsyncData('admin-produk', () => get<any>(`/admin/produk?${params.value}`), { server: false })
 
 // Search is debounced: the watcher used to fire a request on every keystroke,
@@ -24,13 +25,18 @@ watchDebounced(search, () => {
   if (page.value !== 1) page.value = 1
   else refresh()
 }, { debounce: 350 })
-watch([filterGroup, sort, page], () => refresh())
+watch([filterGroup, sort, sortBy, page], () => refresh())
 
 const loading = computed(() => status.value === 'pending')
 const failed = computed(() => !!fetchErr.value || res.value?.error != null)
 const items = computed(() => res.value?.data?.items ?? []); const total = computed(() => res.value?.data?.total ?? 0); const totalPages = computed(() => Math.ceil(total.value / limit))
 function goTo(p: number) { page.value = Math.max(1, Math.min(p, totalPages.value)) }
 function toggleSort() { sort.value = sort.value === 'desc' ? 'asc' : 'desc'; page.value = 1 }
+// Direction labels read differently per field: newest-first on "dibuat" is
+// "Terbaru", on "diubah" it is "Terakhir diubah".
+const sortLabel = computed(() => sortBy.value === 'updated'
+  ? (sort.value === 'desc' ? '↓ Terakhir diubah' : '↑ Terlama diubah')
+  : (sort.value === 'desc' ? '↓ Terbaru' : '↑ Terlama'))
 const { open: confirm } = useConfirm()
 const toast = useToast()
 async function handleDelete(id: string, name: string) { if (!await confirm({ title: `Hapus "${name}"?`, message: 'Produk yang dihapus tidak dapat dikembalikan.' })) return; try { await del(`/admin/produk/${id}`); toast.success(`"${name}" berhasil dihapus`); refresh() } catch { toast.error('Gagal menghapus produk') } }
@@ -85,24 +91,26 @@ async function save(){
     <div class="mb-4 flex gap-2.5">
       <input v-model="search" placeholder="Cari nama..." @keyup.enter="page=1" class="flex-1 rounded-md border border-line bg-white px-3.5 py-2.5 text-[13px] font-sans outline-none" />
       <select v-model="filterGroup" @change="page=1" class="rounded-md border border-line bg-white px-3.5 py-2.5 text-[13px] font-sans outline-none"><option value="">Semua Group</option><option value="belt-conveyor">Belt Conveyor</option><option value="lainnya">Lainnya</option></select>
-      <button @click="toggleSort" class="cursor-pointer whitespace-nowrap rounded-md border border-line bg-white px-3.5 py-2.5 text-[13px] font-sans text-muted">{{ sort==='desc'?'↓ Terbaru':'↑ Terlama' }}</button>
+      <select v-model="sortBy" @change="page=1" class="rounded-md border border-line bg-white px-3.5 py-2.5 text-[13px] font-sans outline-none"><option value="created">Tgl Dibuat</option><option value="updated">Tgl Diubah</option></select>
+      <button @click="toggleSort" class="cursor-pointer whitespace-nowrap rounded-md border border-line bg-white px-3.5 py-2.5 text-[13px] font-sans text-muted">{{ sortLabel }}</button>
     </div>
 
     <!-- Table -->
     <div class="overflow-x-auto rounded-lg border border-line bg-white">
       <table class="table-admin">
-        <thead><tr><th>Nama</th><th>Group</th><th>Category</th><th>Aksi</th></tr></thead>
+        <thead><tr><th>Nama</th><th>Group</th><th>Category</th><th>Terakhir Diubah</th><th>Aksi</th></tr></thead>
         <tbody>
           <tr v-for="p in items" :key="p.id">
             <td class="font-semibold text-ink">{{ p.name }}</td>
             <td class="text-muted">{{ p.group }}</td>
             <td class="text-muted">{{ p.category }}</td>
+            <td class="whitespace-nowrap text-muted" :title="formatDateTime(p.updatedAt)">{{ timeAgo(p.updatedAt) }}</td>
             <td>
               <button @click="openEdit(p.id)" title="Edit" aria-label="Edit" class="mr-2 cursor-pointer rounded border-none bg-transparent p-1 text-muted"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
               <button title="Hapus" aria-label="Hapus" class="cursor-pointer rounded border-none bg-transparent p-1 text-muted" @click="handleDelete(p.id,p.name)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
             </td>
           </tr>
-          <AdminTableState :colspan="4" :loading="loading" :failed="failed" :empty="!items.length" empty-text="Belum ada produk." @retry="refresh()" />
+          <AdminTableState :colspan="5" :loading="loading" :failed="failed" :empty="!items.length" empty-text="Belum ada produk." @retry="refresh()" />
         </tbody>
       </table>
     </div>
