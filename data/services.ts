@@ -51,8 +51,8 @@ export const SERVICE_DOSSIERS: Record<string, ServiceDossier> = {
       { key: 'Tahap akhir', value: 'Pengujian tracking dan tension' },
     ],
     photo: '/images/jasa-onsite.webp',
-    alt: 'Belt conveyor PVC hijau mengangkut botol minuman di line produksi pelanggan setelah penyambungan onsite',
-    caption: 'Lini food and beverage · setelah penyambungan',
+    alt: 'Belt conveyor PVC hijau mengangkut kemasan tube di line produksi pelanggan, dengan operator merapikan produk di atas jalur setelah penyambungan onsite',
+    caption: 'Lini pengemasan tube · setelah penyambungan',
   },
 
   'jasa-reparasi': {
@@ -63,8 +63,8 @@ export const SERVICE_DOSSIERS: Record<string, ServiceDossier> = {
       { key: 'Lokasi kerja', value: 'Di lokasi atau di workshop' },
     ],
     photo: '/images/jasa-reparasi.webp',
-    alt: 'Teknisi BBS menggerinda rangka conveyor stainless yang sedang diperbaiki di workshop',
-    caption: 'Perbaikan rangka conveyor · workshop',
+    alt: 'Teknisi BBS mengelas rangka conveyor melengkung dengan pelindung wajah di workshop, percikan busur las terlihat di sepanjang sambungan',
+    caption: 'Pengelasan rangka conveyor · workshop',
   },
 
   'profile-guide-belt': {
@@ -75,7 +75,7 @@ export const SERVICE_DOSSIERS: Record<string, ServiceDossier> = {
       { key: 'Tahap akhir', value: 'Pengujian tracking' },
     ],
     photo: '/images/jasa-guide.webp',
-    alt: 'Profile guide hijau dilas ke punggung belt conveyor PVC dengan mesin las profil di workshop BBS',
+    alt: 'Teknisi BBS berhelm dan rompi hi-vis melas profile guide hijau ke punggung belt PVC putih menggunakan mesin las udara panas di workshop',
     caption: 'Pemasangan profile guide · workshop',
   },
 

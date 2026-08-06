@@ -165,8 +165,8 @@ useSeoMeta({
           <img
             src="/images/jasa-site-splice.webp"
             alt="Dua teknisi BBS Conveyor menyambung belt biru dengan mesin press portabel di lantai produksi pelanggan"
-            width="900"
-            height="1200"
+            width="1200"
+            height="1600"
             fetchpriority="high"
             decoding="async"
             class="jasa-plate-img"
