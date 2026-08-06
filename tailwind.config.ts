@@ -81,6 +81,19 @@ export default <Config>{
         'belt-travel': {
           to: { strokeDashoffset: '-7.85' },
         },
+        // One horizontal period of .hazard-stripe (main.css). That stripe is a
+        // repeating-linear-gradient at -45deg with a 16px period measured along
+        // its own axis; a purely horizontal shift only advances the phase by
+        // cos(45°) of the distance travelled, so a seamless loop needs
+        // 16 / cos(45°) = 22.627px, not 16px. Translating by anything else
+        // leaves a visible jump at the loop point.
+        //
+        // Moved with transform rather than background-position so the strip is
+        // composited instead of repainting a full-width band every frame for
+        // the life of the page.
+        'hazard-travel': {
+          to: { transform: 'translateX(22.627px)' },
+        },
         // Track is duplicated exactly once, so -50% is one full seam-free cycle
         marquee: {
           from: { transform: 'translateX(0)' },
@@ -92,8 +105,16 @@ export default <Config>{
         'fade-up-fast': 'fade-up 0.22s cubic-bezier(0.22, 1, 0.36, 1) both',
         rise: 'fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both',
         'pulse-glow': 'pulse-glow 2.4s ease-in-out infinite',
-        'belt-travel': 'belt-travel 4.5s linear infinite',
+        // 2.2s, not the 4.5s this ran at originally. The glyph draws in a
+        // 24-unit viewBox at 52% of the badge, so at the old 60px badge one
+        // unit was ~1.3px and the dashes advanced 7.85 units in 4.5s — about
+        // 2.3px per second, which is under the speed at which motion reads as
+        // motion at all. The badge is now ~2x bigger and the period half as
+        // long, which puts it near 10px/s: a deliberate crawl rather than a
+        // logo that appears static until you stare at it.
+        'belt-travel': 'belt-travel 2.2s linear infinite',
         // linear is required — constant motion with any easing visibly pulses
+        'hazard-travel': 'hazard-travel 2.6s linear infinite',
         marquee: 'marquee 42s linear infinite',
       },
     }

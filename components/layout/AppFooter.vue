@@ -22,10 +22,33 @@ const NuxtLink = resolveComponent('NuxtLink')
     <div class="frame frame-dark border-y-0">
       <!-- Steel banner with centered badge + blueprint grid -->
       <div class="relative border-b border-white/10 p-3 md:p-4">
-        <div class="relative isolate grid h-36 place-items-center overflow-hidden rounded-none bg-steel-soft md:h-44">
+        <div class="relative isolate grid h-40 place-items-center overflow-hidden rounded-none bg-steel-soft md:h-52">
           <div class="blueprint-grid-steel absolute inset-0" aria-hidden="true" />
-          <div class="hazard-stripe absolute inset-x-0 bottom-0 h-1 opacity-70" aria-hidden="true" />
-          <BrandMark :size="60" />
+
+          <!-- Pool of gold under the badge. The band is a wide empty plane and
+               the mark used to sit on it like a sticker — nothing tied the two
+               together. A soft accent bloom behind it gives the badge a place
+               to sit and pulls the eye to the one object in the composition.
+               Static: the belt and the stripe are already moving, and a third
+               animation here would be the band fidgeting rather than idling. -->
+          <div
+            class="pointer-events-none absolute h-52 w-52 rounded-full bg-accent/15 blur-3xl md:h-64 md:w-64"
+            aria-hidden="true"
+          />
+
+          <!-- The tread. Runs because this is a conveyor company and a belt
+               that does not move is a belt that is down — the same reason the
+               mark's loop travels. Slow on purpose: at 2.6s per 22.6px period
+               it reads as a line idling under load, and going much faster
+               turns a hazard stripe into a barber-pole progress bar.
+               Overhangs the band by 24px each side so the 22.627px travel
+               never drags an end into view; the parent clips it. -->
+          <div
+            class="hazard-stripe absolute -left-6 -right-6 bottom-0 h-1.5 opacity-70 animate-hazard-travel motion-reduce:animate-none"
+            aria-hidden="true"
+          />
+
+          <BrandMark size="clamp(76px, 8.5vw, 112px)" />
         </div>
       </div>
 
