@@ -49,13 +49,20 @@ export const homepageConfig = {
     // The 2–3 hari promise, drawn instead of asserted.
     //
     // A buyer does not believe a number in a spec row; he believes a sequence
-    // he can picture happening to his own line. Four stops, each one a thing
+    // he can picture happening to his own line. Three stops, each one a thing
     // somebody physically does, the last one gold because it is the only one he
-    // actually wants. Day marks are relative ("H+1") rather than absolute
+    // actually wants. Day marks are relative ("H+2") rather than absolute
     // because the clock starts when he calls, not on a calendar we control.
+    //
+    // Survey and measurement were merged into one H+0–1 stop for a while,
+    // because the plate had lost a photograph and the rail may not outrun the
+    // plate: a stop with no frame behind it never lights, and the stop that
+    // would have gone dark is H+2–3 — the gold one, the only one the buyer is
+    // actually here for. The client has since supplied a survey frame, so the
+    // two are separate stops again and the narrative gets its line back.
     timeline: [
-      { mark: 'H+0', label: 'Survei dan pengukuran di lokasi' },
-      { mark: 'H+1', label: 'Pemotongan dan persiapan sambungan' },
+      { mark: 'H+0', label: 'Survei dan asesmen di lokasi' },
+      { mark: 'H+1', label: 'Pengukuran dan persiapan sambungan' },
       { mark: 'H+2', label: 'Proses press: hot atau cold joint' },
       { mark: 'H+2–3', label: 'Conveyor kembali beroperasi' },
     ],
@@ -64,45 +71,85 @@ export const homepageConfig = {
     //
     // This was a single still — an on-site joint in a food plant — and it was
     // the right photograph for a hero that had nothing else to say. But the
-    // rail directly beneath it already narrates four stops, and printing one
-    // fixed image above a four-stop sequence means three of those stops are
-    // asserted in 13px type and only one is shown. The plate now carries all
-    // four, in order, and the rail tracks it.
+    // rail directly beneath it already narrates the job stop by stop, and
+    // printing one fixed image above a sequence means every stop but one is
+    // asserted in 13px type and never shown. The plate carries them all, in
+    // order, and the rail tracks it.
+    //
+    // ONE FRAME PER STOP. This array and `timeline` are read in lockstep —
+    // frames[i] is what stop i is showing — so they must stay the same length.
+    // Adding a frame without a stop plays a photograph nothing labels; removing
+    // one without dropping a stop leaves that stop permanently dark, and since
+    // the dark one is always the last, that is the gold payoff node. Dev warns
+    // on the mismatch (HeroSection.vue), and `sm:grid-cols-*` on the rail's <ol>
+    // is set to the stop count and has to move with it.
     //
     // The four are ordered as the job actually runs, and each was chosen for
     // what it proves rather than for how it looks:
     //
-    //   H+0   a surveyor in hard hat and hi-vis with a clipboard against a
-    //         running plant conveyor — the claim that we come to the site
-    //   H+1   two hands cutting the finger splice, clips holding the lay
+    //   H+0   a surveyor with a clipboard at the customer's own conveyor —
+    //         the only frame with a person in it, and the one that says
+    //         somebody comes out before anything is quoted
+    //   H+1   a tape measure across a belt on the press bed, read off at the
+    //         edge — the job starting from a measured number, not an estimate
     //   H+2   the belt under the press bar, hoses live
     //   H+2–3 a food-grade line back in service, the fresh joint visible
     //         running away down the blue belt
     //
-    // `focus` is the object-position for that frame. The four photographs are
-    // not composed alike — the surveyor sits high in his frame, the press sits
-    // low in its — so a single anchor that suits one crops the subject out of
+    // The cutting step had a fourth frame — two hands cutting the finger splice
+    // — and no longer does. It was the only photograph of that step in the
+    // client's set, so there is nothing to put in its place; the stop was
+    // merged into H+0–1 rather than left to strand the rail.
+    //
+    // `focus` is the object-position for that frame. The three photographs are
+    // not composed alike — the tape reads low in its frame, the press sits high
+    // in its — so a single anchor that suits one crops the subject out of
     // another as the cell changes shape. Each frame carries its own.
     //
-    // All four are the client's own, cropped from the 2254×2994 exports in the
-    // site-activity set with the "property of CV Bintang Berjaya Satu" strip
-    // (rows 2836+) removed.
+    // All three are the client's own. H+2 and H+2–3 are cropped from the
+    // 2254×2994 exports in the site-activity set with the "property of CV
+    // Bintang Berjaya Satu" strip (rows 2836+) removed; H+0–1 is a later phone
+    // frame and its crop is scripted in scripts/images/hero-plates.mjs.
     frames: [
       {
-        src: '/images/hero/hero-1-survei.webp',
-        alt: 'Teknisi BBS mengenakan helm dan rompi keselamatan memeriksa belt conveyor di area pabrik sambil mencatat hasil pengukuran',
+        src: '/images/hero/hero-2-survei.webp',
+        alt: 'Petugas survei BBS mengenakan helm proyek, masker, dan rompi hi-vis mencatat pada papan jalan di samping belt conveyor pelanggan, dengan kru lain bekerja di latar belakang',
+        caption: 'Survei di lokasi',
+        // The only frame with a person standing in it, and the figure runs 70%
+        // of the plate's height — so on the 4:3 mobile cell, which shows 46% of
+        // those rows, he cannot fit whole no matter where this is anchored (see
+        // the crop note in scripts/images/hero-plates.mjs: the source is not
+        // wide enough for a landscape frame that holds him). What the anchor
+        // can guarantee is that the cut never lands on him badly, and the
+        // binding case is the 16:9 cell at sm, which shows only 34% of the
+        // height: at 20% his hard hat clears the top edge with room to spare
+        // there, on 4:3, and on the tall desktop cell alike. Anything lower
+        // takes the top of his helmet off on a tablet.
+        focus: '50% 20%',
+      },
+      {
+        src: '/images/hero/hero-1-ukur.webp',
+        alt: 'Meteran dibentangkan melintasi permukaan belt conveyor karet hitam hingga ke tepi belt yang dijepit batang aluminium, menunjukkan angka 20 sentimeter',
         // Captions must set on one line inside the caption box — half the
         // figure width minus padding, about 147px at 360px, or roughly 19
         // characters of tracked 11px mono. Anything longer is clipped on the
-        // primary target device, so none of the four exceeds it.
-        caption: 'Survei di lokasi',
-        focus: '58% 38%',
-      },
-      {
-        src: '/images/hero/hero-2-finger.webp',
-        alt: 'Tangan teknisi memotong pola finger splice pada belt PVC hijau yang dijepit rapi sebelum disambung',
-        caption: 'Potong finger',
-        focus: '50% 45%',
+        // primary target device, so none of the three exceeds it.
+        //
+        // "Pengukuran belt" rather than the old "Survei di lokasi": this frame
+        // is shot on the workshop press bed, and a caption claiming the
+        // customer's site under a photograph that plainly isn't one costs more
+        // than the claim is worth.
+        //
+        // The on-site claim is carried by the H+0 frame above it, which is
+        // shot at a customer's line, and by the subheadline and the "Lokasi
+        // pengerjaan" fact — none of which is a photo caption doing a spec
+        // row's job.
+        caption: 'Pengukuran belt',
+        // Anchored low: the whole content is the tape crossing the belt edge at
+        // the red 20, which sits at 63% of the frame's height. At 4/3 the plate
+        // shows only 46% of these rows, and the default 42% would land that
+        // band on empty rubber above the reading.
+        focus: '50% 60%',
       },
       {
         src: '/images/hero/hero-3-press.webp',
@@ -122,14 +169,18 @@ export const homepageConfig = {
     ],
 
     // The inset holds still while the plate moves. It is the one thing in the
-    // hero the wide shots cannot carry at any crop: the finger splice itself,
-    // squared up on the press bed, at the scale where you can count the teeth.
-    // Keeping it fixed also gives the eye somewhere to rest — four frames
-    // changing behind a fifth that also changed would read as a slideshow
-    // rather than as one job progressing.
+    // hero the wide shots cannot carry at any crop: the mechanical fastener
+    // itself, seated on the belt edge, at the scale where you can count the
+    // plates. Keeping it fixed also gives the eye somewhere to rest — four
+    // frames changing behind a fifth that also changed would read as a
+    // slideshow rather than as one job progressing.
+    //
+    // Cropped from a 1200×1600 phone frame to the 3:2 the plate renders at,
+    // on the band that holds both rows of fasteners and the green belt above
+    // them; the original's lower third is bare matting and carries nothing.
     detail: {
-      src: '/images/hero/hero-detail-finger.webp',
-      alt: 'Detail pola finger splice pada belt conveyor, tersusun rapat di atas landasan mesin press',
+      src: '/images/hero/hero-detail-fastener.webp',
+      alt: 'Detail sambungan mekanis pada tepi belt conveyor PVC hijau, dua baris pelat kawat gigi terpasang rapat dan saling mengunci',
     },
   },
   company: {

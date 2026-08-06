@@ -348,8 +348,8 @@ function go(i: number) {
             <span v-else class="hero-toggle-pause" aria-hidden="true" />
           </button>
 
-          <!-- The detail the wide shot cannot carry: the finger splice itself,
-               clipped and squared up before it goes under heat. Overlapping the
+          <!-- The detail the wide shot cannot carry: the mechanical fastener
+               itself, seated and locked on the belt edge. Overlapping the
                plate's bottom-left rather than sitting below it — the corner it
                covers is a flat white coverall, and the straddle is what stops
                the two columns reading as two documents that happen to share a
@@ -389,12 +389,18 @@ function go(i: number) {
       <!-- ── The rail ───────────────────────────────────────────────────
            The headline promises 2–3 days. Previously a datasheet row restated
            that promise in smaller type, which is assertion twice over, not
-           evidence. Here the promise is drawn: four stops on a line, each one a
-           thing the buyer can picture happening, the last one gold because it
-           is the one he actually wants.
+           evidence. Here the promise is drawn: a stop on a line for each thing
+           the buyer can picture happening, the last one gold because it is the
+           one he actually wants.
            Square nodes, not dots — this system has no rounded corners, and a
            circle on the rail would be the one radius on the page. -->
       <div v-if="timeline.length" class="hero-rail">
+        <!-- The column count at sm+ is the stop count: a count that does not
+             match leaves a dead cell and stops the rail short of the plate's
+             edge, which reads as a layout bug rather than as a sequence. It has
+             to move whenever `timeline` changes length. Below sm it stays at 2
+             — three stacked rows would push the rail off a 667px screen, and
+             four stops fill exactly two. -->
         <ol class="grid flex-1 grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4 sm:gap-x-4">
           <!-- Each stop is a button, not because the hero needed controls but
                because the rail is now the only thing that says which
