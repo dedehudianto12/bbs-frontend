@@ -238,6 +238,39 @@ export const homepageConfig = {
   // actually published instead: 2–3 day lead time, hot & cold joint, onsite at
   // your plant or our workshop. Any number added here must come from the
   // backend or from the client in writing.
+  // ── Client logos, rendered by ClientLogoBand directly above the CTA ──
+  //
+  // Source files live outside the repo (Documents/BBS/Client); the WebP here is
+  // built by scripts/images/client-logos.mjs, which also prints the w/h below.
+  // Those two numbers are the *display* size at 1x — the asset is emitted at 2x
+  // — and they are stored rather than computed because each mark is scaled to
+  // equal optical area, so no two share a height and there is nothing to derive
+  // them from at runtime. They exist to reserve the box and avoid layout shift.
+  //
+  // `sector` is the hover/touch caption. It is the industry, not the company's
+  // legal name: the name is already legible in the logo, whereas the sector is
+  // the thing a buyer is actually checking — whether we have worked a line like
+  // theirs. It is also the only caption that cannot be got wrong.
+  //
+  // No `count`, no "dipercaya 120 perusahaan", no years. Same rule as the
+  // deleted `statistics` block above: numbers come from the client in writing.
+  //
+  // Order is not alphabetical or by size. Sari Roti is the only badge in the
+  // set — taller, boxed, and the only one carrying its own background — so it
+  // sits in the middle as the row's visual anchor with two wordmarks either
+  // side. Reordering these will unbalance the row.
+  clients: {
+    eyebrow: 'Dipercaya Oleh',
+    note: 'Sebagian perusahaan yang menggunakan produk dan layanan kami.',
+    items: [
+      { name: 'J&T Express', sector: 'Logistik', src: '/images/clients/jnt.webp', w: 113, h: 24 },
+      { name: 'Hilon', sector: 'Tekstil & Serat', src: '/images/clients/hilon.webp', w: 78, h: 36 },
+      { name: 'Sari Roti', sector: 'Makanan & Minuman', src: '/images/clients/sari-roti.webp', w: 80, h: 44 },
+      { name: 'Indah Kiat', sector: 'Pulp & Kertas', src: '/images/clients/indah-kiat.webp', w: 117, h: 26 },
+      { name: 'Polytron', sector: 'Elektronik', src: '/images/clients/polytron.webp', w: 117, h: 15 },
+    ],
+  },
+
   cta: {
     headline: 'Konsultasikan Kebutuhan Conveyor Anda',
     description:

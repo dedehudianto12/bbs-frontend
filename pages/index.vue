@@ -170,5 +170,11 @@ useSeoMeta({
     <MarketplaceBand />
   </template>
 
+  <!-- Outside the v-else with CTASection, and for the same reason: it has no
+       API dependency. The logos are local files, so when the backend is
+       unreachable and the page collapses to an error banner plus a way to get
+       in touch, the one piece of proof on the page survives with it. -->
+  <ClientLogoBand v-bind="hpData.clients" />
+
   <CTASection v-bind="ctaProps" />
 </template>
