@@ -56,7 +56,9 @@ const relatedArticles = computed(() => {
 
 useSeoMeta({
   title: article.value ? `${(article.value as any).title}` : 'Artikel Tidak Ditemukan',
-  description: (article.value as any)?.excerpt ?? ''
+  description: (article.value as any)?.excerpt ?? '',
+  ogImage: (article.value as any)?.image ?? undefined,
+  twitterCard: 'summary_large_image',
 })
 </script>
 
@@ -96,6 +98,18 @@ useSeoMeta({
         {{ new Date(article.publishedAt).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) }}
       </time>
     </div>
+
+    <!-- Hero image. Above the fold, so `eager` — the lazy default in
+         ImageOrSkeleton is tuned for card grids further down the page. -->
+    <ImageOrSkeleton
+      v-if="article.image"
+      :src="article.image"
+      :alt="article.title"
+      aspect="aspect-[16/9]"
+      fit="object-cover"
+      eager
+      class="mt-10 border border-line"
+    />
 
     <div class="prose-tech mt-10 max-w-none" v-html="contentHtml" />
 
