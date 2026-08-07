@@ -62,7 +62,29 @@ await sharp(`${B}/hero-big-measure.jpg`)
   .webp({ quality: 80 })
   .toFile(`${OUT}/hero-1-ukur.webp`)
 
-for (const name of ['hero-2-survei', 'hero-1-ukur']) {
+// ── H+2, press: the operator at the press, one hand on the control, the green
+// PVC belt running up into the bar. Recut from `hero-big-person.jpeg`, the
+// client's clean export of the same moment; the frame it replaces carried the
+// circular "BBS" watermark burned into the middle of the belt, which sat right
+// where the eye lands on the plate.
+//
+// The source is 834×1600 — 0.521, taller than the 0.612 the plate renders at —
+// so 237 rows have to go and width is untouched. They come off the bottom:
+// those rows are shop floor, a coiled yellow lead and the operator's sandals,
+// and nothing of the join happens in them. Cutting from the top instead would
+// take the press head and his face, which is the whole reason this frame is in
+// the rail.
+//
+// Not resized. 834 wide is under the 1120 of its neighbours, but the plate
+// reserves its box by ratio, and upscaling a phone frame buys bytes and no
+// detail — same call as H+1.
+await sharp(`${B}/hero-big-person.jpeg`)
+  .rotate()
+  .extract({ left: 0, top: 0, width: 834, height: 1363 })
+  .webp({ quality: 80 })
+  .toFile(`${OUT}/hero-3-press.webp`)
+
+for (const name of ['hero-2-survei', 'hero-1-ukur', 'hero-3-press']) {
   const m = await sharp(`${OUT}/${name}.webp`).metadata()
   console.log(name.padEnd(14), `${m.width}x${m.height}`, (m.width / m.height).toFixed(4))
 }

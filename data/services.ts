@@ -51,8 +51,8 @@ export const SERVICE_DOSSIERS: Record<string, ServiceDossier> = {
       { key: 'Tahap akhir', value: 'Pengujian tracking dan tension' },
     ],
     photo: '/images/jasa-onsite.webp',
-    alt: 'Belt conveyor PVC hijau mengangkut kemasan tube di line produksi pelanggan, dengan operator merapikan produk di atas jalur setelah penyambungan onsite',
-    caption: 'Lini pengemasan tube · setelah penyambungan',
+    alt: 'Dua teknisi bergaun dan berpenutup kepala menutup mesin press portabel pada belt PVC biru di ruang produksi pangan pelanggan saat penyambungan onsite',
+    caption: 'Ruang produksi pangan · press onsite di jalur',
   },
 
   'jasa-reparasi': {

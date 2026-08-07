@@ -65,23 +65,19 @@ const { root } = useRevealOnScroll({ stagger: 45 })
 
       <!-- Two photographs, because this band makes two claims and each one
            answers a different half.
-           Left is a BBS technician on the walkway of an installed line inside a
-           customer's plant — hard hat, coverall, the conveyor running away from
-           him into the room. It answers "tim kami datang ke lokasi Anda" as
-           literally as a photograph can, and the PPE is doing the real work in
-           it: this band is asking an industrial buyer to let strangers into his
-           plant, and what he is buying is a crew that turns up dressed for it.
-           The room is doing the second job. A buyer reads the calibre of the
-           facility we are standing in as the calibre of client we keep, and
-           this one is bright, modern and orderly.
-           It replaced a survey shot — the same engineer measuring an incline
-           conveyor with a tape — for the reason the previous note in this spot
-           gave for its own swap, which the hero then broke. The hero's first
-           frame is now a hard hat and a clipboard against a conveyor, and the
-           survey shot was a hard hat and a clipboard against a conveyor: same
-           gesture, same subject, two hundred pixels apart. The claim is split
-           between them again — the survey up in the hero at H+0, the finished
-           line in service down here.
+           Left is a cleated incline belt climbing to a bagging hopper in a
+           customer's shed, shot from the floor so the belt runs corner to
+           corner through the strip. It is the plant itself answering "tim kami
+           datang ke lokasi Anda" — a working line in a working building, not a
+           product on a sweep.
+           It is cut from a frame that has people in it, and deliberately does
+           not show them: the crop is the band between the fitter at the head
+           pulley and the operator in the foreground, which is where the belt
+           is and where nobody's face is. See scripts/images/home-band.mjs.
+           It replaced onsite-line.webp, a hard-hatted technician on the
+           walkway of an installed line. That frame's argument was PPE and a
+           tidy plant; this one's is the equipment, and the two people already
+           in the hero carry the crew.
            Right is the same cleated belt, but installed and running on an
            incline in the customer's bay rather than coiled in our workshop.
            It replaced the coil shot, which had itself replaced rolls
@@ -95,23 +91,20 @@ const { root } = useRevealOnScroll({ stagger: 45 })
            Instalasi" and the coil could not show it — a product photographed in
            our own workshop is inventory, and the claim being made here is
            service. Both photographs are now on a customer's site.
-           The pairing survives that change: people on the left, the conveyor
-           itself on the right, the copy's two halves divided between them.
-           A running food line was the other finalist and told a tidier story,
-           but it put a customer's branded packaging in frame without permission
-           to imply the account, and it is also what the hero's last frame
-           already shows.
+           The pairing is now belt on both sides — installed and climbing on the
+           left, installed and running on the right — with the copy's two halves
+           divided between them.
            Only the first shows below sm. At 360px a two-up would give each
-           image about 180px of width, and two people at that size are unreadable
-           smudges; one legible photograph beats two illegible ones.
+           image about 180px of width, and at that size neither reads; one
+           legible photograph beats two illegible ones.
            object-cover because these are bands that should fill their box, and
            empty alt because the copy above already says what they show. -->
       <div class="grid grid-cols-1 gap-px border-t border-ink/20 bg-ink/20 sm:grid-cols-2">
         <img
-          src="/images/onsite-line.webp"
+          src="/images/onsite-incline.webp"
           alt=""
-          width="1400"
-          height="700"
+          width="720"
+          height="260"
           loading="lazy"
           decoding="async"
           class="h-[200px] w-full object-cover md:h-[280px]"

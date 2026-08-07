@@ -373,7 +373,7 @@ useSeoMeta({
             src="/images/about-tim.webp"
             alt="Tim BBS Conveyor berkumpul bersama di satu meja"
             width="1400"
-            height="778"
+            height="788"
             loading="lazy"
             decoding="async"
             class="aspect-[3/2] w-full object-cover"

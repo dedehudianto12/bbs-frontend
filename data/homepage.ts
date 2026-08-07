@@ -153,12 +153,15 @@ export const homepageConfig = {
       },
       {
         src: '/images/hero/hero-3-press.webp',
-        // The press frame is anchored high on purpose: the machine, the hoses
-        // and the belt entering the bar all sit in the top two-thirds, and
-        // that is the whole content of the shot.
-        alt: 'Belt conveyor hijau masuk ke mesin press sambungan panas dengan selang hidrolik terpasang di workshop BBS',
+        // The press frame is anchored high on purpose: the operator, the press
+        // head, the hoses and the belt entering the bar all sit in the top
+        // two-thirds, and that is the whole content of the shot. 20% rather
+        // than the old 30%: the recut source (see scripts/images/hero-plates.mjs)
+        // puts his head in the top fifth of the plate, and the 4:3 mobile cell
+        // shows only 46% of the rows — at 30% the cut lands across his face.
+        alt: 'Operator BBS mengenakan rompi hi-vis mengoperasikan mesin press sambungan panas, belt conveyor PVC hijau masuk ke batang press dengan selang hidrolik terpasang di workshop',
         caption: 'Proses press',
-        focus: '50% 30%',
+        focus: '50% 20%',
       },
       {
         src: '/images/hero/hero-4-jalan.webp',

@@ -94,27 +94,21 @@ const JOBS = [
     width: 720,
   }],
 
-  // ── Onsite joint: the finished line running product at the customer's plant.
+  // ── Onsite joint: two technicians closing the portable press on a blue belt
+  // inside a food plant, hairnets and gowns on, the line's own control box and
+  // crates behind them. Supplied by the client, replacing the 596px phone video
+  // frame of the finished tube line — this is a still, 2254px, and it shows the
+  // work rather than its result.
   //
-  // The client rejected the yogurt frame as too blurry and supplied this one.
-  // Be clear about what it is: a 596x1280 phone video frame, letterboxed 108px
-  // top and 110px bottom, and by the re-blur metric marginally SOFTER than the
-  // yogurt frame it replaces (0.499 vs 0.461 at matched width). It reads
-  // sharper because the tubes are large in frame, where the yogurt shot was a
-  // wide view of many small objects — softness on fine detail is what the eye
-  // calls blur. Cropped from y=228 so the operator's arm anchors the top-left
-  // and the near-empty stretch of belt below is dropped.
-  //
-  // Not the 2254px `Untitled11_20260805150737` plate of this same green line,
-  // which looks like the obvious upgrade: it is a video frame too, and its
-  // watermark sits dead centre on a flat green belt with nothing to hide it.
-  //
-  // 596 wide, not upscaled — see the width note at the top of this file. The
-  // real fix is a still photograph, shot landscape, not a frame pulled from a
-  // phone video.
-  ['Photo/jasa-onsite.jpg', 'jasa-onsite', {
-    crop: { left: 0, top: 228, width: 596, height: 447 }, // 4:3
-    width: 596,
+  // 4:3 off a 2254x2994 watermarked plate, so 1300 rows have to go and the
+  // frame cannot hold both the near tech's hairnet and the foot of the press:
+  // 580→2544 is 1964 tall and 4:3 at that height needs more width than the
+  // plate has. The press wins — it is the service. top=850 takes the top of his
+  // cap and keeps the tool whole, both faces, and the belt. The bottom stops at
+  // 2540, clear of the white "© property of" strip at y≈2830.
+  ['Photo/onside-joint.png', 'jasa-onsite', {
+    crop: { left: 0, top: 850, width: 2254, height: 1690 }, // 4:3
+    width: 1200,
   }],
 
   // ── Hot joint: the heated platen of the press, seen down its length.
