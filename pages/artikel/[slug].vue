@@ -83,6 +83,18 @@ useSeoMeta({
       ]"
     />
 
+    <!-- Hero image, above the title. Rendered at its natural aspect ratio (no
+         fixed-ratio box) so nothing is ever cropped, whatever the upload's
+         shape. Above the fold, so `eager`. -->
+    <img
+      v-if="article.image"
+      :src="article.image"
+      :alt="article.title"
+      loading="eager"
+      decoding="async"
+      class="mb-10 w-full border border-line"
+    />
+
     <div v-if="article.tag" class="mb-5">
       <span class="inline-block rounded-full bg-accent/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-accent">
         {{ article.tag }}
@@ -98,18 +110,6 @@ useSeoMeta({
         {{ new Date(article.publishedAt).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) }}
       </time>
     </div>
-
-    <!-- Hero image. Above the fold, so `eager` — the lazy default in
-         ImageOrSkeleton is tuned for card grids further down the page. -->
-    <ImageOrSkeleton
-      v-if="article.image"
-      :src="article.image"
-      :alt="article.title"
-      aspect="aspect-[16/9]"
-      fit="object-cover"
-      eager
-      class="mt-10 border border-line"
-    />
 
     <div class="prose-tech mt-10 max-w-none" v-html="contentHtml" />
 
