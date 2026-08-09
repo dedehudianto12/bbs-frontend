@@ -359,9 +359,9 @@ useSeoMeta({
         <figure data-reveal-item class="relative bg-paper">
           <img
             src="/images/about-workshop.webp"
-            alt="Mesin press penyambungan belt di workshop BBS Conveyor, Pulo Gebang"
+            alt="Stok roll belt konveyor dan meja kerja di workshop BBS Conveyor, Pulo Gebang"
             width="1400"
-            height="934"
+            height="933"
             loading="lazy"
             decoding="async"
             class="aspect-[3/2] w-full object-cover"

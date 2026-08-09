@@ -1,5 +1,6 @@
 import sharp from 'sharp'
 const B = '/mnt/c/Users/ThinkPad/Documents/BBS/Activity foto'
+const P = '/mnt/c/Users/ThinkPad/Documents/BBS/Photo'
 const OUT = 'public/images'
 
 // ── Konsultasi: BBS staff and a customer's people around a table in the
@@ -10,10 +11,12 @@ await sharp(`${B}/servey.jpeg`).rotate()
   .extract({ left: 0, top: 10, width: 1400, height: 700 })
   .webp({ quality: 80 }).toFile(`${OUT}/about-konsultasi.webp`)
 
-// ── Workshop: the hot press in Pulo Gebang with a green PVC belt draped over
-// the bed, control box in the foreground. The room itself, not a product in it.
-await sharp(`${B}/Untitled11_20260730171453.png`).rotate()
-  .extract({ left: 0, top: 477, width: 2254, height: 1503 })
+// ── Workshop: the Pulo Gebang floor looking down the racks — belt rolls stood
+// on end along the right, a sheet laid out on the trestles. The room itself,
+// not a product in it. Sourced from Photo/ rather than Activity foto/. Cropped
+// 3:2 off the top, which drops a band of bare wall.
+await sharp(`${P}/tentang-kamis.jpeg`).rotate()
+  .extract({ left: 0, top: 140, width: 1320, height: 880 })
   .resize({ width: 1400, kernel: 'lanczos3' })
   .webp({ quality: 78 }).toFile(`${OUT}/about-workshop.webp`)
 
