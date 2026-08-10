@@ -34,7 +34,9 @@ defineProps<{
     <p class="mt-1 text-sm leading-relaxed text-muted" :class="{ 'text-center': !preview }">{{ description }}</p>
 
     <div class="mt-4 flex items-center gap-3" :class="{ 'justify-center': !preview }">
-      <UiButton :href="href" size="sm" variant="outline">
+      <!-- `external` is required: the href is a static PDF, not a page route.
+           Without it UiButton hands the path to NuxtLink and the router 404s. -->
+      <UiButton :href="href" external size="sm" variant="outline">
         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
           <circle cx="12" cy="12" r="3" />

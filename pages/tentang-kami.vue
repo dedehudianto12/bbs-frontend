@@ -443,7 +443,10 @@ useSeoMeta({
           <p class="mt-1.5 text-sm leading-relaxed text-muted">{{ doc.desc }}</p>
 
           <div class="mt-5 flex items-center gap-3">
-            <UiButton :href="doc.href" size="sm" variant="outline">Lihat</UiButton>
+            <!-- `external` is required: the href is a static PDF, not a page
+                 route. Without it UiButton hands the path to NuxtLink, the
+                 router finds no match, and the reader gets error.vue's 404. -->
+            <UiButton :href="doc.href" external size="sm" variant="outline">Lihat</UiButton>
             <!-- A plain <a>: UiButton has no `download` passthrough and adding
                  one for two call sites is not worth the prop. -->
             <a :href="doc.href" download class="about-dl">Unduh</a>
