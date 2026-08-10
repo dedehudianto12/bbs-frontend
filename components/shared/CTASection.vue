@@ -2,17 +2,14 @@
 import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
 import { waLink } from '~/utils/whatsapp'
 
-const props = defineProps<{
+defineProps<{
   headline: string
   description: string
   buttonText: string
   buttonLink: string
 }>()
 
-// Carries the section headline through so sales can see which CTA fired —
-// every page passes a different one ("Butuh Solusi Conveyor?", "Tidak
-// Menemukan yang Anda Cari?", "Punya Proyek Serupa?", ...).
-const waHref = computed(() => waLink({ halaman: props.headline }))
+const waHref = waLink()
 
 const { root } = useRevealOnScroll()
 </script>

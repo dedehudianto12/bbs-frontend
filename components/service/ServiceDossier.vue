@@ -118,7 +118,7 @@ const href = computed(() => `/jasa/${props.slug}`)
                service names run to three words and the interpolated label
                wrapped to two lines inside the button on every row but one. The
                link already carries the name in its message. -->
-          <UiButton :href="waLink({ layanan: title, halaman: 'Jasa' })">
+          <UiButton :href="waLink({ layanan: title })">
             <UiWhatsAppIcon class="h-4 w-4" />
             Konsultasi layanan ini
           </UiButton>

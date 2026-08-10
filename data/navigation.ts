@@ -33,7 +33,7 @@ export const headerNav = [
 // prefilled message — there is no form to route it to.
 export const navCta = {
   label: 'Minta Penawaran',
-  href: waLink({ halaman: 'Navigasi utama' }),
+  href: waLink(),
 }
 
 export const footerColumns = [

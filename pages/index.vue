@@ -11,10 +11,9 @@ const heroProps = computed(() => ({
   highlights: hpData.hero.headlineHighlights,
   subheadline: hpData.hero.subheadline,
   primaryCTA: hpData.hero.primaryCTA,
-  // Built here rather than stored as a static path so the prefilled message
-  // tells sales the lead came from the hero, not one of the other wa.me links
-  // on this page.
-  primaryLink: waLink({ halaman: 'Hero — Beranda' }),
+  // Built here rather than stored as a static path so the number and the
+  // prefilled message stay resolved from data/contact.ts.
+  primaryLink: waLink(),
   primaryWhatsApp: true,
   secondaryCTA: hpData.hero.secondaryCTA,
   secondaryLink: hpData.hero.secondaryLink,

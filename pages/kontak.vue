@@ -31,7 +31,7 @@ const { root: placeRoot } = useRevealOnScroll({ stagger: 80 })
 
 // The masthead button is a generic "start a chat", not a named person — the
 // choice of staff is the Saluran section's job, further down.
-const waHref1 = waLink({ halaman: 'Kontak — masthead' })
+const waHref1 = waLink()
 const week = contactInfo.jamMingguan
 
 // The masthead datasheet. Every line is already published elsewhere on this
@@ -63,7 +63,7 @@ const SALES = contactInfo.salesNumbers.map((s, i) => ({
   key: s.label,
   value: prettyPhone(s.number),
   note: 'WhatsApp',
-  href: waLink({ halaman: 'Kontak — saluran' }, (i + 1) as 1 | 2 | 3 | 4),
+  href: waLink({}, (i + 1) as 1 | 2 | 3 | 4),
 }))
 
 const EMAIL = {
@@ -520,7 +520,7 @@ useSeoMeta({
               Buka di Google Maps
             </UiButton>
             <UiButton
-              :href="waLink({ halaman: 'Kontak — alamat' })"
+              :href="waLink()"
               :block="true"
               class="sm:!w-auto"
             >

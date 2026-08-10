@@ -9,7 +9,7 @@ defineProps<{
 const year = new Date().getFullYear()
 
 const socials = [
-  { label: 'WhatsApp', href: waLink({ halaman: 'Footer' }), icon: 'wa' },
+  { label: 'WhatsApp', href: waLink(), icon: 'wa' },
   { label: 'Email', href: `mailto:${contactInfo.email}`, icon: 'mail' },
   { label: 'Lokasi', href: '/kontak', icon: 'pin' },
 ]

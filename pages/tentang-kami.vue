@@ -482,7 +482,7 @@ useSeoMeta({
             <div class="flex items-baseline justify-between gap-6 border-t border-line py-4">
               <dt class="spec-key">{{ contactInfo.waLabelUtama }}</dt>
               <dd>
-                <a :href="waLink({ halaman: 'Tentang Kami — colophon' })" target="_blank" rel="noopener noreferrer" class="about-link num text-[15px] font-semibold text-ink">
+                <a :href="waLink()" target="_blank" rel="noopener noreferrer" class="about-link num text-[15px] font-semibold text-ink">
                   {{ phone }}
                 </a>
               </dd>
@@ -497,7 +497,7 @@ useSeoMeta({
             </div>
 
             <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-              <UiButton :href="waLink({ halaman: 'Tentang Kami — colophon' })" :block="true" class="sm:!w-auto">
+              <UiButton :href="waLink()" :block="true" class="sm:!w-auto">
                 <UiWhatsAppIcon class="h-4 w-4" />
                 Hubungi via WhatsApp
               </UiButton>

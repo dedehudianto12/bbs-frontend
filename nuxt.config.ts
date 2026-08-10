@@ -219,10 +219,10 @@ export default defineNuxtConfig({
       // that claims to describe a page on a host it is not served from.
       url: SITE_URL,
       logo: "/bbs-logo.svg",
-      sameAs: ["https://wa.me/6281287859061"],
+      sameAs: ["https://wa.me/6287758161166"],
       contactPoint: {
         contactType: "Sales",
-        telephone: "+6281287859061",
+        telephone: "+6287758161166",
         email: "bbsconveyor@yahoo.com",
       },
       address: {

@@ -26,10 +26,7 @@ defineProps<{
   steps: { label: string; detail: string }[]
 }>()
 
-const consultHref = waLink({
-  layanan: 'Jasa Onsite Joint',
-  halaman: 'Beranda — Layanan & Lead Time',
-})
+const consultHref = waLink()
 
 const { root } = useRevealOnScroll({ stagger: 45 })
 </script>

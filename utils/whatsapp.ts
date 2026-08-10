@@ -13,8 +13,6 @@ export interface WaContext {
   kategori?: string
   /** Service name, e.g. "Jasa Onsite Joint" */
   layanan?: string
-  /** Human-readable page/section the click came from */
-  halaman?: string
 }
 
 const OPENING = 'Halo BBS Conveyor, saya ingin minta penawaran.'
@@ -27,15 +25,14 @@ export function waMessage(ctx: WaContext = {}): string {
   if (ctx.produk) lines.push(`Produk: ${ctx.produk}`)
   if (ctx.kategori) lines.push(`Kategori: ${ctx.kategori}`)
   if (ctx.layanan) lines.push(`Layanan: ${ctx.layanan}`)
-  if (ctx.halaman) lines.push(`Halaman: ${ctx.halaman}`)
 
   lines.push(CLOSING)
   return lines.join('\n')
 }
 
 /**
- * Formats a stored 62-prefixed number for display: 6281287859061 →
- * "+62 812-878-590-61". Lived as a local helper inside WhatsAppFloat; the hero
+ * Formats a stored 62-prefixed number for display: 6287758161166 →
+ * "+62 877-581-611-66". Lived as a local helper inside WhatsAppFloat; the hero
  * now prints a number too, and two copies would be two formats the first time
  * either was touched.
  */

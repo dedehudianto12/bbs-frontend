@@ -35,7 +35,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
 // published here.
 const salesLinks = [
   {
-    href: waLink({ halaman: 'Tombol WhatsApp mengapung' }),
+    href: waLink(),
     label: contactInfo.waLabelUtama,
     number: contactInfo.waUtama,
   },

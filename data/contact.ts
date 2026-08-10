@@ -6,7 +6,7 @@ export const contactInfo = {
   // to this — on the client's instruction, only the Kontak page offers a choice
   // of staff. Changing it here changes it everywhere except that page's Saluran
   // section, which draws from salesNumbers below.
-  waUtama: '6281287859061',
+  waUtama: '6287758161166',
   waLabelUtama: 'Chat Sales',
 
   // The four sales lines, in the order the client gave them (Aug 2026). Each is

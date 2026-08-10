@@ -21,7 +21,7 @@ function isActive(item: NavItem): boolean {
 
 watch(() => route.path, () => { isOpen.value = false })
 
-const waHref = waLink({ halaman: 'Navigasi utama' })
+const waHref = waLink()
 </script>
 
 <template>

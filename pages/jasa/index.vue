@@ -141,7 +141,7 @@ useSeoMeta({
           </p>
 
           <div class="mt-9 flex flex-col gap-3 sm:flex-row">
-            <UiButton :href="waLink({ halaman: 'Jasa — masthead' })">
+            <UiButton :href="waLink()">
               <UiWhatsAppIcon class="h-4 w-4" />
               Konsultasi Gratis
             </UiButton>
@@ -252,7 +252,7 @@ useSeoMeta({
         <p class="mt-4 text-base text-ink">Daftar layanan tidak dapat dimuat dari server.</p>
         <div class="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
           <UiButton variant="outline" @click="() => refreshNuxtData('jasa-listing')">Muat Ulang</UiButton>
-          <UiButton :href="waLink({ halaman: 'Jasa — daftar gagal dimuat' })">
+          <UiButton :href="waLink()">
             <UiWhatsAppIcon class="h-4 w-4" />
             Hubungi Kami
           </UiButton>
@@ -376,7 +376,7 @@ useSeoMeta({
               <dt class="spec-key">{{ contactInfo.waLabelUtama }}</dt>
               <dd>
                 <a
-                  :href="waLink({ halaman: 'Jasa — brief' })"
+                  :href="waLink()"
                   target="_blank"
                   rel="noopener noreferrer"
                   class="jasa-link num text-[15px] font-semibold text-ink"
@@ -389,7 +389,7 @@ useSeoMeta({
             </div>
 
             <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-              <UiButton :href="waLink({ halaman: 'Jasa — brief' })" :block="true" class="sm:!w-auto">
+              <UiButton :href="waLink()" :block="true" class="sm:!w-auto">
                 <UiWhatsAppIcon class="h-4 w-4" />
                 Hubungi via WhatsApp
               </UiButton>

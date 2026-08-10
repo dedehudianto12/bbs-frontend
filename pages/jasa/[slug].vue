@@ -115,7 +115,7 @@ useSeoMeta({
       <h1 class="display mt-5 text-3xl text-ink md:text-4xl">Tidak dapat menghubungi server</h1>
       <div class="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
         <UiButton variant="outline" @click="refreshNuxtData(`jasa-${slug}`)">Coba lagi</UiButton>
-        <UiButton :href="waLink({ halaman: 'Jasa — detail gagal dimuat' })">
+        <UiButton :href="waLink()">
           <UiWhatsAppIcon class="h-4 w-4" />
           Tanya langsung
         </UiButton>
@@ -161,7 +161,7 @@ useSeoMeta({
           </p>
 
           <div class="mt-9">
-            <UiButton :href="waLink({ layanan: service.name, halaman: 'Jasa — detail' })">
+            <UiButton :href="waLink({ layanan: service.name })">
               <UiWhatsAppIcon class="h-4 w-4" />
               Konsultasi layanan ini
             </UiButton>
@@ -236,7 +236,7 @@ useSeoMeta({
             </p>
             <div class="mt-6 flex flex-col gap-3">
               <UiButton
-                :href="waLink({ layanan: service.name, halaman: 'Jasa — detail sidebar' })"
+                :href="waLink({ layanan: service.name })"
                 :block="true"
               >
                 <UiWhatsAppIcon class="h-4 w-4" />
