@@ -84,6 +84,40 @@ await sharp(`${B}/hero-big-person.jpeg`)
   .webp({ quality: 80 })
   .toFile(`${OUT}/hero-3-press.webp`)
 
+// ── The insets ────────────────────────────────────────────────────────────
+//
+// The small plate over the photograph's bottom-left corner. It used to be one
+// fixed frame; it now advances with the plate, one inset per rail stop, on the
+// same 4.2s hold. All four are 3:2 at 1000x666 — HeroSection reserves the box
+// by ratio the same way it does for the frames above, and the fastener frame
+// that predates this set was already cut to that size.
+//
+// These are cut from the client's Photo/ batch and are material shots, not
+// scene shots: the plate behind them carries the place and the people, so the
+// inset's job is the thing itself at a scale the wide frame cannot resolve.
+const DETAILS = [
+  // Cleats in rank on the belt's face, the guide bars between them. A 720x1600
+  // screenshot letterboxed black, content rows 160–1439; y=500 is where the
+  // cleats fill the width without the bare floor along the left edge.
+  ['small-1.jpeg', 'hero-detail-cleat', { left: 0, top: 500, width: 720, height: 480 }],
+  // A roll seen end-on, the plies stacked so the belt's thickness reads. Native
+  // 1204x1600; y=250 puts the coil's eye on the crop's centre line.
+  ['small-2.jpeg', 'hero-detail-roll', { left: 0, top: 250, width: 1204, height: 803 }],
+  // Finished endless belts on the workshop floor, the joints closed. Native
+  // 1536x1152, already close to 3:2, so only 128 rows come off, split top-heavy
+  // to drop the dark bench at the very top.
+  ['small-3.jpeg', 'hero-detail-endless', { left: 0, top: 96, width: 1536, height: 1024 }],
+]
+
+for (const [src, name, crop] of DETAILS) {
+  await sharp(`${B}/${src}`)
+    .rotate()
+    .extract(crop)
+    .resize({ width: 1000, height: 666, kernel: 'lanczos3' })
+    .webp({ quality: 82 })
+    .toFile(`${OUT}/${name}.webp`)
+}
+
 for (const name of ['hero-2-survei', 'hero-1-ukur', 'hero-3-press']) {
   const m = await sharp(`${OUT}/${name}.webp`).metadata()
   console.log(name.padEnd(14), `${m.width}x${m.height}`, (m.width / m.height).toFixed(4))

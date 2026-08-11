@@ -14,7 +14,7 @@ import sharp from 'sharp'
 const B = '/mnt/c/Users/ThinkPad/Documents/BBS'
 const OUT = 'public/images'
 
-/** @type {[string, string, {rotate?: number, crop: {left:number,top:number,width:number,height:number}, width?: number}][]} */
+/** @type {[string, string, {rotate?: number, crop: {left:number,top:number,width:number,height:number}, width?: number, quality?: number}][]} */
 const JOBS = [
   // ── Masthead: an on-site splice at a food plant, two techs feeding a blue
   // belt through the portable press. Replaces the 113516 survey briefing, where
@@ -74,10 +74,16 @@ const JOBS = [
     width: 1200,
   }],
 
-  // ── Incline in service: sidewall/cleat buckets climbing a guarded incline.
-  ['Activity foto/penyambungan lokasi incline.jpeg', 'jasa-incline', {
-    crop: { left: 0, top: 300, width: 1127, height: 845 }, // 4:3
-    width: 1127,
+  // ── Incline in service: a green cleated belt seen down the length of the
+  // incline, cleats in rank, the crew and the press at the head of the run.
+  // Supplied by the client in the Photo/ batch, replacing the older frame.
+  //
+  // 1200x1600 portrait, so 700 rows go. top=560 is where the near cleats start:
+  // above it is only the grey wall and the ceiling lamp's flare, and the crop
+  // still reaches the technicians and the portable press at the top of the run.
+  ['Photo/incline-cleated.jpeg', 'jasa-incline', {
+    crop: { left: 0, top: 560, width: 1200, height: 900 }, // 4:3
+    width: 1200,
   }],
 
 
@@ -116,6 +122,48 @@ const JOBS = [
     crop: { left: 0, top: 350, width: 960, height: 720 }, // 4:3
     width: 960,
   }],
+
+  // ── Hot joint, the method plate: a technician laying up the joint on the
+  // press bed, the belt's fingers clipped with binder clips before the platen
+  // comes down. Client-supplied, and it is now the Hot joint card's photograph;
+  // the red platen frame above (jasa-hotjoint) moved to the Cold joint card
+  // when the two were found swapped. The filenames are crossed as a result —
+  // the card each file feeds is named in data/services.ts, which is the only
+  // place the pairing is decided.
+  //
+  // 1204x1600 portrait cut 4:3 at top=349: that band holds both hands, the
+  // clipped joint and the press plate, and drops the empty floor the lower
+  // third is made of.
+  ['Photo/hot-joint.jpeg', 'jasa-joint-hot', {
+    crop: { left: 0, top: 349, width: 1204, height: 903 }, // 4:3
+    width: 1200,
+    quality: 82,
+  }],
+
+  // ── Lokasi pengerjaan, left: a technician measuring an installed belt in the
+  // customer's line. Replaces jasa-ukur.webp.
+  //
+  // A 720x1600 phone screenshot letterboxed black, content rows 132–1411. The
+  // section renders 3:2, not the 4:3 the plates above use, so the crop is
+  // 720x480 from y=330 — high enough to keep the whole hard hat, low enough to
+  // hold the tape and the belt he is measuring.
+  ['Photo/jasa-left.jpg', 'jasa-lokasi-onsite', {
+    crop: { left: 0, top: 330, width: 720, height: 480 }, // 3:2
+    width: 1200,
+    quality: 82,
+  }],
+
+  // ── Lokasi pengerjaan, right: two of the crew handling a green PVC belt
+  // among the wrapped rolls at Pulo Gebang. Replaces jasa-workshop.webp.
+  //
+  // 3000x4000, so 2000 rows go. top=1600 keeps the roof trusses that establish
+  // the building and lands the crew and the green belt in the lower half where
+  // the eye goes; below 3600 is bare floor.
+  ['Photo/jasa-right.jpg', 'jasa-lokasi-workshop', {
+    crop: { left: 0, top: 1600, width: 3000, height: 2000 }, // 3:2
+    width: 1200,
+    quality: 82,
+  }],
 ]
 
 for (const [src, name, opt] of JOBS) {
@@ -123,7 +171,7 @@ for (const [src, name, opt] of JOBS) {
   await base
     .extract(opt.crop)
     .resize({ width: opt.width, kernel: 'lanczos3' })
-    .webp({ quality: 78 })
+    .webp({ quality: opt.quality ?? 78 })
     .toFile(`${OUT}/${name}.webp`)
   const m = await sharp(`${OUT}/${name}.webp`).metadata()
   console.log(name.padEnd(22), `${m.width}x${m.height}`)

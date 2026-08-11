@@ -171,20 +171,36 @@ export const homepageConfig = {
       },
     ],
 
-    // The inset holds still while the plate moves. It is the one thing in the
-    // hero the wide shots cannot carry at any crop: the mechanical fastener
-    // itself, seated on the belt edge, at the scale where you can count the
-    // plates. Keeping it fixed also gives the eye somewhere to rest — four
-    // frames changing behind a fifth that also changed would read as a
-    // slideshow rather than as one job progressing.
+    // The inset advances with the plate, one detail per frame, on the same
+    // 4.2s hold — it is driven by the same `active` index, so the two can
+    // never drift apart. Each holds what the wide shot behind it cannot carry
+    // at any crop: the material and the joint at the scale where you can count
+    // the plates.
     //
-    // Cropped from a 1200×1600 phone frame to the 3:2 the plate renders at,
-    // on the band that holds both rows of fasteners and the green belt above
-    // them; the original's lower third is bare matting and carries nothing.
-    detail: {
-      src: '/images/hero/hero-detail-fastener.webp',
-      alt: 'Detail sambungan mekanis pada tepi belt conveyor PVC hijau, dua baris pelat kawat gigi terpasang rapat dan saling mengunci',
-    },
+    // Ordered to match `frames` stop for stop. The count must equal
+    // `frames.length`; a shorter list leaves the last frames without an inset.
+    // All cropped to the 3:2 the plate renders at (1000×666).
+    details: [
+      {
+        src: '/images/hero/hero-detail-cleat.webp',
+        alt: 'Deretan cleat bergelombang hijau terpasang di punggung belt PVC, dilihat dari dekat di bidang kerja',
+      },
+      {
+        src: '/images/hero/hero-detail-roll.webp',
+        alt: 'Penampang gulungan belt PVC hijau, lapisan-lapisannya tersusun rapat memperlihatkan ketebalan belt',
+      },
+      {
+        src: '/images/hero/hero-detail-endless.webp',
+        alt: 'Beberapa belt PVC hijau yang telah disambung endless tergeletak melingkar di lantai workshop',
+      },
+      // Cropped from a 1200×1600 phone frame on the band that holds both rows
+      // of fasteners and the green belt above them; the original's lower third
+      // is bare matting and carries nothing.
+      {
+        src: '/images/hero/hero-detail-fastener.webp',
+        alt: 'Detail sambungan mekanis pada tepi belt conveyor PVC hijau, dua baris pelat kawat gigi terpasang rapat dan saling mengunci',
+      },
+    ],
   },
   company: {
     companyName: 'CV Bintang Berjaya Satu',

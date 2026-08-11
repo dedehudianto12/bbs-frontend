@@ -31,15 +31,21 @@ const props = withDefaults(
      * two the same length is the intended use and is asserted in dev below.
      */
     frames: Frame[]
-    /** Small overlaid plate: the detail the wide shots cannot show. */
-    detail?: { src: string; alt: string }
+    /**
+     * Small overlaid plate: the detail each wide shot cannot show. One per
+     * frame, cross-faded on the same `active` index and therefore the same
+     * hold. A list shorter than `frames` simply leaves the later frames
+     * without an inset; keeping the two the same length is the intended use
+     * and is asserted in dev below.
+     */
+    details?: { src: string; alt: string }[]
   }>(),
   {
     highlights: () => [],
     primaryWhatsApp: false,
     facts: () => [],
     timeline: () => [],
-    detail: undefined,
+    details: () => [],
   },
 )
 
@@ -51,6 +57,16 @@ if (import.meta.dev && props.timeline.length && props.frames.length !== props.ti
   console.warn(
     `[HeroSection] ${props.frames.length} frames against ${props.timeline.length} timeline stops — ` +
       'the rail can only track the plate while the two match.',
+  )
+}
+
+// Same failure, one layer in: the inset is keyed off the plate's index, so a
+// short list means the last frames show no inset at all — a hole that opens
+// three frames into the loop and closes again when it wraps.
+if (import.meta.dev && props.details.length && props.details.length !== props.frames.length) {
+  console.warn(
+    `[HeroSection] ${props.details.length} detail insets against ${props.frames.length} frames — ` +
+      'frames past the end of the list render without one.',
   )
 }
 
@@ -348,23 +364,44 @@ function go(i: number) {
             <span v-else class="hero-toggle-pause" aria-hidden="true" />
           </button>
 
-          <!-- The detail the wide shot cannot carry: the mechanical fastener
-               itself, seated and locked on the belt edge. Overlapping the
-               plate's bottom-left rather than sitting below it — the corner it
-               covers is a flat white coverall, and the straddle is what stops
-               the two columns reading as two documents that happen to share a
-               row. The gap around it is drawn with a border in the ground
-               colour, so it reads as cut into the photograph. -->
-          <img
-            v-if="detail"
-            :src="detail.src"
-            :alt="detail.alt"
-            width="1000"
-            height="666"
-            loading="lazy"
-            decoding="async"
-            class="hero-detail"
-          />
+          <!-- The detail the wide shot behind it cannot carry, at the scale
+               where the material reads. Overlapping the plate's bottom-left
+               rather than sitting below it — the corner it covers is a flat
+               white coverall, and the straddle is what stops the two columns
+               reading as two documents that happen to share a row. The gap
+               around it is drawn with a border in the ground colour, so it
+               reads as cut into the photograph.
+
+               Stacked and cross-faded on the same `active` index as the plate,
+               so the pair always turns together — anything else and the inset
+               would end up captioning the wrong photograph. Already
+               `position: absolute` in the stylesheet, so the stack needs no
+               extra wrapper. Deliberately no drift: the plate breathes because
+               it is 34rem tall, and the same 5.5% on a 13rem inset reads as a
+               jitter, not as a camera.
+
+               The wrapper is not decorative. The entrance keyframe below ends
+               on `opacity: 1` with `animation-fill-mode: both`, and a filled
+               animation outranks an inline style for the same property — put
+               it on the images and all four settle opaque with the last one in
+               source order winning, which is exactly the trap documented for
+               the plate a few rules above. The entrance belongs to the stack,
+               the cross-fade to the images inside it, and neither touches the
+               other's opacity. -->
+          <div v-if="details.length" class="hero-detail">
+            <img
+              v-for="(item, i) in details"
+              :key="item.src"
+              :src="item.src"
+              :alt="item.alt"
+              width="1000"
+              height="666"
+              :loading="i === 0 ? 'eager' : 'lazy'"
+              decoding="async"
+              class="hero-detail-frame"
+              :style="{ opacity: i === active ? 1 : 0, transitionDuration: `${CROSSFADE_S}s` }"
+            />
+          </div>
 
           <!-- The caption names the frame, so it has to change with it. It is
                keyed on the caption text rather than the index so Vue replaces
@@ -637,7 +674,6 @@ function go(i: number) {
      arguing with it. */
   width: 46%;
   max-width: 12rem;
-  object-fit: cover;
   aspect-ratio: 3 / 2;
   /* The border is the ground colour, so the plate reads as cut into the
      photograph rather than laid on top of it. No shadow — sheet metal does not
@@ -645,6 +681,26 @@ function go(i: number) {
   border: 6px solid rgb(var(--ink));
   border-left: 0;
   border-bottom: 0;
+}
+
+/* The insets are stacked in the wrapper's box, one per plate frame, and only
+   the active one is opaque. Duration is bound inline from CROSSFADE_S so the
+   inset and the plate can only ever be given the same one. */
+.hero-detail-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition-property: opacity;
+  transition-timing-function: var(--ease-out);
+}
+/* A frame turning under a reduced-motion preference should still turn — it is
+   information, not decoration — but it should not fade while it does. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-detail-frame {
+    transition-duration: 0s !important;
+  }
 }
 @media (min-width: 1024px) {
   .hero-detail {

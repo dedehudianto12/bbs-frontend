@@ -19,6 +19,13 @@ export const contactInfo = {
     { label: 'Chat Sales 4', number: '6281287859061' },
   ],
 
+  // The office landline. Two fields for one number, same reasoning as the hours
+  // above: `telepon` is what a reader sees, `teleponTel` is what a phone dials.
+  // Deriving the second from the first at runtime means one stray space in the
+  // display string silently breaks the dial.
+  telepon: '021 48670043',
+  teleponTel: '+622148670043',
+
   email: 'bbsconveyor@yahoo.com',
   alamat: 'Jl. Pulo Bangka, RT.1/RW.9, Pulo Gebang\nKec. Cakung, Jakarta Timur\nDKI Jakarta 13950',
   jamOperasional: 'Senin – Jumat, 08:00 – 17:00 WIB\nSabtu, 08:00 – 12:00 WIB',

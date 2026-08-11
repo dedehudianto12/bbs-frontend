@@ -505,6 +505,16 @@ useSeoMeta({
                 {{ contactInfo.jamOperasional }}
               </dd>
             </div>
+            <div class="border-t border-line py-4">
+              <dt class="spec-key">Telepon</dt>
+              <dd class="mt-2.5 text-[14px] leading-relaxed">
+                <!-- tel: off teleponTel, not off the display string — see the
+                     note on both fields in data/contact.ts. -->
+                <a :href="`tel:${contactInfo.teleponTel}`" class="kontak-link text-ink">
+                  {{ contactInfo.telepon }}
+                </a>
+              </dd>
+            </div>
             <div class="border-y border-line py-4">
               <dt class="spec-key">Email</dt>
               <dd class="mt-2.5 text-[14px] leading-relaxed">

@@ -62,19 +62,18 @@ const { root } = useRevealOnScroll({ stagger: 45 })
 
       <!-- Two photographs, because this band makes two claims and each one
            answers a different half.
-           Left is a cleated incline belt climbing to a bagging hopper in a
-           customer's shed, shot from the floor so the belt runs corner to
-           corner through the strip. It is the plant itself answering "tim kami
-           datang ke lokasi Anda" — a working line in a working building, not a
-           product on a sweep.
-           It is cut from a frame that has people in it, and deliberately does
-           not show them: the crop is the band between the fitter at the head
-           pulley and the operator in the foreground, which is where the belt
-           is and where nobody's face is. See scripts/images/home-band.mjs.
-           It replaced onsite-line.webp, a hard-hatted technician on the
-           walkway of an installed line. That frame's argument was PPE and a
-           tidy plant; this one's is the equipment, and the two people already
-           in the hero carry the crew.
+           Left is a technician in hi-vis reaching across a running green food
+           line in a customer's plant, pouches travelling under the guide rails.
+           It is the crew answering "tim teknisi kami melakukan inspeksi dan
+           penyambungan langsung di lokasi" — the work being done on someone
+           else's line, mid-shift, not a product on a sweep.
+           The crop stops short of his face: the strip is his shoulder, the
+           hi-vis and the reaching arm against the belt, which is where the work
+           is. See scripts/images/home-band.mjs.
+           It replaced onsite-incline.webp, a cleated incline belt shot from the
+           floor. That left the band belt on both sides; this half of the copy
+           is about the team coming to you, so it now carries a person and the
+           right-hand plate carries the equipment.
            Right is the same cleated belt, but installed and running on an
            incline in the customer's bay rather than coiled in our workshop.
            It replaced the coil shot, which had itself replaced rolls
@@ -88,9 +87,9 @@ const { root } = useRevealOnScroll({ stagger: 45 })
            Instalasi" and the coil could not show it — a product photographed in
            our own workshop is inventory, and the claim being made here is
            service. Both photographs are now on a customer's site.
-           The pairing is now belt on both sides — installed and climbing on the
-           left, installed and running on the right — with the copy's two halves
-           divided between them.
+           The pairing is now crew on the left and equipment on the right, both
+           on a customer's site, with the copy's two halves divided between
+           them.
            Only the first shows below sm. At 360px a two-up would give each
            image about 180px of width, and at that size neither reads; one
            legible photograph beats two illegible ones.
@@ -98,10 +97,10 @@ const { root } = useRevealOnScroll({ stagger: 45 })
            empty alt because the copy above already says what they show. -->
       <div class="grid grid-cols-1 gap-px border-t border-ink/20 bg-ink/20 sm:grid-cols-2">
         <img
-          src="/images/onsite-incline.webp"
+          src="/images/onsite-teknisi.webp"
           alt=""
-          width="720"
-          height="260"
+          width="1192"
+          height="330"
           loading="lazy"
           decoding="async"
           class="h-[200px] w-full object-cover md:h-[280px]"

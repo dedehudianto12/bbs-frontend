@@ -100,18 +100,18 @@ export const WORK_PLACES = [
     key: 'Onsite',
     title: 'Di pabrik Anda',
     text: 'Tim beserta peralatan splicing kami mobilisasi ke lokasi Anda. Metode ini sesuai untuk belt yang sudah terpasang, jalur yang tidak dapat dibongkar, serta pekerjaan dengan waktu henti yang harus sesingkat mungkin.',
-    // Not the survey frame — that one is the masthead, and the same photograph
-    // twice inside one screen reads as a stock library with two entries.
-    photo: '/images/jasa-ukur.webp',
-    alt: 'Teknisi BBS mengukur belt conveyor dengan meteran langsung di conveyor pabrik pelanggan',
+    // Deliberately not the masthead frame — the same photograph twice inside
+    // one screen reads as a stock library with two entries.
+    photo: '/images/jasa-lokasi-onsite.webp',
+    alt: 'Teknisi berhelm dan rompi hi-vis mengukur belt conveyor dengan meteran langsung di jalur produksi pabrik pelanggan',
     caption: 'Pengukuran langsung pada conveyor pelanggan',
   },
   {
     key: 'Workshop',
     title: 'Di workshop Pulo Gebang',
     text: 'Belt dikerjakan di workshop kami. Metode ini sesuai untuk belt baru, pemasangan cleat dan profile guide, serta pekerjaan yang memerlukan mesin press dan bidang kerja yang rata.',
-    photo: '/images/jasa-workshop.webp',
-    alt: 'Kru BBS menangani gulungan belt conveyor hijau di workshop Pulo Gebang',
+    photo: '/images/jasa-lokasi-workshop.webp',
+    alt: 'Dua kru BBS membentangkan belt PVC hijau bertekstur di antara gulungan belt terbungkus di workshop Pulo Gebang',
     caption: 'Workshop Pulo Gebang, Cakung',
   },
 ] as const
@@ -126,18 +126,6 @@ export const JOINT_METHODS = [
     text: 'Sambungan dipanaskan di bawah mesin press khusus hingga menyatu. Metode ini menghasilkan sambungan yang paling kuat dan paling tahan lama.',
     specs: [
       { key: 'Kekuatan', value: '±90% kekuatan asli belt' },
-      { key: 'Aplikasi', value: 'Rubber belt, beban berat' },
-      { key: 'Sektor', value: 'Pertambangan, pelabuhan' },
-    ],
-    photo: '/images/jasa-hotjoint.webp',
-    alt: 'Plat pemanas merah pada mesin press vulkanisasi, dilihat memanjang di sepanjang bed press',
-  },
-  {
-    name: 'Cold joint',
-    sub: 'Adhesive, tanpa panas',
-    text: 'Sambungan direkatkan menggunakan adhesive khusus. Waktu pengerjaannya lebih singkat sehingga jalur produksi dapat kembali beroperasi lebih cepat.',
-    specs: [
-      { key: 'Kekuatan', value: 'Sesuai spesifikasi adhesive' },
       { key: 'Aplikasi', value: 'Belt PVC dan PU' },
       // Not "Pangan, farmasi". The source (seed.sql, Cold Splicing) says only
       // "cocok untuk belt PVC/PU dan aplikasi dengan downtime terbatas" — food
@@ -146,7 +134,19 @@ export const JOINT_METHODS = [
       // weight we cannot vouch for.
       { key: 'Sektor', value: 'Aplikasi dengan waktu henti terbatas' },
     ],
-    photo: '/images/jasa-coldjoint.webp',
-    alt: 'Sambungan belt PVC hijau dijepit dengan binder clip di meja kerja sebelum direkatkan',
+    photo: '/images/jasa-joint-hot.webp',
+    alt: 'Teknisi menyiapkan sambungan belt PVC hijau di atas plat press, jari-jari sambungan dijepit binder clip sebelum dipanaskan',
+  },
+  {
+    name: 'Cold joint',
+    sub: 'Adhesive, tanpa panas',
+    text: 'Sambungan direkatkan menggunakan adhesive khusus. Waktu pengerjaannya lebih singkat sehingga jalur produksi dapat kembali beroperasi lebih cepat.',
+    specs: [
+      { key: 'Kekuatan', value: 'Sesuai spesifikasi adhesive' },
+      { key: 'Aplikasi', value: 'Rubber belt, beban berat' },
+      { key: 'Sektor', value: 'Pertambangan, pelabuhan' },
+    ],
+    photo: '/images/jasa-hotjoint.webp',
+    alt: 'Plat pemanas merah pada mesin press vulkanisasi, dilihat memanjang di sepanjang bed press',
   },
 ] as const
