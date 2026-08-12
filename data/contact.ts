@@ -23,7 +23,7 @@ export const contactInfo = {
   // above: `telepon` is what a reader sees, `teleponTel` is what a phone dials.
   // Deriving the second from the first at runtime means one stray space in the
   // display string silently breaks the dial.
-  telepon: '021 48670043',
+  telepon: '(+62) 21 486-70-043',
   teleponTel: '+622148670043',
 
   email: 'bbsconveyor@yahoo.com',
