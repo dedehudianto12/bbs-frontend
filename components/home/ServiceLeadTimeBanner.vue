@@ -62,8 +62,9 @@ const { root } = useRevealOnScroll({ stagger: 45 })
 
       <!-- Two photographs, because this band makes two claims and each one
            answers a different half.
-           Left is a technician in hi-vis reaching across a running green food
-           line in a customer's plant, pouches travelling under the guide rails.
+           Left is a green sortation belt running loaded in a customer's packing
+           hall, guide rails and transfer chute across it — the line in service,
+           edge to edge.
            It is the crew answering "tim teknisi kami melakukan inspeksi dan
            penyambungan langsung di lokasi" — the work being done on someone
            else's line, mid-shift, not a product on a sweep.
@@ -99,8 +100,8 @@ const { root } = useRevealOnScroll({ stagger: 45 })
         <img
           src="/images/onsite-teknisi.webp"
           alt=""
-          width="1192"
-          height="330"
+          width="1440"
+          height="720"
           loading="lazy"
           decoding="async"
           class="h-[200px] w-full object-cover md:h-[280px]"
