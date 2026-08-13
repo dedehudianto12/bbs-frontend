@@ -11,7 +11,7 @@
 //
 // In development they always are: nuxt.config proxies /api to localhost:8080,
 // so every call is same-origin and the flaw is invisible. In production it
-// depends on where the API lives. A subdomain (api.bbsconveyor.com) is still
+// depends on where the API lives. A subdomain (api.bintangberjayasatu.com) is still
 // same-site and Lax is fine. A different registrable domain — any of the usual
 // PaaS hostnames — is cross-site, Lax withholds the cookie on XHR, and the
 // in-memory token is already gone after the first reload. The result would be

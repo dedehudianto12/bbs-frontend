@@ -47,14 +47,14 @@ All repository values fall back to env vars so nothing is hardcoded in productio
 1. Go to https://github.com/settings/developers → **New OAuth App**
 2. Fill in:
    - **Application name:** BBS Conveyor Studio
-   - **Homepage URL:** `https://bbsconveyor.com`
-   - **Authorization callback URL:** `https://bbsconveyor.com/_studio/auth/github`
+   - **Homepage URL:** `https://bintangberjayasatu.com`
+   - **Authorization callback URL:** `https://bintangberjayasatu.com/_studio/auth/github`
 3. Copy the **Client ID** and **Client Secret** into your deployment env vars.
 
 ## How Editors Use Nuxt Studio
 
 1. Deploy the site with SSR (`nuxt build` — Vercel recommended).
-2. Navigate to `https://bbsconveyor.com/_studio`.
+2. Navigate to `https://bintangberjayasatu.com/_studio`.
 3. Sign in with GitHub (must be a collaborator on the repository).
 4. The Studio UI shows all content collections from `content.config.ts`:
    - **Blog** — create/edit articles with form-based frontmatter + markdown body

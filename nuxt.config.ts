@@ -59,17 +59,22 @@ if (isDeployableBuild && process.env.ALLOW_LOCALHOST_API !== "1") {
 
 // ── Which domain this build belongs to ──────────────────────────────────────
 //
-// This was hardcoded to bbsconveyor.com, which is correct only while that is
-// the site's one and only home. It drives the canonical tag, og:url, the
-// sitemap's <loc> entries and the Sitemap: line in robots.txt — so deploying
-// this same bundle to a second domain without changing it publishes a site
-// whose every page tells Google "do not index me, index bbsconveyor.com
-// instead". The pages would be crawled and then dropped, and nothing in the
-// build output or the browser would look wrong.
+// This drives the canonical tag, og:url, the sitemap's <loc> entries and the
+// Sitemap: line in robots.txt — so deploying this same bundle to a second
+// domain without changing it publishes a site whose every page tells Google
+// "do not index me, index the other domain instead". The pages would be
+// crawled and then dropped, and nothing in the build output or the browser
+// would look wrong.
 //
-// Set NUXT_SITE_URL per Cloudflare Pages project. The default keeps the
-// existing deployment working unchanged.
-const SITE_URL = process.env.NUXT_SITE_URL || "https://bbsconveyor.com";
+// As of the bintangberjayasatu.com migration the Pages project serves BOTH
+// bintangberjayasatu.com and the legacy bbsconveyor.com. One build can only
+// declare one canonical origin, and it must be the new domain: that is what
+// tells Google the two hosts are the same site and moves the existing ranking
+// signals onto the new name instead of splitting them.
+//
+// Set NUXT_SITE_URL per Cloudflare Pages project if the old domain ever needs
+// its own separately-indexed deployment.
+const SITE_URL = process.env.NUXT_SITE_URL || "https://bintangberjayasatu.com";
 
 if (isDeployableBuild) {
   // Echoed because the failure mode above is silent: the only way to catch a

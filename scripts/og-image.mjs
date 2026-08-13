@@ -93,7 +93,7 @@ const brand = await text(
 )
 
 const domain = await text(
-  `<span font="Inter Medium 20px" foreground="${MUTED}" letter_spacing="1200">bbsconveyor.com</span>`,
+  `<span font="Inter Medium 20px" foreground="${MUTED}" letter_spacing="1200">bintangberjayasatu.com</span>`,
   360,
   { align: 'right' },
 )
