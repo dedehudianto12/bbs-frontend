@@ -54,12 +54,39 @@ const relatedArticles = computed(() => {
     }))
 })
 
-useSeoMeta({
-  title: article.value ? `${(article.value as any).title}` : 'Artikel Tidak Ditemukan',
-  description: (article.value as any)?.excerpt ?? '',
-  ogImage: (article.value as any)?.image ?? undefined,
-  twitterCard: 'summary_large_image',
+useSeo({
+  title: () => (article.value as any)?.title ?? 'Artikel Tidak Ditemukan',
+  description: () => (article.value as any)?.excerpt,
+  image: () => (article.value as any)?.image,
+  type: 'article',
 })
+
+const identity = useIdentityRef()
+
+useSchemaOrg([
+  defineArticle({
+    headline: () => (article.value as any)?.title,
+    description: () => (article.value as any)?.excerpt,
+    image: () => (article.value as any)?.image || undefined,
+    // publishedAt is YYYY-MM-DD. Date-only is valid ISO-8601 and Google
+    // accepts it; appending T00:00:00Z would assert a publication hour nobody
+    // recorded, and for a WIB site it would be wrong by 7 hours.
+    datePublished: () => (article.value as any)?.publishedAt,
+    // A dateModified that is null, or earlier than datePublished, is a
+    // validation error — fall back rather than risk either.
+    dateModified: () =>
+      (article.value as any)?.updatedAt || (article.value as any)?.publishedAt,
+    // `author` is required for Article and must never be empty, so an unnamed
+    // article is attributed to the company rather than to a blank Person.
+    author: () =>
+      (article.value as any)?.author
+        ? { name: (article.value as any).author }
+        : identity,
+    publisher: identity,
+    articleSection: () => (article.value as any)?.tag || undefined,
+    inLanguage: 'id-ID',
+  }),
+])
 </script>
 
 <template>

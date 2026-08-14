@@ -11,6 +11,8 @@
 // blocked. Getting this wrong takes the whole site down, which is why it is
 // computed instead of guessed — but note it is resolved at BUILD time, so
 // changing the API host requires a redeploy, not just an env edit.
+import { contactInfo } from "./data/contact";
+
 const API_BASE = process.env.NUXT_PUBLIC_API_BASE || "/api";
 const apiOrigin = (() => {
   try {
@@ -75,6 +77,34 @@ if (isDeployableBuild && process.env.ALLOW_LOCALHOST_API !== "1") {
 // Set NUXT_SITE_URL per Cloudflare Pages project if the old domain ever needs
 // its own separately-indexed deployment.
 const SITE_URL = process.env.NUXT_SITE_URL || "https://bintangberjayasatu.com";
+
+// ── Opening hours, for the LocalBusiness node in schemaOrg.identity ──────────
+//
+// data/contact.ts is the single source: jamMingguan holds minutes-from-midnight
+// per day, already structured precisely so nothing has to parse the prose
+// version. Transposed here into schema.org's HH:MM form. A day with tutup:null
+// is closed and is dropped rather than emitted as a zero-length window.
+const HHMM = (minutes: number) =>
+  `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
+
+const SCHEMA_DAY: Record<string, string> = {
+  Senin: "Monday",
+  Selasa: "Tuesday",
+  Rabu: "Wednesday",
+  Kamis: "Thursday",
+  Jumat: "Friday",
+  Sabtu: "Saturday",
+  Minggu: "Sunday",
+};
+
+const OPENING_HOURS = contactInfo.jamMingguan
+  .filter((d) => d.buka !== null && d.tutup !== null)
+  .map((d) => ({
+    "@type": "OpeningHoursSpecification" as const,
+    dayOfWeek: SCHEMA_DAY[d.hari],
+    opens: HHMM(d.buka as number),
+    closes: HHMM(d.tutup as number),
+  }));
 
 if (isDeployableBuild) {
   // Echoed because the failure mode above is silent: the only way to catch a
@@ -214,7 +244,29 @@ export default defineNuxtConfig({
   // ── Schema.org JSON-LD ──
   schemaOrg: {
     identity: {
-      type: "Organization",
+      // LocalBusiness, not Organization.
+      //
+      // This node already carried the full Pulo Gebang street address, so it
+      // was describing a local business while typed as a generic org — and
+      // local intent ("supplier belt conveyor Jakarta") is a large share of
+      // what this site is competing for.
+      //
+      // LocalBusiness is a subclass of Organization, so every property below
+      // stays valid and — importantly — every `{'@id': '#identity'}` reference
+      // added on the product, article and service pages keeps resolving. The
+      // alternative, a defineLocalBusiness() on pages/kontak.vue, would have
+      // created a SECOND business entity at the same address under a different
+      // @id, leaving Google to guess which one is real. One node, upgraded.
+      //
+      // Plain LocalBusiness rather than a subtype: Manufacturer is not a
+      // LocalBusiness (it cannot carry opening hours) and Store implies walk-in
+      // retail, which has not been confirmed.
+      //
+      // Deliberately absent: `geo` (pages/kontak.vue notes its coordinates are
+      // district-level and not routing-grade — precise enough to be wrong) and
+      // `priceRange` (no published prices; same reasoning as the omitted Offer
+      // on product pages).
+      type: "LocalBusiness",
       name: "CV Bintang Berjaya Satu",
       alternateName: "BBS Conveyor",
       description:
@@ -236,6 +288,20 @@ export default defineNuxtConfig({
         addressCountry: "ID",
         streetAddress: "Jl. Pulo Bangka, RT.1/RW.9, Pulo Gebang, Kec. Cakung",
       },
+      // LocalBusiness wants these directly, not only nested in contactPoint.
+      telephone: "+6287758161166",
+      email: "bbsconveyor@yahoo.com",
+      // Derived from data/contact.ts rather than retyped. That file already
+      // holds the hours three times over and says plainly that the three are
+      // "edited together or not at all" — a fourth hand-written copy here,
+      // in a file nobody opens to change opening times, is exactly the drift
+      // it warns about. jamMingguan is the structured one, so it is the one
+      // machine-readable output should come from.
+      //
+      // Note this publishes Saturday 08:00–12:00, which jamSingkat ("Sen–Jum")
+      // omits — the abbreviation is for a hero datasheet, not a statement that
+      // the workshop is shut on Saturdays.
+      openingHoursSpecification: OPENING_HOURS,
     },
   },
 

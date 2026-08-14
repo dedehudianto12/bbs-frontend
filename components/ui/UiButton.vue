@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { internalPath } from '~/utils/url'
 
 // The single pressable primitive for the public surface.
 //
@@ -74,7 +75,7 @@ const classes = computed(() => [
     <slot />
   </a>
 
-  <NuxtLink v-else-if="href" :to="href" :class="classes">
+  <NuxtLink v-else-if="href" :to="internalPath(href)" :class="classes">
     <slot />
   </NuxtLink>
 

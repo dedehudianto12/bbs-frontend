@@ -28,7 +28,7 @@ const props = defineProps<{
 }>()
 
 const num = computed(() => String(props.index).padStart(2, '0'))
-const href = computed(() => `/jasa/${props.slug}`)
+const href = computed(() => `/jasa/${props.slug}/`)
 </script>
 
 <template>

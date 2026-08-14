@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { categorySlug } from '~/utils/slug'
+
 const router = useRouter()
 const { get } = useApi()
 
@@ -25,14 +27,14 @@ if (import.meta.client) {
 
 const subCategories = computed(() => {
   const cats = [...new Set(products.value.map((p) => p.category))]
-  return cats.map((c) => ({ label: c, value: c.toLowerCase().replace(/\s+/g, '-') }))
+  return cats.map((c) => ({ label: c, value: categorySlug(c) }))
 })
 
 function onFilterChange(subcat: string) {
-  router.push(`/produk/belt-conveyor/${subcat}`)
+  router.push(`/produk/belt-conveyor/${subcat}/`)
 }
 
-useSeoMeta({
+useSeo({
   title: 'Belt Conveyor',
   description: 'PVC Belt, PU, Flat Belt, dan Rubber Belt berkualitas untuk kebutuhan industri Anda.'
 })

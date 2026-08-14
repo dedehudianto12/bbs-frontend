@@ -15,7 +15,7 @@ const themeIndex = computed(() => {
 </script>
 
 <template>
-  <NuxtLink :to="`/produk/${slug}`" class="card-shell h-full">
+  <NuxtLink :to="`/produk/${slug}/`" class="card-shell h-full">
     <div class="p-2 pb-0">
       <ImageOrSkeleton :src="image" :alt="title" aspect="aspect-[4/3]" fit="object-contain" rounded="rounded-none" :fallback-index="themeIndex" />
     </div>

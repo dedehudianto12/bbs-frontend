@@ -82,13 +82,33 @@ const others = computed(() =>
 
 const { root: bodyRoot } = useRevealOnScroll({ stagger: 60 })
 
-useSeoMeta({
+useSeo({
   title: () =>
     service.value
       ? `${service.value.name} — Jasa Belt Conveyor`
       : 'Jasa Tidak Ditemukan',
-  description: () => service.value?.shortDescription ?? '',
+  description: () => service.value?.shortDescription,
+  image: () => dossier.value?.photo,
 })
+
+const identity = useIdentityRef()
+
+useSchemaOrg([
+  defineService({
+    name: () => service.value?.name,
+    serviceType: () => service.value?.name,
+    description: () => service.value?.shortDescription || service.value?.fullDescription,
+    // From the dossier, not the API: services.images is '{}' for every seeded
+    // row, so the photo the page actually renders is the only real one.
+    image: () => dossier.value?.photo || undefined,
+    provider: identity,
+    // The honest scope. Onsite joint work happens at the customer's plant
+    // anywhere in Indonesia as well as at the Pulo Gebang workshop — narrowing
+    // this to Jakarta would understate it, and a GeoCircle radius would be
+    // invented precision.
+    areaServed: { '@type': 'Country', name: 'Indonesia' },
+  }),
+])
 </script>
 
 <template>
@@ -105,7 +125,7 @@ useSeoMeta({
       <p class="mx-auto mt-4 max-w-md leading-relaxed text-muted">
         Halaman layanan yang Anda cari tidak ada atau sudah dipindahkan.
       </p>
-      <UiButton to="/jasa" class="mt-8">Lihat semua layanan</UiButton>
+      <UiButton href="/jasa" class="mt-8">Lihat semua layanan</UiButton>
     </div>
   </div>
 
@@ -266,7 +286,7 @@ useSeoMeta({
         <NuxtLink
           v-for="other in others"
           :key="other.slug"
-          :to="`/jasa/${other.slug}`"
+          :to="`/jasa/${other.slug}/`"
           class="jasa-other bg-paper p-5 md:p-6"
         >
           <img

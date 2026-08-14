@@ -78,7 +78,7 @@ const entries = computed(() =>
         <!-- Static link. Deliberately outside the track: a click target that
              slides away under the cursor is a bad hit target. -->
         <NuxtLink
-          to="/galeri"
+          to="/galeri/"
           class="marquee-link flex shrink-0 items-center gap-1.5 border-l border-line px-5 text-[12px] font-semibold text-ink"
         >
           Semua

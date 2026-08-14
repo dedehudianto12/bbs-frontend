@@ -40,7 +40,7 @@ const allTags = computed(() => {
   return [...new Set(tags)]
 })
 
-useSeoMeta({
+useSeo({
   title: 'Artikel',
   description: 'Panduan teknis dan informasi seputar belt conveyor, roller, dan komponen industri dari BBS Conveyor.'
 })

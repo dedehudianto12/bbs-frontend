@@ -98,11 +98,10 @@ const galleryItems = computed(() =>
   }))
 )
 
-useSeoMeta({
+useSeo({
   title: hpData.seo.title,
   description: hpData.seo.description,
-  ogImage: hpData.seo.ogImage,
-  twitterCard: 'summary_large_image',
+  image: hpData.seo.ogImage,
 })
 </script>
 

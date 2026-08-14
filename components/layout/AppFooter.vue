@@ -11,7 +11,7 @@ const year = new Date().getFullYear()
 const socials = [
   { label: 'WhatsApp', href: waLink(), icon: 'wa' },
   { label: 'Email', href: `mailto:${contactInfo.email}`, icon: 'mail' },
-  { label: 'Lokasi', href: '/kontak', icon: 'pin' },
+  { label: 'Lokasi', href: '/kontak/', icon: 'pin' },
   // The landline sits below Lokasi because it is the one channel in this column
   // that reaches the office rather than a person — the same place the address
   // points to. Rendered as its own tel: link so a phone dials it on tap.

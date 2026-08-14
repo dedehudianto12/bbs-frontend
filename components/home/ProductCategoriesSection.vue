@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
+import { categorySlug } from '~/utils/slug'
 
 // The catalog band — the home page's single dark tonal anchor before the
 // footer. A 3-column grid of hard cells, one per real category.
@@ -38,9 +39,7 @@ const GROUP_LABEL: Record<string, string> = {
   lainnya: 'Lainnya',
 }
 
-function slugOf(cat: string): string {
-  return cat.toLowerCase().replace(/\s+/g, '-')
-}
+const slugOf = categorySlug
 
 const cards = computed(() =>
   // Sorted so the two real groups cluster, which lets the grid read as grouped
@@ -55,8 +54,8 @@ const cards = computed(() =>
       groupLabel: GROUP_LABEL[item.group] ?? item.group,
       href:
         item.group === 'belt-conveyor'
-          ? `/produk/belt-conveyor/${slugOf(item.cat)}`
-          : `/produk/lainnya/${slugOf(item.cat)}`,
+          ? `/produk/belt-conveyor/${slugOf(item.cat)}/`
+          : `/produk/lainnya/${slugOf(item.cat)}/`,
     })),
 )
 
@@ -95,7 +94,7 @@ const { root } = useRevealOnScroll({ stagger: 45 })
       <div class="flex items-center justify-between gap-4 border-b border-line px-6 py-3 md:px-10">
         <span class="eyebrow text-accent">Katalog</span>
         <NuxtLink
-          to="/produk/belt-conveyor"
+          to="/produk/"
           class="cat-all inline-flex items-center gap-1.5 text-[12px] font-semibold text-muted lg:hidden"
         >
           Semua produk
@@ -216,7 +215,7 @@ const { root } = useRevealOnScroll({ stagger: 45 })
              a track is worse than a swipe. The header link covers the early
              exit on mobile instead. -->
         <NuxtLink
-          to="/produk/belt-conveyor"
+          to="/produk/"
           class="cat-cell cat-cell--cta group relative flex w-[78%] shrink-0 snap-start flex-col bg-accent px-6 py-8 sm:w-[46%] md:w-[38%] md:px-8 md:py-10 lg:w-auto"
         >
           <!-- Same skeleton as the category cells: mark top-left, arrow

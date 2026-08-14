@@ -19,7 +19,7 @@ const galleryItems = computed(() =>
   }))
 )
 
-useSeoMeta({
+useSeo({
   title: 'Galeri Proyek',
   description: 'Dokumentasi proyek instalasi belt conveyor, roller, dan jasa onsite joint oleh BBS Conveyor.'
 })

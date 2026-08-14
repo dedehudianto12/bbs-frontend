@@ -42,7 +42,7 @@ const specEntries = computed<[string, string][]>(() => {
 })
 
 const categoryLink = computed(() => {
-  if (!product.value) return '/produk/belt-conveyor'
+  if (!product.value) return '/produk'
   return product.value.group === 'belt-conveyor'
     ? '/produk/belt-conveyor'
     : '/produk/lainnya'
@@ -97,18 +97,57 @@ const breadcrumbItems = computed(() => {
   const groupLink = p.group === 'belt-conveyor' ? '/produk/belt-conveyor' : '/produk/lainnya'
   return [
     { label: 'Beranda', href: '/' },
-    { label: 'Produk', href: '/produk/belt-conveyor' },
+    { label: 'Produk', href: '/produk' },
     { label: groupLabel, href: groupLink },
     { label: p.name },
   ]
 })
 
-useSeoMeta({
-  title: product.value
-    ? `${product.value.name}`
-    : 'Produk Tidak Ditemukan',
-  description: product.value?.description ?? ''
+useSeo({
+  title: () => product.value?.name ?? 'Produk Tidak Ditemukan',
+  description: () => product.value?.description,
+  image: () => product.value?.image,
 })
+
+// Deliberately no `offers`, and no aggregateRating/review.
+//
+// The site publishes no prices — every product routes to a WhatsApp quote — so
+// there is no honest value for Offer.price. `0` claims the belt is free, a
+// placeholder is a lie, and an `offers` node without a price is a validation
+// error. Fabricated price or rating markup is the most common trigger for a
+// structured-data manual action, which would cost the rich results on every
+// other page here. Product is fully valid without it: the Google Product rich
+// result won't fire (it needs price or rating), but the entity still feeds the
+// Knowledge Graph and LLM extraction, which is the actual channel for a
+// quote-driven B2B catalogue.
+//
+// Rich Results Test will report "Missing field 'offers'" as a WARNING. That is
+// the intended outcome, not something to fix.
+const identity = useIdentityRef()
+
+useSchemaOrg([
+  defineProduct({
+    name: () => product.value?.name,
+    description: () => product.value?.description,
+    // Omitted rather than emitted empty when a product has no photo (about
+    // half the catalogue) — an empty image is an error, a missing one is a
+    // warning.
+    image: () => product.value?.image || undefined,
+    category: () => product.value?.category,
+    sku: slug,
+    mpn: slug,
+    brand: identity,
+    // specEntries already parses the string-or-object ambiguity in `specs`;
+    // this is the part of the markup carrying real technical attributes.
+    additionalProperty: computed(() =>
+      specEntries.value.map(([name, value]) => ({
+        '@type': 'PropertyValue' as const,
+        name,
+        value: String(value),
+      })),
+    ),
+  }),
+])
 </script>
 
 <template>
@@ -207,7 +246,7 @@ useSeoMeta({
     <h1 class="display text-3xl text-ink md:text-4xl">Produk Tidak Ditemukan</h1>
     <p class="mt-4 text-muted">Produk yang Anda cari tidak tersedia atau telah dihapus.</p>
     <div class="mt-8 flex justify-center">
-      <UiButton href="/produk/belt-conveyor" variant="ghost">
+      <UiButton href="/produk" variant="ghost">
         Kembali ke Produk
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
       </UiButton>

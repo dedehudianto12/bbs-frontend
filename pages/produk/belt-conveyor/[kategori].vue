@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { categorySlug } from '~/utils/slug'
+
 const route = useRoute()
 const router = useRouter()
 const subcat = route.params.kategori as string
@@ -15,7 +17,7 @@ const beltProducts = computed(() =>
     category: p.category,
     description: p.description,
     image: p.image ?? null,
-    _categoryClean: p.category.toLowerCase().replace(/\s+/g, '-'),
+    _categoryClean: categorySlug(p.category),
   }))
 )
 
@@ -33,7 +35,7 @@ const isValid = computed(() => products.value.length > 0)
 
 const subCategories = computed(() => {
   const cats = [...new Set(beltProducts.value.map((p) => p.category))]
-  return cats.map((c) => ({ label: c, value: c.toLowerCase().replace(/\s+/g, '-') }))
+  return cats.map((c) => ({ label: c, value: categorySlug(c) }))
 })
 
 const currentLabel = computed(() => {
@@ -42,12 +44,13 @@ const currentLabel = computed(() => {
 })
 
 function onFilterChange(newSubcat: string) {
-  router.push(`/produk/belt-conveyor/${newSubcat}`)
+  router.push(`/produk/belt-conveyor/${newSubcat}/`)
 }
 
-useSeoMeta({
-  title: `${currentLabel.value} — Belt Conveyor`,
-  description: `Belt conveyor ${currentLabel.value} berkualitas untuk kebutuhan industri. Tersedia dari BBS Conveyor.`
+useSeo({
+  title: () => `${currentLabel.value} — Belt Conveyor`,
+  description: () =>
+    `Belt conveyor ${currentLabel.value} berkualitas untuk kebutuhan industri. Tersedia dari BBS Conveyor.`,
 })
 </script>
 
