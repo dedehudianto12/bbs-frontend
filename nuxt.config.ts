@@ -171,7 +171,22 @@ export default defineNuxtConfig({
       // analytics at all with nothing to indicate why. It now lives in
       // plugins/analytics.client.ts, which reads runtimeConfig at run time.
       link: [
-        { rel: "icon", type: "image/svg+xml", href: "/bbs-logo.svg" },
+        // Google showed a blank globe instead of our logo in search results.
+        // Two causes: the only icon declared was bbs-logo.svg, which is
+        // 720x378 — Google requires a square favicon and ignores anything
+        // else — and with no favicon.ico in public/, nuxt-seo-utils answered
+        // /favicon.ico with a text placeholder, so the fallback was junk too.
+        //
+        // The PNG/ICO files are the wordmark centred on a white square,
+        // generated from bbs-logo.svg. White rather than transparent because
+        // the mark is near-black ink and disappears on dark-mode results.
+        // Sizes are multiples of 48px, as Google asks. Regenerate them if the
+        // logo changes; they do not follow the SVG automatically.
+        //
+        // public/logo.png is NOT the brand mark and must not be used here.
+        { rel: "icon", type: "image/x-icon", href: "/favicon.ico", sizes: "48x48" },
+        { rel: "icon", type: "image/png", href: "/icon-192.png", sizes: "192x192" },
+        { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
         { rel: "preconnect", href: "https://fonts.googleapis.com" },
         {
           rel: "preconnect",
@@ -276,7 +291,41 @@ export default defineNuxtConfig({
       // that claims to describe a page on a host it is not served from.
       url: SITE_URL,
       logo: "/bbs-logo.svg",
-      sameAs: ["https://wa.me/6287758161166"],
+      // The profiles that tie this domain to the real company.
+      //
+      // As of Aug 2026 Google has never crawled this site: a URL Inspection on
+      // the homepage reports "Discovered - currently not indexed" with Last
+      // crawl N/A, and the ONLY referring page is our own sitemap. The domain
+      // has no inbound links at all, which is why a search for the company's
+      // own name returns the legacy bbsconveyor.com, Indotrading and Facebook
+      // but never this site.
+      //
+      // sameAs is how the entity gets stitched back together: it tells Google
+      // that the already-indexed profiles below and this domain describe one
+      // business, so the brand's existing recognition can attach here. It is a
+      // claim, not a link — it does not replace actually changing the website
+      // field ON those profiles, which is the step that creates real inbound
+      // links. Both are needed; this is the half that lives in the repo.
+      //
+      // Every entry must be a profile the company genuinely controls. A wrong
+      // URL here asserts a false identity, so entries are added only once the
+      // profile is confirmed theirs.
+      //
+      // Still missing, in rough order of impact:
+      //   - Google Business Profile (strongest signal for local brand queries)
+      //   - the YouTube *channel* URL; a video URL is not a profile
+      //   - Tokopedia and Shopee storefronts (see data/contact.ts, where the
+      //     same links are still blank for the same reason)
+      //
+      // Deliberately absent: bbsconveyor.com and conveyorbelt-bbs.com. Both are
+      // the company's own, but both are live competing copies of this site, and
+      // naming them here would assert that the duplicates are canonical parts
+      // of this entity rather than sites to be consolidated away.
+      sameAs: [
+        "https://wa.me/6287758161166",
+        "https://www.facebook.com/61570010036981",
+        "https://en.indotrading.com/bintangberjayasatu",
+      ],
       contactPoint: {
         contactType: "Sales",
         telephone: "+6287758161166",
